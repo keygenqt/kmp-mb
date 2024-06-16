@@ -6,15 +6,15 @@ Website with a basic set of functionality on KMP:
 
 #### Website: React + KMP
 
-[https://mb.keygenqt.com/](https://mb-api.keygenqt.com/)
+[https://mb.keygenqt.com](https://mb-api.keygenqt.com/)
 
 #### Admin-Panel: React + KMP
 
-[https://mb-admin.keygenqt.com/](https://mb-api.keygenqt.com/)
+[https://mb-admin.keygenqt.com](https://mb-api.keygenqt.com/)
 
 #### API: Ktor + KMP
 
-[https://mb-api.keygenqt.com/](https://mb-api.keygenqt.com/)
+[https://mb-api.keygenqt.com](https://mb-api.keygenqt.com/)
 
 ### License
 
