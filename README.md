@@ -14,8 +14,8 @@ Website with a basic set of functionality on KMP:
 
 #### API: Ktor + KMP
 
-[https://mb-api.keygenqt.com](https://mb-api.keygenqt.com)
-[https://mb-api.keygenqt.com/api/experts](https://mb-api.keygenqt.com/api/experts)
+- [https://mb-api.keygenqt.com](https://mb-api.keygenqt.com)
+- [https://mb-api.keygenqt.com/api/experts](https://mb-api.keygenqt.com/api/experts)
 
 ### License
 
