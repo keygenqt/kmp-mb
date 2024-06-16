@@ -1,0 +1,89 @@
+services:
+  gradle:
+    container_name: mb-kotlin
+    restart: no
+    tty: true
+    build:
+      context: .
+      dockerfile: gradle/Dockerfile
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /var/www/src/shared
+        gradle shared:serverLib
+        gradle shared:reactLib
+
+        cd /var/www/src/server
+        gradle buildFatJar
+    working_dir: /var/www/src
+    volumes:
+      - ../apps:/var/www/src
+
+  node:
+    container_name: mb-react
+    restart: no
+    build:
+      context: .
+      dockerfile: node/Dockerfile
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /var/www/src/website
+        npm install
+        npm run build
+
+        cd /var/www/src/admin-panel
+        npm install
+        npm run build
+    working_dir: /var/www/src
+    volumes:
+      - ../apps:/var/www/src
+
+  java:
+    container_name: mb-server-run
+    depends_on:
+      gradle:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: java/Dockerfile
+    restart: always
+    tty: true
+    command: "java -jar mb-server.jar"
+    ports:
+      - ${PORT_API}:3002
+    working_dir: /var/www/src/build/libs
+    volumes:
+      - ../apps/server/:/var/www/src
+    networks:
+      - internal
+
+  nginx:
+    container_name: mb-nginx
+    depends_on:
+      java:
+        condition: service_started
+      node:
+        condition: service_completed_successfully
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    restart: always
+    tty: true
+    ports:
+      - ${PORT_WEBSITE}:3000
+      - ${PORT_ADMIN_PANEL}:3001
+    volumes:
+      - ../:/var/www/src
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  kmpms-database:
