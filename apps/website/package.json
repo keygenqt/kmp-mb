@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.16.0",
     "@mui/material": "^5.15.20",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -15,6 +16,10 @@
     "react-scripts": "5.0.1",
     "shared": "file:libs/shared",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "sass": "^1.77.6",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "scripts": {
     "start": "PORT=3000 react-scripts start",

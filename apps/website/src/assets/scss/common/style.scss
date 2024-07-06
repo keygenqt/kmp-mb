@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+html, body, #root, .App {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.Table {
+    display: table;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.Table-Row {
+    display: table-row;
+}
+
+.Table-Cell {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.Footer {
+    background-color: #878686;
+    color: white;
+    padding: 40px 60px;
+    text-align: center;
+}
+
+.Footer img {
+    filter: contrast(0%) brightness(2);
+    width: 70px;
+    margin: 0 auto !important;
+}
