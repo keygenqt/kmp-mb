@@ -42,7 +42,7 @@ function App() {
         <ThemeProvider theme={darkMode ? ThemeDark : ThemeLight}>
         <Box className={"Table " + (darkMode ? 'ThemeDark' : 'ThemeLight')} sx={{ backgroundColor: 'background.default' }}>
             <Box className={"Table-Row"}>
-                <Box className={"Table-Cell Header"} sx={{height: 0}}>
+                <Box className={"Table-Cell Header"} sx={{height: '1px'}}>
                     <AppBar position="relative" color={'transparent'} elevation={0}>
                         <Toolbar>
                             <IconButton
@@ -146,7 +146,7 @@ function App() {
                     </Container>
                 </Box>
             </Box>
-            <Box className={"Table-Row"} sx={{height: 0}}>
+            <Box className={"Table-Row"} sx={{height: '1px'}}>
                 <Box className={"Table-Cell"}>
                     <Box className={"Footer"}>
                         <Stack spacing={4} alignItems="center">
@@ -163,13 +163,19 @@ function App() {
                                     '& .Mui-disabled': {
                                         color: '#ffffff73 !important',
                                         border: '1px solid #ffffff73 !important',
+                                    },
+                                    '@supports (-moz-appearance:none)': {
+                                        '& .MuiTypography-root' : {
+                                            position: 'relative',
+                                            top: '-2px',
+                                        }
                                     }
                                 }}
                             >
                                 <Button
                                     disabled={isLocEn}
                                     onClick={() => {
-                                        i18n.changeLanguage('en')
+                                        i18n.changeLanguage('en-US')
                                     }}
                                 >
                                     <Typography>en</Typography>
@@ -178,7 +184,7 @@ function App() {
                                 <Button
                                     disabled={!isLocEn}
                                     onClick={() => {
-                                        i18n.changeLanguage('ru')
+                                        i18n.changeLanguage('ru-RU')
                                     }}
                                 >
                                     <Typography>ru</Typography>
