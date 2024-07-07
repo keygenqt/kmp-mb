@@ -1,6 +1,10 @@
 import * as React from 'react';
 import {ThemeLight} from "./theme/ThemeLight";
-import {ConstantImages} from "./base";
+import {ThemeDark} from "./theme/ThemeDark";
+import {
+    ConstantImages,
+    LanguageContext
+} from "./base";
 import {
     useTheme,
     useMediaQuery,
@@ -14,8 +18,16 @@ import {
     Stack,
     Avatar,
     Grid,
-    Typography
+    Typography,
+    Divider,
+    ButtonGroup
 } from "@mui/material";
+
+import {
+    Brightness5Outlined,
+    Brightness4Outlined
+} from '@mui/icons-material';
+
 
 
 function App() {
@@ -23,11 +35,14 @@ function App() {
     const theme = useTheme()
     const isLG = useMediaQuery(theme.breakpoints.down('lg'));
 
+    const [darkMode, setDarkMode] = React.useState(false);
+    const {t, i18n, isLocEn} = React.useContext(LanguageContext)
+
     return (
-        <ThemeProvider theme={ThemeLight}>
-        <Box className={"Table"}>
+        <ThemeProvider theme={darkMode ? ThemeDark : ThemeLight}>
+        <Box className={"Table " + (darkMode ? 'ThemeDark' : 'ThemeLight')} sx={{ backgroundColor: 'background.default' }}>
             <Box className={"Table-Row"}>
-                <Box className={"Table-Cell"} sx={{height: 0}}>
+                <Box className={"Table-Cell Header"} sx={{height: 0}}>
                     <AppBar position="relative" color={'transparent'} elevation={0}>
                         <Toolbar>
                             <IconButton
@@ -35,17 +50,17 @@ function App() {
                                 edge="start"
                                 color="inherit"
                                 aria-label="menu"
-                                sx={{ mr: 2, padding: 0, marginLeft: '-4px'}}
+                                sx={{ mr: 2, padding: 0, marginLeft: '-4px', marginRight: 0}}
                             >
                                 <Avatar
                                     alt={'Logo'}
                                     src={ConstantImages.common.logo}
                                     sx={{
-                                        width: 60,
-                                        height: 60,
+                                        width: isLG ? 50 : 60,
+                                        height: isLG ? 50 : 60,
                                         '& .MuiAvatar-img': {
-                                            width: 46,
-                                            height: 46,
+                                            width: isLG ? 36 : 46,
+                                            height: isLG ? 36 : 46,
                                             objectFit: 'contain',
                                             padding: '4px',
                                             paddingBottom: '8px'
@@ -58,10 +73,38 @@ function App() {
 
                             <Stack
                                 direction="row"
-                                spacing={2}
+                                spacing={isLG ? 0.5 : 2}
                             >
-                                <Button color="inherit">Сообщество</Button>
-                                <Button color="inherit">Эксперты</Button>
+
+                                <Button color="primary">
+                                    {t('layouts.header.t_community')}
+                                </Button>
+
+                                <Button color="primary">
+                                    {t('layouts.header.t_experts')}
+                                </Button>
+
+                                <Divider orientation="vertical" flexItem />
+
+                                <ButtonGroup
+                                    color={'primary'}
+                                    size="small"
+                                    variant="text"
+                                    aria-label="Mode"
+                                >
+                                    <Button
+                                        onClick={() => {
+                                            setDarkMode(!darkMode)
+                                        }}
+                                    >
+                                        {darkMode ? (
+                                            <Brightness4Outlined/>
+                                        ) : (
+                                            <Brightness5Outlined/>
+                                        )}
+                                    </Button>
+                                </ButtonGroup>
+
                             </Stack>
                         </Toolbar>
                     </AppBar>
@@ -78,17 +121,17 @@ function App() {
                             >
                                 <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
                                     <Stack spacing={2}>
-                                        <Typography variant="h2">
-                                            Mobile Broadcast
+                                        <Typography variant="h2" color={'text.primary'}>
+                                            {t('pages.home.t_block_1_title')}
                                         </Typography>
 
-                                        <Typography variant="text1">
-                                            Это международное сообщество для всех, кто увлечен мобильной разработкой. Это место, где границы между платформами стираются, и единственное, что имеет значение – ваш интерес и страсть к мобильным технологиям.
+                                        <Typography variant="text1" color={'text.primary'}>
+                                            {t('pages.home.t_block_1_text')}
                                         </Typography>
 
                                         <Box>
                                             <Button variant="contained">
-                                                Вступить в сообщество
+                                                {t('pages.home.t_block_1_button')}
                                             </Button>
                                         </Box>
                                     </Stack>
@@ -106,11 +149,41 @@ function App() {
             <Box className={"Table-Row"} sx={{height: 0}}>
                 <Box className={"Table-Cell"}>
                     <Box className={"Footer"}>
-                        <Stack spacing={4}>
+                        <Stack spacing={4} alignItems="center">
                             <img src={ConstantImages.common.logo} alt="Logo" />
+
                             <Box>
-                                © Mobile Broadcast 2024
+                                {t('layouts.footer.t_copyright')}
                             </Box>
+
+                            <ButtonGroup
+                                color={'white'}
+                                size="small"
+                                sx={{
+                                    '& .Mui-disabled': {
+                                        color: '#ffffff73 !important',
+                                        border: '1px solid #ffffff73 !important',
+                                    }
+                                }}
+                            >
+                                <Button
+                                    disabled={isLocEn}
+                                    onClick={() => {
+                                        i18n.changeLanguage('en')
+                                    }}
+                                >
+                                    <Typography>en</Typography>
+                                </Button>
+
+                                <Button
+                                    disabled={!isLocEn}
+                                    onClick={() => {
+                                        i18n.changeLanguage('ru')
+                                    }}
+                                >
+                                    <Typography>ru</Typography>
+                                </Button>
+                            </ButtonGroup>
                         </Stack>
                     </Box>
                 </Box>

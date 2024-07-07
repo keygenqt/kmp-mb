@@ -6,7 +6,13 @@
 export const typography = {
     fontSize: 14,
     button: {
-        textTransform: 'none'
+        textTransform: 'none',
+        fontSize: 16,
+        fontWeight: 600,
+        fontFamily: [
+            'Jura',
+            'sans-serif',
+        ].join(','),
     },
     h2: {
         fontSize: 48,

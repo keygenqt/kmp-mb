@@ -26,6 +26,11 @@ html, body, #root, .App {
     vertical-align: middle;
 }
 
+.ThemeDark .Header .MuiAvatar-img {
+    filter: invert(0%) sepia(40%) saturate(46%) brightness(2) contrast(100%);
+    transition-duration: 200ms;
+}
+
 .Footer {
     background-color: #878686;
     color: white;
