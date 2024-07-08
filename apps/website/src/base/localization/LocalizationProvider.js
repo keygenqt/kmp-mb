@@ -1,22 +1,21 @@
 import React from 'react';
-import {useTranslation} from "react-i18next";
+import {useTranslation} from 'react-i18next';
+import {LocalizationContext} from './Localization'
 
-export const LanguageContext = React.createContext({})
-
-export default function LanguageContextProvider(props) {
+export function LocalizationProvider(props) {
 
     const {t, i18n} = useTranslation()
 
     const isLocEn = i18n.language === 'en-US'
 
     return (
-        <LanguageContext.Provider
+        <LocalizationContext.Provider
             value={{
                 t,
                 i18n,
                 isLocEn,
             }}>
             {props.children}
-        </LanguageContext.Provider>
+        </LocalizationContext.Provider>
     )
 }

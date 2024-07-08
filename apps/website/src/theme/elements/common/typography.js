@@ -17,6 +17,7 @@ export const typography = {
     h2: {
         fontSize: 48,
         fontWeight: 'bold',
+        lineHeight: '1.6',
         fontFamily: [
             'Jura',
             'sans-serif',

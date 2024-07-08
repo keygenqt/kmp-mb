@@ -15,14 +15,19 @@ export function BaseLayout(props) {
                 </Box>
             </Box>
             <Box className={'Table-Row'}>
-                <Box className={'Table-Cell'} sx={{paddingTop: 6, paddingBottom: 6}}>
+                <Box className={'Table-Cell ' + props.className} sx={{
+                    paddingTop: 6,
+                    paddingBottom: 6,
+                    verticalAlign: props.isCenter === true ? 'middle' : 'top'
+                    }}
+                >
                     <Container maxWidth='lg'>
                         {props.children}
                     </Container>
                 </Box>
             </Box>
             <Box className={'Table-Row'} sx={{height: '1px'}}>
-                <Box className={'Table-Cell'}>
+                <Box className={'Table-Cell Footer'}>
                     <Footer/>
                 </Box>
             </Box>
@@ -32,5 +37,6 @@ export function BaseLayout(props) {
 
 BaseLayout.propTypes = {
     children: PropTypes.element.isRequired,
+    className: PropTypes.string.isRequired,
     isCenter: PropTypes.bool,
 };

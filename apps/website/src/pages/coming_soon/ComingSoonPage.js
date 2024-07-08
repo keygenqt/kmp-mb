@@ -8,7 +8,7 @@ import {
     Button,
 } from '@mui/material';
 
-export function ErrorPage(props) {
+export function ComingSoonPage(props) {
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
     return (
@@ -16,19 +16,19 @@ export function ErrorPage(props) {
             <Stack spacing={4}>
 
                 <Typography variant='h2' color={'text.primary'}>
-                    {t('pages.error.t_title')}
+                    {t('pages.coming_soon.t_title')}
                 </Typography>
 
                 <Box>
                     <Lottie
-                        className={'ErrorLottie'}
+                        className={'ComingSoonLottie'}
                         loop={false}
-                        animationData={DataLottie.error_404}
+                        animationData={DataLottie.coming_soon}
                     />
                 </Box>
 
                 <Typography variant='text1' color={'text.primary'}>
-                    {t('pages.error.t_text')}
+                    {t('pages.coming_soon.t_text')}
                 </Typography>
 
                 <Box>
@@ -38,7 +38,7 @@ export function ErrorPage(props) {
                             route.toLocation(routes.home)
                         }}
                     >
-                        {t('pages.error.t_btn')}
+                        {t('pages.coming_soon.t_btn')}
                     </Button>
                 </Box>
 
@@ -47,4 +47,4 @@ export function ErrorPage(props) {
     );
 }
 
-ErrorPage.propTypes = {};
+ComingSoonPage.propTypes = {};

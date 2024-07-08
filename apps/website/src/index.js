@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import LanguageContextProvider from './base/contexts/LanguageContext';
+import {BrowserRouter} from 'react-router-dom';
+import {LocalizationProvider, RouteProvider} from './base';
 import reportWebVitals from './reportWebVitals';
-
+import App from './App';
 import './assets/scss/index.scss';
-import './localization/Localization';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <LanguageContextProvider>
-      <App />
-    </LanguageContextProvider>
+    <BrowserRouter>
+      <LocalizationProvider>
+        <RouteProvider>
+          <App />
+        </RouteProvider>
+      </LocalizationProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
