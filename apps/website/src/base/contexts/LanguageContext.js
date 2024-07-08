@@ -1,7 +1,7 @@
-import React, {createContext} from "react";
+import React from 'react';
 import {useTranslation} from "react-i18next";
 
-export const LanguageContext = createContext({})
+export const LanguageContext = React.createContext({})
 
 export default function LanguageContextProvider(props) {
 

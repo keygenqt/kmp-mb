@@ -1,7 +1,7 @@
 import {createTheme} from '@mui/material/styles';
-import {palette} from "./impl/dark/palette";
-import {typography} from "./impl/common/typography";
-import {components} from "./impl/common/components";
+import {palette} from "./elements/dark/palette";
+import {typography} from "./elements/common/typography";
+import {components} from "./elements/common/components";
 
 
 export const ThemeDark = createTheme({

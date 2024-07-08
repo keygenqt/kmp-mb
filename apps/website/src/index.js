@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './assets/scss/index.scss';
 import App from './App';
+import LanguageContextProvider from './base/contexts/LanguageContext';
 import reportWebVitals from './reportWebVitals';
-import "./localization/Localization";
-import LanguageContextProvider from "./base/contexts/LanguageContext";
+
+import './assets/scss/index.scss';
+import './localization/Localization';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <LanguageContextProvider>
