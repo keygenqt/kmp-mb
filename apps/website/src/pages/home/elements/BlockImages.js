@@ -14,7 +14,7 @@ export function BlockImages(props) {
     const isDownSM = useMediaQuery(theme.breakpoints.down('sm'))
 
     const content = []
-    DataImages.home.slider.forEach((item, index) => {
+    DataImages.home.slider.slice().reverse().forEach((item, index) => {
         content.push(
             <Box className={'Carousel-Item'} sx={{backgroundImage: `url("${item}")`}} key={`slider-${index}`}/>
         )
@@ -23,10 +23,10 @@ export function BlockImages(props) {
     return (
         <Box className={'BlockImages'}>
             <Carousel
+                changeOnFirstRender={true}
                 height={isLG ? 550 : isDownSM ? 250 : 400}
-                index={5}
+                index={0}
                 autoPlay={true}
-                swipe={false}
                 navButtonsAlwaysVisible={true}
             >
                 {content}
