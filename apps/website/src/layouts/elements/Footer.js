@@ -100,7 +100,7 @@ export function Footer(props) {
                     direction={'row'}
                     justifyContent="space-between"
                 >
-                    <Typography variant='body2' color={'white'} sx={{alignContent: 'center'}}>
+                    <Typography variant='body2' color={'white'} sx={{paddingTop: '5px'}}>
                         {t('layouts.footer.t_copyright')}
                     </Typography>
 
