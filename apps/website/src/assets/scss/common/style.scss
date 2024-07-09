@@ -73,6 +73,14 @@ html, body, #root, .App {
     display: none;
 }
 
+.MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0.1 !important;
+}
+
+.ThemeDark .MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0.25 !important;
+}
+
 @media (max-width: 1200px) {
     .Footer img.Logo-Top {
         display: block;
