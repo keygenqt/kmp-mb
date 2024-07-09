@@ -25,7 +25,7 @@ export function HomePage(props) {
             <Container maxWidth='lg'>
                 <BlockImages/>
             </Container>
-            <Container maxWidth='xl'>
+            <Container maxWidth='lg'>
                 <BlockPartners/>
             </Container>
         </Stack>

@@ -11,6 +11,7 @@ import home_slider_7 from '../../assets/images/home/slider/photo1719814034.jpeg'
 import home_slider_8 from '../../assets/images/home/slider/photo1720172955.jpeg';
 import home_slider_9 from '../../assets/images/home/slider/photo1720336026.jpeg';
 import home_slider_10 from '../../assets/images/home/slider/photo1720436562.jpeg';
+import home_slider_11 from '../../assets/images/home/slider/photo1720527742.jpeg';
 
 export const DataImages = {
     common: {
@@ -29,6 +30,7 @@ export const DataImages = {
             home_slider_8,
             home_slider_9,
             home_slider_10,
+            home_slider_11,
         ]
     }
 };
