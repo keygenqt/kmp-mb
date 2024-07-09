@@ -34,7 +34,7 @@ export function BlockCards(props) {
                 }}
             >
                 <CardContent>
-                    <Stack spacing={3}>
+                    <Stack spacing={isMD ? 2 : 3}>
                         <Typography variant="h3" component="div">
                             {t(item.title)}
                         </Typography>
@@ -58,7 +58,7 @@ export function BlockCards(props) {
 
     return (
         <Box className={'BlockCards'}>
-            <Stack spacing={6} direction={isMD ? 'column' : 'row'}>
+            <Stack spacing={isMD ? 3 : 6} direction={isMD ? 'column' : 'row'}>
                 {content}
             </Stack>
         </Box>
