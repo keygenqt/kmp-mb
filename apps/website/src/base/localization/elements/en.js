@@ -6,6 +6,12 @@ export const enLocalization = {
                 t_experts: 'Experts',
             },
             footer: {
+                t_founders: 'Founders',
+                t_founder_k_title: 'Kirill Rozov',
+                t_founder_k_text: 'Blogger, founder of Android Broadcast',
+                t_founder_a_title: 'Alexey Gladkov',
+                t_founder_a_text: 'Blogger, Aurora and Kotlin Multiplatform',
+                t_contacts: 'Contacts',
                 t_copyright: '© Mobile Broadcast 2024',
             }
         },

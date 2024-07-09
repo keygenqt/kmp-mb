@@ -52,15 +52,44 @@ html, body, #root, .App {
     background-color: #858585;
     color: white;
     padding: 40px 60px;
-    text-align: center;
 }
 
 .ThemeDark .Footer {
     background-color: #292929;
 }
 
-.Footer img {
+.Footer img.Logo {
     filter: contrast(0%) brightness(2);
-    width: 70px;
     margin: 0 auto !important;
+    display: block;
+}
+
+.Footer img.Logo-Center {
+    width: 150px;
+}
+
+.Footer img.Logo-Top {
+    width: 70px;
+    display: none;
+}
+
+@media (max-width: 1200px) {
+    .Footer img.Logo-Top {
+        display: block;
+    }
+    .Footer img.Logo-Center {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .Footer img.Logo {
+        padding-bottom: 24px;
+    }
+}
+
+@media (max-width: 600px) {
+    .Footer {
+        padding: 34px;
+    }
 }

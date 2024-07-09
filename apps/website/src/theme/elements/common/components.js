@@ -9,7 +9,10 @@ export const components = {
                 theme.unstable_sx({
                     borderRadius: 5,
                     boxShadow: 'none !important',
-                    background: theme.palette.mode === 'dark' ? '#292929' : '#F9F9F9',
+                    background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#F9F9F9',
+                    '&:hover .MuiCardActionArea-focusHighlight': {
+                        opacity: theme.palette.mode === 'dark' ? '0.2' : '0.1'
+                    },
                     '& .MuiCardHoverShow': {
                         opacity: '0',
                         transitionDuration: '200ms'

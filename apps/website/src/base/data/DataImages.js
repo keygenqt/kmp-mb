@@ -1,4 +1,6 @@
 import common_logo from '../../assets/images/common/logo.svg';
+import common_rozov from '../../assets/images/common/photo1704995037.jpeg';
+import common_gladkov from '../../assets/images/common/photo1704995038.jpeg';
 
 import home_map from '../../assets/images/home/map.png';
 import home_slider_1 from '../../assets/images/home/slider/photo1718970610.jpeg';
@@ -15,7 +17,9 @@ import home_slider_11 from '../../assets/images/home/slider/photo1720527742.jpeg
 
 export const DataImages = {
     common: {
-        logo: common_logo
+        logo: common_logo,
+        rozov: common_rozov,
+        gladkov: common_gladkov,
     },
     home: {
         map: home_map,

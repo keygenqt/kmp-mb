@@ -6,6 +6,12 @@ export const ruLocalization = {
                 t_experts: 'Эксперты',
             },
             footer: {
+                t_founders: 'Основатели',
+                t_founder_k_title: 'Кирилл Розов',
+                t_founder_k_text: 'Блогер, основатель Android Broadcast',
+                t_founder_a_title: 'Алексей Гладков',
+                t_founder_a_text: 'Блогер, Aurora и Kotlin Multiplatform',
+                t_contacts: 'Контакты',
                 t_copyright: '© Mobile Broadcast 2024',
             }
         },
