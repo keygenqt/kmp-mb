@@ -16,6 +16,7 @@
     "lottie-react": "^2.4.0",
     "react-router": "^6.24.1",
     "react-router-dom": "^6.24.1",
+    "react-material-ui-carousel": "^3.4.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

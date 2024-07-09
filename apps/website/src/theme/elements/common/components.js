@@ -3,6 +3,26 @@
  * @link https://mui.com/material-ui/customization/theme-components/
  */
 export const components = {
+    MuiCard: {
+        styleOverrides: {
+            root: ({ theme }) =>
+                theme.unstable_sx({
+                    borderRadius: 5,
+                    boxShadow: 'none !important',
+                    background: theme.palette.mode === 'dark' ? '#292929' : '#F9F9F9',
+                    '& .MuiCardHoverShow': {
+                        opacity: '0',
+                        transitionDuration: '200ms'
+                    },
+                    '&:hover .MuiCardHoverShow': {
+                        opacity: '1'
+                    },
+                    '& .MuiCardContent-root': {
+                        padding: 4
+                    }
+                }),
+        }
+    },
     MuiButton: {
         styleOverrides: {
             root: {

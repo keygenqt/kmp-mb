@@ -1,12 +1,15 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {Container, Box} from '@mui/material';
+import {useTheme, useMediaQuery, Box} from '@mui/material';
 
 import {Header} from './elements/Header';
 import {Footer} from './elements/Footer';
 
 
 export function BaseLayout(props) {
+    const theme = useTheme()
+    const isMD = useMediaQuery(theme.breakpoints.down('md'))
+
     return (
         <>
             <Box className={'Table-Row'}>
@@ -16,14 +19,12 @@ export function BaseLayout(props) {
             </Box>
             <Box className={'Table-Row'}>
                 <Box className={'Table-Cell ' + props.className} sx={{
-                    paddingTop: 6,
-                    paddingBottom: 6,
+                    paddingTop: isMD ? 4 : 6,
+                    paddingBottom: isMD ? 4 : 6,
                     verticalAlign: props.isCenter === true ? 'middle' : 'top'
                     }}
                 >
-                    <Container maxWidth='lg'>
-                        {props.children}
-                    </Container>
+                    {props.children}
                 </Box>
             </Box>
             <Box className={'Table-Row'} sx={{height: '1px'}}>

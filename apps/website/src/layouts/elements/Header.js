@@ -48,11 +48,11 @@ export function Header(props) {
                     alt={'Logo'}
                     src={DataImages.common.logo}
                     sx={{
-                        width: isLG ? 50 : 60,
-                        height: isLG ? 50 : 60,
+                        width: isLG ? 38 : 60,
+                        height: isLG ? 38 : 60,
                         '& .MuiAvatar-img': {
-                            width: isLG ? 36 : 46,
-                            height: isLG ? 36 : 46,
+                            width: isLG ? 30 : 46,
+                            height: isLG ? 30 : 46,
                             objectFit: 'contain',
                             padding: '4px',
                             paddingBottom: '8px'
@@ -95,6 +95,12 @@ export function Header(props) {
                     aria-label='Mode'
                 >
                     <Button
+                        sx={isLG ? {
+                            minWidth: '30px !important',
+                            height: '33px',
+                            position: 'relative',
+                            top: '4px',
+                        } : {}}
                         onClick={() => {
                             CacheStorage.booleanSet(CacheKeys.darkMode, !darkMode)
                         }}

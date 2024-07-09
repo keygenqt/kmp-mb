@@ -15,13 +15,26 @@ export const typography = {
         ].join(','),
     },
     h2: {
-        fontSize: 48,
+        fontSize: 46,
         fontWeight: 'bold',
-        lineHeight: '1.6',
+        lineHeight: '1.2',
         fontFamily: [
             'Jura',
             'sans-serif',
         ].join(','),
+    },
+    h3: {
+        fontSize: 35,
+        fontWeight: 'bold',
+        lineHeight: '1.2',
+        fontFamily: [
+            'Jura',
+            'sans-serif',
+        ].join(','),
+    },
+    subtitle1: {
+        fontSize: 24,
+        lineHeight: '1.5',
     },
     text1: {
         fontSize: 20,

@@ -32,11 +32,31 @@ html, body, #root, .App {
     transition-duration: 200ms;
 }
 
+.Header .MuiToolbar-root {
+    border-bottom: 1px solid #802aea1f;
+}
+
+.Header .MuiDivider-root {
+    border-color: #802aea1f;;
+}
+
+.ThemeDark .Header .MuiToolbar-root {
+    border-bottom: 1px solid #cc8ff71f;
+}
+
+.ThemeDark .Header .MuiDivider-root {
+    border-color: #cc8ff71f;
+}
+
 .Footer {
-    background-color: #707070;
+    background-color: #858585;
     color: white;
     padding: 40px 60px;
     text-align: center;
+}
+
+.ThemeDark .Footer {
+    background-color: #292929;
 }
 
 .Footer img {

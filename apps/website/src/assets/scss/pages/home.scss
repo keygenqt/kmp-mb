@@ -1,0 +1,73 @@
+// BlockAbout
+.HomePage .ContentPage .BlockAbout {
+    background-color: #802aea0d;
+    border-radius: 20px;
+    padding: 80px 60px;
+}
+
+.ThemeDark .HomePage .ContentPage .BlockAbout {
+    background-color: #cb8ff717;
+}
+
+@media (max-width: 1200px) {
+    .HomePage .ContentPage .BlockAbout {
+        padding: 40px 32px;
+    }
+}
+
+// BlockCards
+.HomePage .ContentPage .BlockCards .Logo {
+    height: 35px;
+    filter: brightness(1) saturate(1%);
+}
+
+.ThemeDark .HomePage .ContentPage .BlockCards .Logo {
+    filter: contrast(0%) brightness(2);
+}
+
+// BlockImages
+.HomePage .ContentPage .BlockImages .Carousel-Item {
+    height: 550px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+@media (max-width: 1200px) {
+    .HomePage .ContentPage .BlockImages .Carousel-Item {
+        height: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .HomePage .ContentPage .BlockImages .Carousel-Item {
+        height: 250px;
+    }
+    .HomePage .ContentPage .BlockImages .MuiIconButton-root[aria-label="Previous"],
+    .HomePage .ContentPage .BlockImages .MuiIconButton-root[aria-label="Next"] {
+        display: none;
+    }
+}
+
+// BlockPartners
+.HomePage .ContentPage .BlockPartners {
+    background-color: #802aea0d;
+    border-radius: 20px;
+    padding: 40px;
+}
+
+@media (max-width: 1200px) {
+    .HomePage .ContentPage .BlockPartners {
+        padding: 32px;
+    }
+}
+
+.ThemeDark .HomePage .ContentPage .BlockPartners {
+    background-color: #cb8ff717;
+}
+
+.HomePage .ContentPage .BlockPartners .LaptopLottie {
+    width: 100px;
+    margin: 0 auto;
+}

@@ -11,9 +11,18 @@ export const enLocalization = {
         },
         pages: {
             home: {
-                t_block_1_title: 'Mobile Broadcast',
-                t_block_1_text: 'This is an international community for everyone who is passionate about mobile development. This is a place where the boundaries between platforms blur and the only thing that matters is your interest and passion for mobile technology.',
-                t_block_1_button: 'Join the community',
+                t_BlockAbout_title: 'Mobile Broadcast',
+                t_BlockAbout_text: 'This is an international community for everyone who is passionate about mobile development. This is a place where the boundaries between platforms blur and the only thing that matters is your interest and passion for mobile technology.',
+                t_BlockAbout_btn: 'Join the community',
+
+                t_BlockPartners_title: 'Partners',
+                t_BlockPartners_text: 'If you would like to become a community partner, please contact us and we will discuss the details.',
+                t_BlockPartners_btn: 'Leave a statement',
+
+                t_BlockCards_item1_title: 'Create a community',
+                t_BlockCards_item1_text: 'You can apply to register a community in your city',
+                t_BlockCards_item2_title: 'List of communities',
+                t_BlockCards_item2_text: 'Here you can find a list of Mobile Broadcast communities',
             },
             error: {
                 t_title: 'Page not found.',
