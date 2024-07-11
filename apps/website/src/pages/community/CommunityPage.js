@@ -30,7 +30,7 @@ export function CommunityPage(props) {
             alignItems="center"
         >
             <Container maxWidth='xl'>
-                <Card sx={{padding: 3}}>
+                <Card sx={{padding: isMD ? 2 : 3}}>
                     <CardContent>
                         <Stack spacing={isMD ? 2 : 3}>
                             <Stack spacing={2} direction={isSM ? 'column' : 'row'} alignItems={isSM ? 'right' : 'center'}>

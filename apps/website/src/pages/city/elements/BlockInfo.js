@@ -24,7 +24,7 @@ export function BlockInfo(props) {
     } = props
 
     return (
-        <Card sx={{padding: 3}}>
+        <Card sx={{padding: isMD ? 2 : 3}}>
             <CardContent>
                 <Stack
                     direction={isMD ? 'column' : 'row'}
