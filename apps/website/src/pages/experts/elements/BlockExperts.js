@@ -81,7 +81,7 @@ export function BlockExperts(props) {
                                 {search_name}
                             </Typography>
 
-                            <Stack spacing={0.5} direction={'row'}>
+                            <Stack spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
                                 {item.direction.map((option) => (
                                     <Chip className={option.replace(' ', '_')} label={option} variant="outlined" />
                                 ))}
