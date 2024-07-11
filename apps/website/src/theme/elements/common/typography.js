@@ -32,6 +32,15 @@ export const typography = {
             'sans-serif',
         ].join(','),
     },
+    h4: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        lineHeight: '1.2',
+        fontFamily: [
+            'Jura',
+            'sans-serif',
+        ].join(','),
+    },
     h5: {
         fontSize: 22,
         fontWeight: 'bold',
@@ -47,5 +56,8 @@ export const typography = {
     },
     text1: {
         fontSize: 20,
+    },
+    text2: {
+        fontSize: 17,
     },
 }

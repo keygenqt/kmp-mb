@@ -1,5 +1,8 @@
 export const enLocalization = {
     translation: {
+        common: {
+            t_more: 'More details'
+        },
         layouts: {
             header: {
                 t_community: 'Community',
@@ -29,6 +32,23 @@ export const enLocalization = {
                 t_BlockCards_item1_text: 'You can apply to register a community in your city',
                 t_BlockCards_item2_title: 'List of communities',
                 t_BlockCards_item2_text: 'Here you can find a list of Mobile Broadcast communities',
+            },
+            community: {
+                t_title: 'Community',
+                t_text: "The main driver of the branch is the organizer, he organizes events and moderates the city’s Telegram group. If you don't find your city on this list, you can open a community branch in your city by becoming a Mobile Broadcast organizer.",
+                t_subtext: 'Join our friendly community!',
+                t_btn: 'Create a community',
+                t_filter_search: 'Search',
+                t_filter_country: 'Country',
+            },
+            city: {
+                t_text1: 'Welcome to the {{city}} community page! If you find a gallery on the page, these are our meetings where we discuss all sorts of different IT issues. If suddenly she’s not there, we haven’t had time to take a photo yet, but everything is ahead.',
+                t_text2: 'Also on this page you will find the organizers; you can contact them and discuss important matters. If there are no organizers on the page yet, this happens; it is still in the process of formation.',
+                t_text3: 'Join the community, it will be interesting!',
+                t_join_btn: 'Join the community',
+                t_administrator: 'Join the community',
+                t_organizer: 'Organizer',
+                t_organizers: 'Organizers',
             },
             error: {
                 t_title: 'Page not found.',

@@ -1,15 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Jura:wght@300..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
-html, body, #root, .App {
+html, body, .App {
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
     font-family: 'Montserrat', sans-serif;
     line-height: 1.3;
+    overflow: hidden;
 }
 
+#root.ScrollSection {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+}
+
+// Table
 .Table {
     display: table;
     padding: 0;
@@ -27,6 +36,7 @@ html, body, #root, .App {
     vertical-align: middle;
 }
 
+// Header
 .ThemeDark .Header .MuiAvatar-img {
     filter: invert(0%) sepia(40%) saturate(46%) brightness(2) contrast(100%);
     transition-duration: 200ms;
@@ -48,6 +58,7 @@ html, body, #root, .App {
     border-color: #cc8ff71f;
 }
 
+// Footer
 .Footer {
     background-color: #858585;
     color: white;
@@ -73,14 +84,6 @@ html, body, #root, .App {
     display: none;
 }
 
-.MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
-    opacity: 0.1 !important;
-}
-
-.ThemeDark .MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
-    opacity: 0.25 !important;
-}
-
 @media (max-width: 1200px) {
     .Footer img.Logo-Top {
         display: block;
@@ -100,4 +103,38 @@ html, body, #root, .App {
     .Footer {
         padding: 34px;
     }
+}
+
+// BlockCarousel
+.ContentPage .BlockCarousel .Carousel-Item {
+    height: 550px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+@media (max-width: 1200px) {
+    .ContentPage .BlockCarousel .Carousel-Item {
+        height: 400px;
+    }
+}
+
+@media (max-width: 600px) {
+    .ContentPage .BlockCarousel .Carousel-Item {
+        height: 250px;
+    }
+    .ContentPage .BlockCarousel .MuiIconButton-root[aria-label="Previous"],
+    .ContentPage .BlockCarousel .MuiIconButton-root[aria-label="Next"] {
+        display: none;
+    }
+}
+
+// @todo
+.MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0.1 !important;
+}
+
+.ThemeDark .MuiPaper-root:hover .MuiCardActionArea-focusHighlight {
+    opacity: 0.25 !important;
 }

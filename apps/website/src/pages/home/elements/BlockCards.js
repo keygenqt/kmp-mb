@@ -12,8 +12,20 @@ import {
     Typography,
 } from '@mui/material';
 
-import {ItemActiveCard} from "../data/ItemActiveCard";
-
+const ItemActiveCard = [
+    {
+        id: 1,
+        title: 'pages.home.t_BlockCards_item1_title',
+        text: 'pages.home.t_BlockCards_item1_text',
+        link: 'https://docs.google.com/forms/d/1Oqt0y2dgP9NjVqxW3CBEaIWEPlZPKW1NmPHu_BuKYVA/viewform?edit_requested=true'
+    },
+    {
+        id: 2,
+        title: 'pages.home.t_BlockCards_item2_title',
+        text: 'pages.home.t_BlockCards_item2_text',
+        link: 'community'
+    },
+];
 
 export function BlockCards(props) {
     const {t} = React.useContext(LocalizationContext)
@@ -23,37 +35,40 @@ export function BlockCards(props) {
 
     const content = []
     ItemActiveCard.forEach((item) => {
-        content.push(<Card key={item.id} sx={{ maxWidth: isMD ? 'auto' : 350 }}>
-            <CardActionArea
-                onClick={() => {
-                    if (item.link.includes('http')) {
-                        route.openUrlNewTab(item.link)
-                    } else {
-                        route.toLocation(routes[item.link])
-                    }
-                }}
-            >
-                <CardContent>
-                    <Stack spacing={isMD ? 2 : 3}>
-                        <Typography variant="h3" component="div">
-                            {t(item.title)}
-                        </Typography>
-                        <Typography variant='text1' color={'text.primary'}>
-                            {t(item.text)}
-                        </Typography>
-                        <Box>
-                            <Stack
-                                direction="row"
-                                justifyContent="space-between"
-                            >
-                                <img className='MuiCardHoverShow Logo' src={DataImages.common.logo} alt='Logo' />
-                                <SouthEast fontSize="large"/>
-                            </Stack>
-                        </Box>
-                    </Stack>
-                </CardContent>
-            </CardActionArea>
-        </Card>)
+        content.push(
+            <Card key={item.id} sx={{ maxWidth: isMD ? 'auto' : 350 }}>
+                <CardActionArea
+                    sx={{padding: 2}}
+                    onClick={() => {
+                        if (item.link.includes('http')) {
+                            route.openUrlNewTab(item.link)
+                        } else {
+                            route.toLocation(routes[item.link])
+                        }
+                    }}
+                >
+                    <CardContent>
+                        <Stack spacing={isMD ? 2 : 3}>
+                            <Typography variant="h3" component="div">
+                                {t(item.title)}
+                            </Typography>
+                            <Typography variant='text1' color={'text.primary'}>
+                                {t(item.text)}
+                            </Typography>
+                            <Box>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                >
+                                    <img className='MuiCardHoverShow Logo' src={DataImages.common.logo} alt='Logo' />
+                                    <SouthEast fontSize="large"/>
+                                </Stack>
+                            </Box>
+                        </Stack>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+        )
     })
 
     return (

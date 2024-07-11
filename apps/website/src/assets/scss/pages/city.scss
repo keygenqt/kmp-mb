@@ -1,0 +1,10 @@
+.CityPage .ContentPage .LogoCity {
+    max-width: 300px;
+    border-radius: 20px;
+}
+
+@media (max-width: 600px) {
+    .CityPage .ContentPage .LogoCity {
+        width: 100%;
+    }
+}

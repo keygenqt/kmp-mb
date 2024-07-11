@@ -10,6 +10,8 @@ export const components = {
                     borderRadius: 5,
                     boxShadow: 'none !important',
                     background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#F9F9F9',
+                    border: '1px solid',
+                    borderColor: theme.palette.mode === 'dark' ? '#cb8ff747' : '#802aea2b',
                     '& .MuiCardHoverShow': {
                         opacity: '0',
                         transitionDuration: '200ms'
@@ -17,9 +19,6 @@ export const components = {
                     '&:hover .MuiCardHoverShow': {
                         opacity: '1'
                     },
-                    '& .MuiCardContent-root': {
-                        padding: 4
-                    }
                 }),
         }
     },

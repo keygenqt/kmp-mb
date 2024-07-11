@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useTheme, useMediaQuery, Stack, Container} from '@mui/material';
 import {BlockAbout} from './elements/BlockAbout';
 import {BlockCards} from './elements/BlockCards';
-import {BlockImages} from './elements/BlockImages';
+import {BlockCarousel} from './elements/BlockCarousel';
 import {BlockPartners} from './elements/BlockPartners';
 
 
@@ -12,9 +12,9 @@ export function HomePage(props) {
 
     return (
         <Stack
-        spacing={isMD ? 4 : 6}
-        className={'ContentPage'}
-        alignItems="center"
+            spacing={isMD ? 4 : 6}
+            className={'ContentPage'}
+            alignItems="center"
         >
             <Container maxWidth='xl'>
                 <BlockAbout/>
@@ -23,13 +23,12 @@ export function HomePage(props) {
                 <BlockCards/>
             </Container>
             <Container maxWidth='lg'>
-                <BlockImages/>
+                <BlockCarousel/>
             </Container>
             <Container maxWidth='lg'>
                 <BlockPartners/>
             </Container>
         </Stack>
-
     );
 }
 

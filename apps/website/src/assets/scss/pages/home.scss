@@ -25,31 +25,6 @@
     filter: contrast(0%) brightness(2);
 }
 
-// BlockImages
-.HomePage .ContentPage .BlockImages .Carousel-Item {
-    height: 550px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-radius: 20px;
-}
-
-@media (max-width: 1200px) {
-    .HomePage .ContentPage .BlockImages .Carousel-Item {
-        height: 400px;
-    }
-}
-
-@media (max-width: 600px) {
-    .HomePage .ContentPage .BlockImages .Carousel-Item {
-        height: 250px;
-    }
-    .HomePage .ContentPage .BlockImages .MuiIconButton-root[aria-label="Previous"],
-    .HomePage .ContentPage .BlockImages .MuiIconButton-root[aria-label="Next"] {
-        display: none;
-    }
-}
-
 // BlockPartners
 .HomePage .ContentPage .BlockPartners {
     background-color: #f9f9f9;

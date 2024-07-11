@@ -1,6 +1,7 @@
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';
+export * from './data/DataCities';
 // locale
 export * from './localization/Localization';
 export * from './localization/LocalizationProvider';

@@ -1,9 +1,12 @@
 import {Route} from 'react-router-dom';
-import {BaseLayout} from "../../layouts/BaseLayout";
+import {BaseLayout} from '../../layouts/BaseLayout';
+import {RouteTypes} from './RouteTypes'
 import {
     HomePage,
     ErrorPage,
     ComingSoonPage,
+    CommunityPage,
+    CityPage,
 } from "../../pages";
 
 export const RouteConf = {
@@ -32,8 +35,26 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'ComingSoonPage CommunityPage'}>
-                            <ComingSoonPage/>
+                        <BaseLayout isCenter={false} className={'CommunityPage'}>
+                            <CommunityPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        city: {
+            path: '/city/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'CityPage'}>
+                            <CityPage/>
                         </BaseLayout>
                     }
                 />

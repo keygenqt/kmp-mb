@@ -18,10 +18,10 @@ export function BaseLayout(props) {
                 </Box>
             </Box>
             <Box className={'Table-Row'}>
-                <Box className={'Table-Cell ' + props.className} sx={{
-                    paddingTop: isMD ? 4 : 6,
-                    paddingBottom: isMD ? 4 : 6,
-                    verticalAlign: props.isCenter === true ? 'middle' : 'top'
+                <Box id={'Table-Cell-Page'} className={'Table-Cell ' + props.className} sx={{
+                        paddingTop: isMD ? 4 : 6,
+                        paddingBottom: isMD ? 4 : 6,
+                        verticalAlign: props.isCenter === true ? 'middle' : 'top'
                     }}
                 >
                     {props.children}

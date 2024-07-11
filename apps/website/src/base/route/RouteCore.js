@@ -1,6 +1,8 @@
 import * as React from "react";
 import {RouteTypes} from "./RouteTypes";
+import {ScrollToTop} from "./ScrollToTop";
 import {Routes} from 'react-router-dom';
+
 
 export default class RouteCore {
 
@@ -327,6 +329,7 @@ export default class RouteCore {
 
         return (
             <React.Fragment>
+                <ScrollToTop/>
                 <Routes>
                     {pages}
                 </Routes>
