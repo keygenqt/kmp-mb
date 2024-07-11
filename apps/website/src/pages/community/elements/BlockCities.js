@@ -154,7 +154,7 @@ export function BlockCities(props) {
             ) : (
                 <Stack spacing={4} sx={{paddingTop: 3, paddingBottom: 3}}>
                     <Typography variant='h4' color={'text.primary'} sx={{textAlign: 'center'}}>
-                        Ничего не найдено, попробуйте изменить запрос.
+                        {t('pages.community.t_not_found')}
                     </Typography>
                     <Box>
                         <Lottie

@@ -40,6 +40,7 @@ export const enLocalization = {
                 t_btn: 'Create a community',
                 t_filter_search: 'Search',
                 t_filter_country: 'Country',
+                t_not_found: 'Nothing found, try changing your query.',
             },
             city: {
                 t_text1: 'Welcome to the {{city}} community page! If you find a gallery on the page, these are our meetings where we discuss all sorts of different IT issues. If suddenly she’s not there, we haven’t had time to take a photo yet, but everything is ahead.',
