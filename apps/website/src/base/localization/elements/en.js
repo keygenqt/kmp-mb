@@ -51,6 +51,15 @@ export const enLocalization = {
                 t_organizer: 'Organizer',
                 t_organizers: 'Organizers',
             },
+            experts: {
+                t_title: 'Experts',
+                t_text: 'Each of the experts is responsible for a specific area, actively participates in its development and popularization, and also shares their expertise with members of our community.',
+                t_subtext: 'Become one of the experts in mobile development for iOS, Android, Kotlin, Aurora OS and other areas!',
+                t_btn: 'Apply',
+                t_filter_search: 'Search',
+                t_filter_direction: 'Direction',
+                t_not_found: 'Nothing found, try changing your query.',
+            },
             error: {
                 t_title: 'Page not found.',
                 t_text: "The Page you are looking for doesn't exist.",

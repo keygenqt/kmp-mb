@@ -4,6 +4,7 @@ import {RouteTypes} from './RouteTypes'
 import {
     HomePage,
     ErrorPage,
+    ExpertsPage,
     ComingSoonPage,
     CommunityPage,
     CityPage,
@@ -68,7 +69,25 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'ComingSoonPage ExpertsPage'}>
+                        <BaseLayout isCenter={false} className={'ExpertsPage'}>
+                            <ExpertsPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        expert: {
+            path: '/expert/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'ComingSoonPage'}>
                             <ComingSoonPage/>
                         </BaseLayout>
                     }
