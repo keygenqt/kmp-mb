@@ -12,9 +12,9 @@ and native UI implementation.
 
 ### Includes
 
-- Website: [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- Admin-Panel: [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- API: [Ktor](https://ktor.io/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- Website - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- Admin-Panel - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- API - [Ktor](https://ktor.io/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
 
 ### Links
 
