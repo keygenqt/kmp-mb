@@ -2,20 +2,25 @@
 
 ### Subscribe and like! <img src="https://github.com/keygenqt/aurora-cli/blob/main/data/star.gif" width="16px"/>
 
-Website with a basic set of functionality on KMP:
+Project using
+[Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+and native UI implementation.
 
-#### Website: React + KMP
+![preview.png](data/preview.png)
 
-[https://mb.keygenqt.com](https://mb.keygenqt.com)
+> The project is under development.
 
-#### Admin-Panel: React + KMP
+### Includes
 
-[https://mb-admin.keygenqt.com](https://mb-admin.keygenqt.com)
+- Website: [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- Admin-Panel: [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- API: [Ktor](https://ktor.io/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
 
-#### API: Ktor + KMP
+### Links
 
-- [https://mb-api.keygenqt.com](https://mb-api.keygenqt.com)
-- [https://mb-api.keygenqt.com/api/experts](https://mb-api.keygenqt.com/api/experts)
+- Website - https://mb.keygenqt.com
+- Admin-Panel - https://mb-admin.keygenqt.com
+- API - https://mb-api.keygenqt.com
 
 ### License
 
