@@ -1,14 +1,14 @@
 # MB KMP
 
-### Subscribe and like! <img src="https://github.com/keygenqt/aurora-cli/blob/main/data/star.gif" width="16px"/>
+### Subscribe and like! <img src="https://github.com/keygenqt/kmp-mb/blob/main/data/star.gif?raw=true" width="16px"/>
+
+> The project is under development.
 
 Project using
 [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 and native UI implementation.
 
 ![preview.png](data/preview.png)
-
-> The project is under development.
 
 ### Includes
 
