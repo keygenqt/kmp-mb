@@ -38,10 +38,9 @@ export function BlockCarousel(props) {
 
     return (
         <Box className={'BlockCarousel'}>
-
             <CircularProgress />
-
             <Carousel
+                animation={'slide'}
                 changeOnFirstRender={true}
                 height={isLG ? 550 : isDownSM ? 250 : 400}
                 index={0}
