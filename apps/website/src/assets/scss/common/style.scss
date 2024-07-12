@@ -122,12 +122,23 @@ html, body, .App {
 }
 
 // BlockCarousel
+.ContentPage .BlockCarousel{
+    position: relative;
+}
 .ContentPage .BlockCarousel .Carousel-Item {
     height: 550px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 20px;
+    position: relative;
+}
+
+.ContentPage .BlockCarousel .MuiCircularProgress-root {
+    position: absolute;
+    top:50%;
+    left:50%;
+    translate: -50% -50%;
 }
 
 @media (max-width: 1200px) {

@@ -20,6 +20,7 @@ import {
     useTheme,
     useMediaQuery,
     Box,
+    CircularProgress,
 } from '@mui/material';
 import Carousel from 'react-material-ui-carousel'
 
@@ -37,6 +38,9 @@ export function BlockCarousel(props) {
 
     return (
         <Box className={'BlockCarousel'}>
+
+            <CircularProgress />
+
             <Carousel
                 changeOnFirstRender={true}
                 height={isLG ? 550 : isDownSM ? 250 : 400}

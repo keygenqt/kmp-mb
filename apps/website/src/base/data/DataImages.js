@@ -148,12 +148,10 @@ import meetings_Minsk_3 from '../../assets/images/community/meetings/Minsk/04024
 
 // Moscow
 import meetings_Moscow_0 from '../../assets/images/community/meetings/Moscow/1b5f9d15-c5d9-4593-8c46-3e07e71eddf6.jpg';
-import meetings_Moscow_1 from '../../assets/images/community/meetings/Moscow/7fe581b9-e678-4d10-bff0-e7c650e03c58.jpeg';
-import meetings_Moscow_2 from '../../assets/images/community/meetings/Moscow/8dd75634-26a6-49ad-8932-b36617b3dd5a.jpeg';
-import meetings_Moscow_3 from '../../assets/images/community/meetings/Moscow/12b9d9b1-dd66-4aaf-a7bd-4c81cea92721.jpg';
-import meetings_Moscow_4 from '../../assets/images/community/meetings/Moscow/ae12ed7f-e37a-4466-8d11-39b2f3107d85.jpeg';
-import meetings_Moscow_5 from '../../assets/images/community/meetings/Moscow/c96ae4d2-2ee9-4f1e-a427-53cd1b1f497c.jpg';
-import meetings_Moscow_6 from '../../assets/images/community/meetings/Moscow/ca34e16f-8a98-4614-b315-46bc95cbbe83.jpeg';
+import meetings_Moscow_1 from '../../assets/images/community/meetings/Moscow/8dd75634-26a6-49ad-8932-b36617b3dd5a.jpeg';
+import meetings_Moscow_2 from '../../assets/images/community/meetings/Moscow/12b9d9b1-dd66-4aaf-a7bd-4c81cea92721.jpg';
+import meetings_Moscow_3 from '../../assets/images/community/meetings/Moscow/c96ae4d2-2ee9-4f1e-a427-53cd1b1f497c.jpg';
+import meetings_Moscow_4 from '../../assets/images/community/meetings/Moscow/ca34e16f-8a98-4614-b315-46bc95cbbe83.jpeg';
 
 // Omsk
 import meetings_Omsk_0 from '../../assets/images/community/meetings/Omsk/85d341fe-1547-445c-8c69-3e98f1765bd1.jpg';
@@ -331,8 +329,6 @@ export const DataImages = {
                 meetings_Moscow_2,
                 meetings_Moscow_3,
                 meetings_Moscow_4,
-                meetings_Moscow_5,
-                meetings_Moscow_6,
             ],
             Omsk: [
                 meetings_Omsk_0,
