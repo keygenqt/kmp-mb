@@ -1,4 +1,4 @@
-# MB KMP
+# KMP Mobile Broadcast
 
 ### Subscribe and like! <img src="https://github.com/keygenqt/kmp-mb/blob/main/data/star.gif?raw=true" width="16px"/>
 
