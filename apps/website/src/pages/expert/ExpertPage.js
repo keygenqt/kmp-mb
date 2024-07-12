@@ -16,24 +16,27 @@
 
 import * as React from 'react';
 import {useParams} from "react-router";
+import {LocalizationContext} from '../../base';
 import {
     useTheme,
     useMediaQuery,
     Stack,
     Container,
+    Typography,
 } from '@mui/material';
+import {FormatQuote} from '@mui/icons-material';
 
-import {DataCities} from '../../base/data/DataCities';
+import {DataExperts} from '../../base/data/DataExperts';
 import {BlockInfo} from './elements/BlockInfo'
-import {BlockCarousel} from './elements/BlockCarousel'
-import {BlockOrganizers} from './elements/BlockOrganizers'
+import {BlockMedia} from './elements/BlockMedia'
 import {ErrorPage} from "../";
 
-export function CityPage(props) {
+export function ExpertPage(props) {
     let {id} = useParams();
-    const [data] = React.useState(DataCities.find(x => x.id === parseInt(id)))
+    const [data] = React.useState(DataExperts.find(x => x.id === parseInt(id)))
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
+    const {isLocEn} = React.useContext(LocalizationContext)
 
     if (!data) {
         return (
@@ -48,20 +51,27 @@ export function CityPage(props) {
             alignItems="center"
         >
             <Container maxWidth='xl'>
-                <BlockInfo city={data}/>
+                <BlockInfo expert={data}/>
             </Container>
-            {data.images.length === 0 ? null : (
-                <Container maxWidth='lg'>
-                    <BlockCarousel images={data.images}/>
+
+            {!data.quote_en || !data.quote_ru ? null : (
+                <Container maxWidth='md'>
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                        <Typography color={'text.primary'} sx={{textAlign: 'center'}}>
+                            <FormatQuote sx={{ fontSize: 60 }}/>
+                        </Typography>
+                        <Typography variant={'text1'} color={'text.primary'} sx={{textAlign: 'center'}}>
+                            {isLocEn ? data.quote_en : data.quote_ru}
+                        </Typography>
+                    </Stack>
                 </Container>
             )}
-            {data.organizers.length === 0 ? null : (
-                <Container maxWidth='lg'>
-                    <BlockOrganizers organizers={data.organizers}/>
-                </Container>
-            )}
+
+            <Container maxWidth='lg'>
+                <BlockMedia media={data.media}/>
+            </Container>
         </Stack>
     );
 }
 
-CityPage.propTypes = {};
+ExpertPage.propTypes = {};

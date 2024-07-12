@@ -1,3 +1,19 @@
+/**
+ * Copyright 2024 Vitaliy Zarubin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import * as React from 'react';
 import Lottie from "lottie-react";
 import {DataLottie, LocalizationContext, RouteContext} from '../../../base';
@@ -21,7 +37,6 @@ import {
 } from '@mui/material';
 
 import {DataExperts} from "../../../base/data/DataExperts";
-
 
 export function BlockExperts(props) {
 
@@ -60,7 +75,7 @@ export function BlockExperts(props) {
         ) {
             // Items
             content.push(
-                <Grid key={item.id} item xl={3} lg={3} md={4} sm={6} xs={12}>
+                <Grid key={`expert-${item.id}`} item xl={3} lg={3} md={4} sm={6} xs={12}>
                     <Card color={'primary'} sx={{
                         '& .MuiCardContent-root': {
                             marginBottom: -1
@@ -81,23 +96,23 @@ export function BlockExperts(props) {
                                 {search_name}
                             </Typography>
 
-                            <Stack spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
-                                {item.direction.map((option) => (
-                                    <Chip className={option.replace(' ', '_')} label={option} variant="outlined" />
+                            <Stack className={'ExpertChips'} spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
+                                {item.direction.map((option, index) => (
+                                    <Chip key={`cip-${index}`} className={option.replace(' ', '_')} label={option} variant="outlined" />
                                 ))}
                             </Stack>
 
                             <Stack direction={'row'} justifyContent="flex-end" sx={{paddingTop: 2}}>
-                                    <Button
-                                        color='primary'
-                                        size="small"
-                                        onClick={() => {
-                                            route.toLocation(routes.expert, item.id)
-                                        }}
-                                    >
-                                        {t('common.t_more')}
-                                    </Button>
-                                </Stack>
+                                <Button
+                                    color='primary'
+                                    size="small"
+                                    onClick={() => {
+                                        route.toLocation(routes.expert, item.id)
+                                    }}
+                                >
+                                    {t('common.t_more')}
+                                </Button>
+                            </Stack>
                         </CardContent>
                     </Card>
                 </Grid>
@@ -118,9 +133,9 @@ export function BlockExperts(props) {
                     <TextField
                         id='outlined-basic'
                         inputProps={{
-                            autocomplete: 'off',
+                            autoComplete: 'off',
                             form: {
-                                autocomplete: 'off',
+                                autoComplete: 'off',
                             },
                         }}
                         label={t('pages.experts.t_filter_search')}
@@ -147,7 +162,7 @@ export function BlockExperts(props) {
                             }}
                         >
                             <MenuItem value="">
-                                <em>None</em>
+                                <em>{t('common.t_none')}</em>
                             </MenuItem>
                             {directions.map((option) => (
                                 <MenuItem key={`cat-${option}`} value={option}>
