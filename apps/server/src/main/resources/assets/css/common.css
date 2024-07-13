@@ -101,6 +101,8 @@ html, body {
     color: #120D16;
     text-decoration: none;
     outline: none;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: #0000;
 }
 
 .Btn:hover {
