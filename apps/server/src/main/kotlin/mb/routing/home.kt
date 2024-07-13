@@ -26,7 +26,7 @@ fun Route.home() {
         call.respondHtml(HttpStatusCode.OK) {
             head {
                 title {
-                    +"MB: API"
+                    +"API - Mobile Broadcast"
                 }
                 link(rel = "icon", href = "/static/images/favicon.ico", type = "text/css")
                 link(rel = "stylesheet", href = "/static/css/common.css", type = "text/css")
@@ -36,11 +36,40 @@ fun Route.home() {
                 div("Table") {
                     div("Table-Row") {
                         div("Table-Cell") {
-                            div("Title") {
-                                +"Mobile Broadcast"
+                            div("Content") {
+                                div("Box") {
+                                    div("Table") {
+                                        div("Table-Row") {
+                                            div("Table-Cell BoxData") {
+                                                div("Title") {
+                                                    +"API for "
+                                                    span { +"M" }
+                                                    +"obile Broadcast"
+                                                }
+                                                img(src = "/static/images/image.png")
+                                                div("Text") {
+                                                    +"Server providing REST API for Mobile Broadcast project applications. Basic information on the project can be found on the project website."
+                                                }
+                                                a(href = "https://mb.keygenqt.com", classes = "Btn") {
+                                                    +"Go to WebSite"
+                                                }
+                                            }
+                                            div("Table-Cell BoxImage") {
+                                                img(src = "/static/images/image.png")
+                                            }
+                                        }
+                                    }
+                                }
                             }
-                            div("Subtitle") {
-                                +"API server"
+                        }
+                    }
+                    div("Table-Row") {
+                        div("Table-Cell") {
+                            style = "height: 1px"
+                            div("Footer") {
+                                div("Box") {
+                                    +"© Mobile Broadcast 2024"
+                                }
                             }
                         }
                     }

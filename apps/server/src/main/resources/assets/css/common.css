@@ -8,8 +8,11 @@ html, body {
     margin: 0;
     height: 100%;
     width: 100%;
-    background: white;
-    font-family: 'Albert Sans', 'Roboto', sans-serif;
+    background: #1E1E1E;
+    line-height: 1.2;
+    font-family: 'Jura', sans-serif;
+    letter-spacing: 0em;
+    color: #e7e7e7;
 }
 
 .Table {
@@ -29,17 +32,102 @@ html, body {
     vertical-align: middle;
 }
 
-.Title {
-    font-family: "Jura";
-    font-weight: bold;
-    font-size: 40px;
-    text-align: center;
-    margin-bottom: 10px;
+.Footer {
+    padding: 0 30px;
 }
 
-.Subtitle {
-    font-family: 'Albert Sans';
-    color: #595959;
-    font-size: 18px;
-    text-align: center;
+.Footer .Box {
+    padding: 30px 0;
+    max-width: 1350px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    font-size: 16px;
+    text-align: right;
+}
+
+.Content {
+    padding: 30px 30px 0 30px;
+}
+
+.Content .Box {
+    background-color: #313131;
+    border: 1px solid #cb8ff747;
+    padding: 60px;
+    border-radius: 20px;
+    max-width: 1350px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.Content .Box .BoxData {
+    width: 100%;
+    padding: 0 30px;
+}
+
+.Content .Box .BoxData img {
+    width: 150px;
+    margin-bottom: 30px;
+    display: none;
+}
+
+.Content .Box .BoxData .Title {
+    font-size: 46px;
+    font-weight: bold;
+    padding-bottom: 30px;
+}
+
+.Content .Box .BoxData .Title span {
+    color: #cb8ff7;
+}
+
+.Content .Box .BoxData .Text {
+    font-size: 24px;
+    line-height: 1.5;
+    padding-bottom: 50px;
+}
+
+.Content .Box .BoxImage {
+    padding: 0 30px;
+}
+
+.Btn {
+    background-color: #cb8ff7;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Jura', sans-serif;
+    transition: background-color 250ms;
+    padding: 8px 18px;
+    border-radius: 50px;
+    color: #120D16;
+    text-decoration: none;
+    outline: none;
+}
+
+.Btn:hover {
+    background-color: #8a64aa;
+}
+
+@media (max-width: 900px) {
+    .Content .Box {
+        padding: 40px
+    }
+    .Content .Box .BoxData {
+        padding: 0;
+        text-align: center;
+    }
+    .Content .Box .BoxData img {
+        display: inline-block;
+    }
+    .Content .Box .BoxImage {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .Content .Box {
+        padding: 30px
+    }
+    .Content .Box .BoxData .Title {
+        font-size: 36px;
+    }
 }
