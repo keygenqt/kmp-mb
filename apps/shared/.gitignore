@@ -11,6 +11,7 @@ captures
 local.properties
 xcuserdata/
 Pods/
+*.klib
 *.jks
 *yarn.lock
 kotlin-js-store
