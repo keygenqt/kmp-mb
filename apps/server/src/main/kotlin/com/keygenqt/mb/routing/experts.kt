@@ -17,9 +17,12 @@ package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getNumberParam
+import com.keygenqt.mb.shared.db.entities.toGuestResponse
+import com.keygenqt.mb.shared.db.entities.toGuestResponses
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.ExpertsService
+import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -29,11 +32,16 @@ fun Route.experts() {
 
     val expertsService: ExpertsService by inject()
 
+    val role = UserRole.GUEST
+
     route("/experts") {
         get {
             // act
             val response = expertsService.transaction {
-                getAll().toResponses()
+                when (role) {
+                    UserRole.GUEST -> getAll(isPublished = true).toGuestResponses()
+                    else -> getAll().toResponses()
+                }
             }
             // response
             call.respond(response)
@@ -43,7 +51,10 @@ fun Route.experts() {
             val id = call.getNumberParam()
             // act
             val response = expertsService.transaction {
-                findById(id)?.toResponse() ?: throw Exceptions.NotFound()
+                when (role) {
+                    UserRole.GUEST -> findById(id, isPublished = true)?.toGuestResponse()
+                    else -> findById(id)?.toResponse()
+                } ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

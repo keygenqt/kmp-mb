@@ -15,27 +15,23 @@
  */
 package com.keygenqt.mb.shared.db.migration
 
+import com.keygenqt.mb.shared.db.entities.ExpertDirections
+import com.keygenqt.mb.shared.db.entities.ExpertInfo
 import com.keygenqt.mb.shared.db.entities.Experts
-import com.keygenqt.mb.shared.db.entities.ExpertEntity
+import com.keygenqt.mb.shared.db.entities.ExpertsInfo
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("unused", "ClassName")
-class V0001__Create_Experts : BaseJavaMigration() {
+class V0002__Create_Experts : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
             SchemaUtils.create(Experts)
-            (1..5).forEach { index ->
-                ExpertEntity.new {
-                    this.name = "Expert $index"
-                    this.isPublished = true
-                    this.createAt = System.currentTimeMillis()
-                    this.updateAt = System.currentTimeMillis()
-                }
-                Thread.sleep(1000);
-            }
+            SchemaUtils.create(ExpertInfo)
+            SchemaUtils.create(ExpertsInfo)
+            SchemaUtils.create(ExpertDirections)
         }
     }
 }

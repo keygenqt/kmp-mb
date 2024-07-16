@@ -21,27 +21,36 @@ import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Table
 
-/**
- * Table shop products
- */
+
 object Experts : IntIdTable() {
-    val name = varchar("name", 255).uniqueIndex()
     val isPublished = bool("isPublished").default(false)
     val createAt = long("createAt")
     val updateAt = long("updateAt")
 }
 
-/**
- * Exposed entity
- */
+object ExpertInfo : Table() {
+    private val expert = reference("expert", Experts)
+    private val info = reference("info", ExpertsInfo)
+    override val primaryKey = PrimaryKey(expert, info, name = "PK_expertInfo_e_i")
+}
+
+object ExpertDirections : Table() {
+    private val expert = reference("expert", Experts)
+    private val direction = reference("direction", Directions)
+    override val primaryKey = PrimaryKey(expert, direction, name = "PK_expertDirections_e_d")
+}
+
 class ExpertEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<ExpertEntity>(Experts)
 
-    var name by Experts.name
     var isPublished by Experts.isPublished
     var createAt by Experts.createAt
     var updateAt by Experts.updateAt
+
+    var info by ExpertInfoEntity via ExpertInfo
+    var directions by DirectionEntity via ExpertDirections
 }
 
 /**
@@ -49,10 +58,11 @@ class ExpertEntity(id: EntityID<Int>) : IntEntity(id) {
  */
 fun ExpertEntity.toResponse() = ExpertResponse(
     id = id.value,
-    name = name,
     isPublished = isPublished,
     createAt = createAt.toUTC(),
     updateAt = updateAt.toUTC(),
+    info = info.toResponses().toTypedArray(),
+    directions = directions.toResponses().toTypedArray(),
 )
 
 /**
@@ -60,4 +70,21 @@ fun ExpertEntity.toResponse() = ExpertResponse(
  */
 fun Iterable<ExpertEntity>.toResponses(): List<ExpertResponse> {
     return map { it.toResponse() }
+}
+
+/**
+ * Convert to [ExpertResponse]
+ */
+fun ExpertEntity.toGuestResponse() = ExpertResponse(
+    id = id.value,
+    info = info.toGuestResponses().toTypedArray(),
+    // @todo https://youtrack.jetbrains.com/issue/EXPOSED-448/Relationship-many-to-many-with-condition.
+    directions = directions.filter { it.isPublished }.toGuestResponses().toTypedArray(),
+)
+
+/**
+ * Convert to [List]
+ */
+fun Iterable<ExpertEntity>.toGuestResponses(): List<ExpertResponse> {
+    return map { it.toGuestResponse() }
 }

@@ -238,7 +238,7 @@ Staff Software Engineer в Тинькофф. Занимается разрабо
     },
     {
         id: 7,
-        name_en: 'Vitaly Zarubin',
+        name_en: 'Vitaliy Zarubin',
         name_ru: 'Виталий Зарубин',
         description_en: `
 Mobile Broadcast Expert on Aurora, Flutter and Kotlin Multiplatform.
