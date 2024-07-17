@@ -13,16 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.service.impl
+package com.keygenqt.mb.shared.db.service
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import com.keygenqt.mb.shared.responses.UserResponse
+import com.keygenqt.mb.shared.db.base.DatabaseMysql
+import com.keygenqt.mb.shared.db.entities.UserDirectionEntity
+import com.keygenqt.mb.shared.db.entities.UserDirections
+import com.keygenqt.mb.shared.interfaces.IService
+import org.jetbrains.exposed.sql.SortOrder
 
-class GetRequest(private val client: HttpClient) {
-    @Throws(Exception::class)
-    suspend fun users(): List<UserResponse> {
-        return client.get("users").body()
-    }
+class DirectionsService(
+    override val db: DatabaseMysql
+) : IService<DirectionsService> {
+    /**
+     * Get all entities
+     */
+    fun getAll() = UserDirectionEntity
+        .all()
+        .orderBy(Pair(UserDirections.name, SortOrder.ASC))
 }

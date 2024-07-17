@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 Vitaliy Zarubin
+ * Copyright 2023 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,12 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Expert directions response
+ * Error response model
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
-data class DirectionResponse(
-    val id: Int,
-    val name: String,
-    val isPublished: Boolean? = null,
-    val createAt: String? = null,
-    val updateAt: String? = null,
+data class ErrorResponse(
+    val code: Int,
+    val message: String,
 )

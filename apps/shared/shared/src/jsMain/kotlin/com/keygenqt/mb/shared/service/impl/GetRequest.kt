@@ -27,6 +27,6 @@ class GetRequestJS(
     private val client: ServiceRequest
 ) {
     @OptIn(DelicateCoroutinesApi::class)
-    fun experts() = GlobalScope.promise { client.get.experts() }
+    fun users() = GlobalScope.promise { client.get.users() }
 }
 

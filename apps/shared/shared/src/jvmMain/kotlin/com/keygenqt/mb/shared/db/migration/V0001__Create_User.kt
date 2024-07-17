@@ -15,22 +15,23 @@
  */
 package com.keygenqt.mb.shared.db.migration
 
-import com.keygenqt.mb.shared.db.entities.*
+import com.keygenqt.mb.shared.db.entities.UserContacts
+import com.keygenqt.mb.shared.db.entities.UserDirections
+import com.keygenqt.mb.shared.db.entities.UserLocalizations
+import com.keygenqt.mb.shared.db.entities.UserMedia
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("unused", "ClassName")
-class V0002__Create_Users : BaseJavaMigration() {
+class V0001__Create_User : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Users)
-            // Relations
-            SchemaUtils.create(RelationsUserUserDirections)
-            SchemaUtils.create(RelationsUserUserLocalization)
-            SchemaUtils.create(RelationsUserUserContacts)
-            SchemaUtils.create(RelationsUserUserMedia)
+            SchemaUtils.create(UserContacts)
+            SchemaUtils.create(UserDirections)
+            SchemaUtils.create(UserLocalizations)
+            SchemaUtils.create(UserMedia)
         }
     }
 }

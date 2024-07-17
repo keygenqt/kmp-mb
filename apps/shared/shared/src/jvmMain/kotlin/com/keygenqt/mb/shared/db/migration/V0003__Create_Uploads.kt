@@ -13,24 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.responses
+package com.keygenqt.mb.shared.db.migration
 
-import kotlinx.serialization.Serializable
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
+import com.keygenqt.mb.shared.db.entities.*
+import org.flywaydb.core.api.migration.BaseJavaMigration
+import org.flywaydb.core.api.migration.Context
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
-/**
- * Expert response
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@Serializable
-@Suppress("ArrayInDataClass")
-data class ExpertResponse(
-    val id: Int,
-    val isPublished: Boolean? = null,
-    val createAt: String? = null,
-    val updateAt: String? = null,
-    val info: Array<ExpertInfoResponse>? = null,
-    val directions: Array<DirectionResponse>? = null,
-)
+@Suppress("unused", "ClassName")
+class V0003__Create_Uploads : BaseJavaMigration() {
+    override fun migrate(context: Context?) {
+        transaction {
+            SchemaUtils.create(Uploads)
+        }
+    }
+}

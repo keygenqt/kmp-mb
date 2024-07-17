@@ -15,46 +15,29 @@
  */
 package com.keygenqt.mb.routing
 
-import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.shared.db.entities.toGuestResponse
 import com.keygenqt.mb.shared.db.entities.toGuestResponses
-import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
-import com.keygenqt.mb.shared.db.service.UsersService
+import com.keygenqt.mb.shared.db.service.DirectionsService
 import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.experts() {
+fun Route.directions() {
 
-    val expertsService: UsersService by inject()
+    val directionsService: DirectionsService by inject()
 
     val role = UserRole.GUEST
 
-    route("/experts") {
+    route("/directions") {
         get {
             // act
-            val response = expertsService.transaction {
+            val response = directionsService.transaction {
                 when (role) {
-                    UserRole.GUEST -> getAllExperts().toGuestResponses()
-                    else -> getAllExperts().toResponses()
+                    UserRole.GUEST -> getAll().toGuestResponses()
+                    else -> getAll().toResponses()
                 }
-            }
-            // response
-            call.respond(response)
-        }
-        get("/{id}") {
-            // get request
-            val id = call.getNumberParam()
-            // act
-            val response = expertsService.transaction {
-                when (role) {
-                    UserRole.GUEST -> findByIdExpert(id)?.toGuestResponse()
-                    else -> findByIdExpert(id)?.toResponse()
-                } ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

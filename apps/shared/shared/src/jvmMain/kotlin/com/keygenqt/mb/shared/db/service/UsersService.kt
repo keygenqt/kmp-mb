@@ -16,45 +16,35 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.ExpertEntity
-import com.keygenqt.mb.shared.db.entities.Experts
+import com.keygenqt.mb.shared.db.entities.UserEntity
+import com.keygenqt.mb.shared.db.entities.Users
 import com.keygenqt.mb.shared.interfaces.IService
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 
-class ExpertsService(
+class UsersService(
     override val db: DatabaseMysql
-) : IService<ExpertsService> {
+) : IService<UsersService> {
+    /**
+     * Get all Experts
+     */
+    fun getAllExperts() = Users
+        .selectAll()
+        .where { Users.role eq UserRole.EXPERT }
+        .orderBy(Pair(Users.lname, SortOrder.ASC))
+        .map { UserEntity.wrapRow(it) }
 
     /**
-     * Find entity by id
+     * Find Expert by id
      */
-    fun findById(
+    fun findByIdExpert(
         id: Int,
         isPublished: Boolean? = null
-    ) = ExpertEntity
-        .let {
-            if (isPublished == null) {
-                it.find { (Experts.id eq id) }
-            } else {
-                it.find { (Experts.id eq id) and (Experts.isPublished eq isPublished) }
-            }
-        }
+    ) = UserEntity
+        .find { (Users.id eq id) and (Users.role eq UserRole.EXPERT) }
         .firstOrNull()
 
-    /**
-     * Get all entities
-     */
-    fun getAll(
-        isPublished: Boolean? = null
-    ) = Experts
-        .selectAll()
-        .apply {
-            if (isPublished != null) {
-                where { (Experts.isPublished eq isPublished) }
-            }
-        }
-        .orderBy(Pair(Experts.id, SortOrder.ASC))
-        .map { ExpertEntity.wrapRow(it) }
+
 }

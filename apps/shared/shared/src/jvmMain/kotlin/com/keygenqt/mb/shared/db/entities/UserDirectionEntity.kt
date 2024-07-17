@@ -16,8 +16,7 @@
 package com.keygenqt.mb.shared.db.entities
 
 import com.keygenqt.mb.shared.extension.toUTC
-import com.keygenqt.mb.shared.responses.DirectionResponse
-import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.shared.responses.UserDirectionResponse
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -26,9 +25,8 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 /**
  * Table shop products
  */
-object Directions : IntIdTable() {
+object UserDirections : IntIdTable() {
     val name = varchar("name", 255).uniqueIndex()
-    val isPublished = bool("isPublished").default(false)
     val createAt = long("createAt")
     val updateAt = long("updateAt")
 }
@@ -36,22 +34,20 @@ object Directions : IntIdTable() {
 /**
  * Exposed entity
  */
-class DirectionEntity(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<DirectionEntity>(Directions)
+class UserDirectionEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserDirectionEntity>(UserDirections)
 
-    var name by Directions.name
-    var isPublished by Directions.isPublished
-    var createAt by Directions.createAt
-    var updateAt by Directions.updateAt
+    var name by UserDirections.name
+    var createAt by UserDirections.createAt
+    var updateAt by UserDirections.updateAt
 }
 
 /**
- * Convert to [DirectionResponse]
+ * Convert to [UserDirectionResponse]
  */
-fun DirectionEntity.toResponse() = DirectionResponse(
+fun UserDirectionEntity.toResponse() = UserDirectionResponse(
     id = id.value,
     name = name,
-    isPublished = isPublished,
     createAt = createAt.toUTC(),
     updateAt = updateAt.toUTC(),
 )
@@ -59,14 +55,14 @@ fun DirectionEntity.toResponse() = DirectionResponse(
 /**
  * Convert to [List]
  */
-fun Iterable<DirectionEntity>.toResponses(): List<DirectionResponse> {
+fun Iterable<UserDirectionEntity>.toResponses(): List<UserDirectionResponse> {
     return map { it.toResponse() }
 }
 
 /**
- * Convert to [DirectionResponse]
+ * Convert to [UserDirectionResponse]
  */
-fun DirectionEntity.toGuestResponse() = DirectionResponse(
+fun UserDirectionEntity.toGuestResponse() = UserDirectionResponse(
     id = id.value,
     name = name,
 )
@@ -74,6 +70,6 @@ fun DirectionEntity.toGuestResponse() = DirectionResponse(
 /**
  * Convert to [List]
  */
-fun Iterable<DirectionEntity>.toGuestResponses(): List<DirectionResponse> {
+fun Iterable<UserDirectionEntity>.toGuestResponses(): List<UserDirectionResponse> {
     return map { it.toGuestResponse() }
 }

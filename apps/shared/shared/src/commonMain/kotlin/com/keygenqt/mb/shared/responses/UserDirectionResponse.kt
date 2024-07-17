@@ -13,19 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.db.migration
+package com.keygenqt.mb.shared.responses
 
-import com.keygenqt.mb.shared.db.entities.Directions
-import org.flywaydb.core.api.migration.BaseJavaMigration
-import org.flywaydb.core.api.migration.Context
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.transactions.transaction
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-@Suppress("unused", "ClassName")
-class V0001__Create_Directions : BaseJavaMigration() {
-    override fun migrate(context: Context?) {
-        transaction {
-            SchemaUtils.create(Directions)
-        }
-    }
-}
+/**
+ * User directions response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class UserDirectionResponse(
+    val id: Int,
+    val name: String,
+    val createAt: String? = null,
+    val updateAt: String? = null,
+)

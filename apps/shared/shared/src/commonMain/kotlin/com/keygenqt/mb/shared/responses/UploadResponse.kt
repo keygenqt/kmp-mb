@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.service.impl
+package com.keygenqt.mb.shared.responses
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.request.*
-import com.keygenqt.mb.shared.responses.UserResponse
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-class GetRequest(private val client: HttpClient) {
-    @Throws(Exception::class)
-    suspend fun users(): List<UserResponse> {
-        return client.get("users").body()
-    }
-}
+/**
+ * Response upload files
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class UploadResponse(
+    val id: Int,
+    val fileName: String,
+    val fileMime: String,
+    val originalFileName: String,
+    val createAt: String,
+)

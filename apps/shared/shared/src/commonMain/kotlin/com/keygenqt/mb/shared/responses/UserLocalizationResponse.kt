@@ -20,16 +20,25 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Expert data response
+ * Additional localizations
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+enum class Localization {
+    RU
+}
+
+/**
+ * Users data info response
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
-data class ExpertInfoResponse(
+data class UserLocalizationResponse(
     val id: Int? = null,
     val fname: String,
     val lname: String,
-    val description: String,
+    val description: String?,
     val quote: String?,
     val locale: Localization,
 )

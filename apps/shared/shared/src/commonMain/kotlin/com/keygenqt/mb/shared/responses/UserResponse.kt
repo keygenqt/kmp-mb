@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Vitaliy Zarubin
+ * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Role user in app
+ * User roles
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 enum class UserRole {
-    GUEST, MANAGER, ADMIN
+    GUEST, ORGANIZER, EXPERT, MANAGER, ADMIN
 }
 
 /**
@@ -34,8 +34,19 @@ enum class UserRole {
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
+@Suppress("ArrayInDataClass")
 data class UserResponse(
     val id: Int,
-    val email: String,
-    val role: UserRole,
+    val role: UserRole? = null,
+    val image: String,
+    val fname: String,
+    val lname: String,
+    val description: String?,
+    val quote: String? = null,
+    val createAt: String? = null,
+    val updateAt: String? = null,
+    val directions: Array<UserDirectionResponse>? = null,
+    val locales: Array<UserLocalizationResponse>? = null,
+    val contacts: Array<UserContactResponse>? = null,
+    val media: Array<UserMediaResponse>? = null,
 )

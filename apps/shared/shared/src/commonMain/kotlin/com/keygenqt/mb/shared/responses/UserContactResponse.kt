@@ -15,14 +15,27 @@
  */
 package com.keygenqt.mb.shared.responses
 
+import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Role uer in app
+ * User contact types
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
-enum class Localization {
-    RU, EN
+enum class ContactTypes {
+    TELEGRAM, EMAIL, LINKEDIN
 }
+
+/**
+ * User data links response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class UserContactResponse(
+    val id: Int? = null,
+    val link: String,
+    val type: ContactTypes,
+)

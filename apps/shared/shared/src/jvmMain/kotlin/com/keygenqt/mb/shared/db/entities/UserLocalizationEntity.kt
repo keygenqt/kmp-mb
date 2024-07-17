@@ -15,66 +15,64 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
-import com.keygenqt.mb.shared.responses.ExpertInfoResponse
-import com.keygenqt.mb.shared.responses.ExpertResponse
 import com.keygenqt.mb.shared.responses.Localization
+import com.keygenqt.mb.shared.responses.UserLocalizationResponse
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-
-object ExpertsInfo : IntIdTable() {
+object UserLocalizations : IntIdTable() {
     val fname = varchar("fname", 255)
     val lname = varchar("lname", 255)
-    val description = text("description")
+    val description = text("description").nullable()
     val quote = text("quote").nullable()
-    val localization = enumeration("localization", Localization::class).default(Localization.EN)
+    val locale = enumeration("locale", Localization::class).default(Localization.RU)
 }
 
-class ExpertInfoEntity(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<ExpertInfoEntity>(ExpertsInfo)
+class UserLocalizationEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserLocalizationEntity>(UserLocalizations)
 
-    var fname by ExpertsInfo.fname
-    var lname by ExpertsInfo.lname
-    var description by ExpertsInfo.description
-    var quote by ExpertsInfo.quote
-    var localization by ExpertsInfo.localization
+    var fname by UserLocalizations.fname
+    var lname by UserLocalizations.lname
+    var description by UserLocalizations.description
+    var quote by UserLocalizations.quote
+    var locale by UserLocalizations.locale
 }
 
 /**
- * Convert to [ExpertResponse]
+ * Convert to [UserLocalizationResponse]
  */
-fun ExpertInfoEntity.toResponse() = ExpertInfoResponse(
+fun UserLocalizationEntity.toResponse() = UserLocalizationResponse(
     id = id.value,
     fname = fname,
     lname = lname,
     description = description,
     quote = quote,
-    locale = localization,
+    locale = locale,
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<ExpertInfoEntity>.toResponses(): List<ExpertInfoResponse> {
+fun Iterable<UserLocalizationEntity>.toResponses(): List<UserLocalizationResponse> {
     return map { it.toResponse() }
 }
 
 /**
- * Convert to [ExpertResponse]
+ * Convert to [UserLocalizationResponse]
  */
-fun ExpertInfoEntity.toGuestResponse() = ExpertInfoResponse(
+fun UserLocalizationEntity.toGuestResponse() = UserLocalizationResponse(
     fname = fname,
     lname = lname,
     description = description,
     quote = quote,
-    locale = localization,
+    locale = locale,
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<ExpertInfoEntity>.toGuestResponses(): List<ExpertInfoResponse> {
+fun Iterable<UserLocalizationEntity>.toGuestResponses(): List<UserLocalizationResponse> {
     return map { it.toGuestResponse() }
 }
