@@ -27,10 +27,10 @@ class V0002__Create_Users : BaseJavaMigration() {
         transaction {
             SchemaUtils.create(Users)
             // Relations
-            SchemaUtils.create(RelationsUserUserDirections)
-            SchemaUtils.create(RelationsUserUserLocalization)
-            SchemaUtils.create(RelationsUserUserContacts)
-            SchemaUtils.create(RelationsUserUserMedia)
+            SchemaUtils.create(RelationsUserDirections)
+            SchemaUtils.create(RelationsUserLocalizations)
+            SchemaUtils.create(RelationsUserContacts)
+            SchemaUtils.create(RelationsUserMedia)
         }
     }
 }

@@ -36,25 +36,25 @@ object Users : IntIdTable() {
     val updateAt = long("updateAt")
 }
 
-object RelationsUserUserDirections : Table() {
+object RelationsUserDirections : Table() {
     private val user = reference("user", Users)
     private val direction = reference("direction", UserDirections)
     override val primaryKey = PrimaryKey(user, direction, name = "PK_userDirections_e_d")
 }
 
-object RelationsUserUserLocalization : Table() {
+object RelationsUserLocalizations : Table() {
     private val user = reference("user", Users)
     private val locale = reference("info", UserLocalizations)
     override val primaryKey = PrimaryKey(user, locale, name = "PK_userLocale_e_l")
 }
 
-object RelationsUserUserContacts : Table() {
+object RelationsUserContacts : Table() {
     private val user = reference("user", Users)
     private val contacts = reference("contacts", UserContacts)
     override val primaryKey = PrimaryKey(user, contacts, name = "PK_userContacts_e_c")
 }
 
-object RelationsUserUserMedia : Table() {
+object RelationsUserMedia : Table() {
     private val user = reference("user", Users)
     private val media = reference("media", UserMedia)
     override val primaryKey = PrimaryKey(user, media, name = "PK_userMedia_e_m")
@@ -72,10 +72,10 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
     var createAt by Users.createAt
     var updateAt by Users.updateAt
 
-    var directions by UserDirectionEntity via RelationsUserUserDirections
-    var locales by UserLocalizationEntity via RelationsUserUserLocalization
-    var contacts by UserContactEntity via RelationsUserUserContacts
-    var media by UserMediaEntity via RelationsUserUserMedia
+    var directions by UserDirectionEntity via RelationsUserDirections
+    var locales by UserLocalizationEntity via RelationsUserLocalizations
+    var contacts by UserContactEntity via RelationsUserContacts
+    var media by UserMediaEntity via RelationsUserMedia
 }
 
 /**
