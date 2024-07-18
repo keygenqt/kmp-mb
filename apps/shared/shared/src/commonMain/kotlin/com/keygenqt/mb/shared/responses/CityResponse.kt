@@ -20,25 +20,20 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Additional localizations
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-enum class Localization {
-    RU
-}
-
-/**
- * Users data info response
+ * Country response
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
-data class UserLocalizationResponse(
-    val id: Int? = null,
-    val fname: String,
-    val lname: String,
-    val description: String?,
-    val quote: String?,
-    val locale: Localization,
+@Suppress("ArrayInDataClass")
+data class CityResponse(
+    val id: Int,
+    val image: String,
+    val name: String,
+    val createAt: String? = null,
+    val updateAt: String? = null,
+    val country: CountryResponse,
+    val locales: Array<ColumnLocaleResponse>? = null,
+    val organizers: Array<UserResponse>? = null,
+    val uploads: Array<UploadResponse>? = null,
 )

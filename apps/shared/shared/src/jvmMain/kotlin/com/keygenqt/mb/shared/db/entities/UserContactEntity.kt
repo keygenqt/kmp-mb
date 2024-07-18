@@ -52,7 +52,7 @@ fun Iterable<UserContactEntity>.toResponses(): List<UserContactResponse> {
 }
 
 /**
- * Convert to [UserResponse]
+ * Convert to [UserContactResponse]
  */
 fun UserContactEntity.toGuestResponse() = UserContactResponse(
     link = link,

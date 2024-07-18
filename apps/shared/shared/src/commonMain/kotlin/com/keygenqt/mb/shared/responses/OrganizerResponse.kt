@@ -33,6 +33,6 @@ data class OrganizerResponse(
     val lname: String,
     val createAt: String? = null,
     val updateAt: String? = null,
-    val locales: Array<UserLocalizationResponse>? = null,
+    val locales: Array<UserLocaleResponse>? = null,
     val contacts: Array<UserContactResponse>? = null,
 )

@@ -19,6 +19,7 @@ import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getStringParam
 import com.keygenqt.mb.shared.db.entities.UploadEntity
 import com.keygenqt.mb.shared.db.entities.toResponse
+import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UploadsService
 import com.keygenqt.mb.shared.utils.ConstantsMime.toExtension
 import io.ktor.http.*
@@ -78,7 +79,7 @@ fun Route.uploads() {
                 part.dispose()
             }
             // response
-            call.respond(uploads.toResponse())
+            call.respond(uploads.toResponses())
         }
         delete("/{name}") {
             // get request

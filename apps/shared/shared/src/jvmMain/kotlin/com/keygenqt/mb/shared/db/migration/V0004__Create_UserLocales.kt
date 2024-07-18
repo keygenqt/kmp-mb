@@ -22,10 +22,10 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("unused", "ClassName")
-class V0003__Create_Uploads : BaseJavaMigration() {
+class V0004__Create_UserLocales : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Uploads)
+            SchemaUtils.create(UserLocales)
         }
     }
 }

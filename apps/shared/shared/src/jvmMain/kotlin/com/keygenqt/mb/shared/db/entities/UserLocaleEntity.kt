@@ -15,39 +15,42 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
-import com.keygenqt.mb.shared.responses.Localization
-import com.keygenqt.mb.shared.responses.UserLocalizationResponse
+import com.keygenqt.mb.shared.responses.Locale
+import com.keygenqt.mb.shared.responses.UserLocaleResponse
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
-object UserLocalizations : IntIdTable() {
+object UserLocales : IntIdTable() {
     val fname = varchar("fname", 255)
     val lname = varchar("lname", 255)
-    val description = text("description").nullable()
+    val short = text("short").nullable()
+    val about = text("about").nullable()
     val quote = text("quote").nullable()
-    val locale = enumeration("locale", Localization::class).default(Localization.RU)
+    val locale = enumeration("locale", Locale::class).default(Locale.EN)
 }
 
-class UserLocalizationEntity(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<UserLocalizationEntity>(UserLocalizations)
+class UserLocaleEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserLocaleEntity>(UserLocales)
 
-    var fname by UserLocalizations.fname
-    var lname by UserLocalizations.lname
-    var description by UserLocalizations.description
-    var quote by UserLocalizations.quote
-    var locale by UserLocalizations.locale
+    var fname by UserLocales.fname
+    var lname by UserLocales.lname
+    var short by UserLocales.short
+    var about by UserLocales.about
+    var quote by UserLocales.quote
+    var locale by UserLocales.locale
 }
 
 /**
- * Convert to [UserLocalizationResponse]
+ * Convert to [UserLocaleResponse]
  */
-fun UserLocalizationEntity.toResponse() = UserLocalizationResponse(
+fun UserLocaleEntity.toResponse() = UserLocaleResponse(
     id = id.value,
     fname = fname,
     lname = lname,
-    description = description,
+    short = short,
+    about = about,
     quote = quote,
     locale = locale,
 )
@@ -55,17 +58,18 @@ fun UserLocalizationEntity.toResponse() = UserLocalizationResponse(
 /**
  * Convert to [List]
  */
-fun Iterable<UserLocalizationEntity>.toResponses(): List<UserLocalizationResponse> {
+fun Iterable<UserLocaleEntity>.toResponses(): List<UserLocaleResponse> {
     return map { it.toResponse() }
 }
 
 /**
- * Convert to [UserLocalizationResponse]
+ * Convert to [UserLocaleResponse]
  */
-fun UserLocalizationEntity.toGuestResponse() = UserLocalizationResponse(
+fun UserLocaleEntity.toGuestResponse() = UserLocaleResponse(
     fname = fname,
     lname = lname,
-    description = description,
+    short = short,
+    about = about,
     quote = quote,
     locale = locale,
 )
@@ -73,6 +77,6 @@ fun UserLocalizationEntity.toGuestResponse() = UserLocalizationResponse(
 /**
  * Convert to [List]
  */
-fun Iterable<UserLocalizationEntity>.toGuestResponses(): List<UserLocalizationResponse> {
+fun Iterable<UserLocaleEntity>.toGuestResponses(): List<UserLocaleResponse> {
     return map { it.toGuestResponse() }
 }

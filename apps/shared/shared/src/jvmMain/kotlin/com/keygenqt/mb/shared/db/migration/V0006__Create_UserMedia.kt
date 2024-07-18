@@ -22,15 +22,10 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 @Suppress("unused", "ClassName")
-class V0002__Create_Users : BaseJavaMigration() {
+class V0006__Create_UserMedia : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
-            SchemaUtils.create(Users)
-            // Relations
-            SchemaUtils.create(RelationsUserDirections)
-            SchemaUtils.create(RelationsUserLocalizations)
-            SchemaUtils.create(RelationsUserContacts)
-            SchemaUtils.create(RelationsUserMedia)
+            SchemaUtils.create(UserMedia)
         }
     }
 }

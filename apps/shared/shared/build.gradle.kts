@@ -9,6 +9,7 @@ val flywaydb_version: String by project
 val HikariCP_version: String by project
 val mysql_connector_version: String by project
 val kotlinx_datetime_version: String by project
+val jbcrypt_version: String by project
 
 plugins {
     kotlin("multiplatform") version "2.0.0"
@@ -57,6 +58,7 @@ kotlin {
             implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
             implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
             // db
+            implementation("org.mindrot:jbcrypt:$jbcrypt_version")
             implementation("mysql:mysql-connector-java:$mysql_connector_version")
             implementation("com.zaxxer:HikariCP:$HikariCP_version")
             implementation("org.flywaydb:flyway-core:$flywaydb_version")

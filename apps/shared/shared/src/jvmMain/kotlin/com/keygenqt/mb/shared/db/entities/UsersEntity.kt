@@ -15,9 +15,9 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.fromTextUserRole
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.UserResponse
-import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -26,11 +26,13 @@ import org.jetbrains.exposed.sql.Table
 
 
 object Users : IntIdTable() {
-    val role = enumeration("role", UserRole::class).default(UserRole.ORGANIZER)
+    val roles = varchar("roles", 255)
     val image = varchar("image", 255)
     val fname = varchar("fname", 255)
     val lname = varchar("lname", 255)
-    val description = text("description").nullable()
+    val paswd = varchar("paswd", 255).nullable()
+    val short = text("short").nullable()
+    val about = text("about").nullable()
     val quote = text("quote").nullable()
     val createAt = long("createAt")
     val updateAt = long("updateAt")
@@ -39,41 +41,43 @@ object Users : IntIdTable() {
 object RelationsUserDirections : Table() {
     private val user = reference("user", Users)
     private val direction = reference("direction", UserDirections)
-    override val primaryKey = PrimaryKey(user, direction, name = "PK_userDirections_e_d")
+    override val primaryKey = PrimaryKey(user, direction, name = "PK_userDirections_u_d")
 }
 
-object RelationsUserLocalizations : Table() {
+object RelationsUserLocales : Table() {
     private val user = reference("user", Users)
-    private val locale = reference("info", UserLocalizations)
-    override val primaryKey = PrimaryKey(user, locale, name = "PK_userLocale_e_l")
+    private val locale = reference("locale", UserLocales)
+    override val primaryKey = PrimaryKey(user, locale, name = "PK_userLocale_u_l")
 }
 
 object RelationsUserContacts : Table() {
     private val user = reference("user", Users)
     private val contacts = reference("contacts", UserContacts)
-    override val primaryKey = PrimaryKey(user, contacts, name = "PK_userContacts_e_c")
+    override val primaryKey = PrimaryKey(user, contacts, name = "PK_userContacts_u_c")
 }
 
 object RelationsUserMedia : Table() {
     private val user = reference("user", Users)
     private val media = reference("media", UserMedia)
-    override val primaryKey = PrimaryKey(user, media, name = "PK_userMedia_e_m")
+    override val primaryKey = PrimaryKey(user, media, name = "PK_userMedia_u_m")
 }
 
 class UserEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UserEntity>(Users)
 
-    var role by Users.role
+    var roles by Users.roles
     var image by Users.image
     var fname by Users.fname
     var lname by Users.lname
-    var description by Users.description
+    var paswd by Users.paswd
+    var short by Users.short
+    var about by Users.about
     var quote by Users.quote
     var createAt by Users.createAt
     var updateAt by Users.updateAt
 
     var directions by UserDirectionEntity via RelationsUserDirections
-    var locales by UserLocalizationEntity via RelationsUserLocalizations
+    var locales by UserLocaleEntity via RelationsUserLocales
     var contacts by UserContactEntity via RelationsUserContacts
     var media by UserMediaEntity via RelationsUserMedia
 }
@@ -83,18 +87,19 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
  */
 fun UserEntity.toResponse() = UserResponse(
     id = id.value,
-    role = role,
+    roles = roles.fromTextUserRole().toTypedArray().ifEmpty { null },
     image = image,
     fname = fname,
     lname = lname,
-    description = description,
+    short = short,
+    about = about,
     quote = quote,
     createAt = createAt.toUTC(),
     updateAt = updateAt.toUTC(),
-    directions = directions.toResponses().toTypedArray(),
-    locales = locales.toResponses().toTypedArray(),
-    contacts = contacts.toResponses().toTypedArray(),
-    media = media.toResponses().toTypedArray(),
+    directions = directions.toResponses().toTypedArray().ifEmpty { null },
+    locales = locales.toResponses().toTypedArray().ifEmpty { null },
+    contacts = contacts.toResponses().toTypedArray().ifEmpty { null },
+    media = media.toResponses().toTypedArray().ifEmpty { null },
 )
 
 /**
@@ -110,15 +115,17 @@ fun Iterable<UserEntity>.toResponses(): List<UserResponse> {
 // @todo https://youtrack.jetbrains.com/issue/EXPOSED-448/Relationship-many-to-many-with-condition.
 fun UserEntity.toGuestResponse() = UserResponse(
     id = id.value,
+    roles = roles.fromTextUserRole().toTypedArray().ifEmpty { null },
     image = image,
     fname = fname,
     lname = lname,
-    description = description,
+    short = short,
+    about = about,
     quote = quote,
-    directions = directions.toGuestResponses().toTypedArray(),
-    locales = locales.toGuestResponses().toTypedArray(),
-    contacts = contacts.toGuestResponses().toTypedArray(),
-    media = media.toGuestResponses().toTypedArray(),
+    directions = directions.toGuestResponses().toTypedArray().ifEmpty { null },
+    locales = locales.toGuestResponses().toTypedArray().ifEmpty { null },
+    contacts = contacts.toGuestResponses().toTypedArray().ifEmpty { null },
+    media = media.toGuestResponses().toTypedArray().ifEmpty { null },
 )
 
 /**

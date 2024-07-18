@@ -37,16 +37,17 @@ enum class UserRole {
 @Suppress("ArrayInDataClass")
 data class UserResponse(
     val id: Int,
-    val role: UserRole? = null,
+    val roles: Array<UserRole>? = null,
     val image: String,
     val fname: String,
     val lname: String,
-    val description: String?,
+    val short: String?,
+    val about: String?,
     val quote: String? = null,
     val createAt: String? = null,
     val updateAt: String? = null,
     val directions: Array<UserDirectionResponse>? = null,
-    val locales: Array<UserLocalizationResponse>? = null,
+    val locales: Array<UserLocaleResponse>? = null,
     val contacts: Array<UserContactResponse>? = null,
     val media: Array<UserMediaResponse>? = null,
 )

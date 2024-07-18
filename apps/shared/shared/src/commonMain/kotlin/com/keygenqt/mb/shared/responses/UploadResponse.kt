@@ -26,9 +26,9 @@ import kotlin.js.JsExport
 @JsExport
 @Serializable
 data class UploadResponse(
-    val id: Int,
+    val id: Int? = null,
     val fileName: String,
-    val fileMime: String,
-    val originalFileName: String,
-    val createAt: String,
+    val fileMime: String? = null,
+    val originalFileName: String? = null,
+    val createAt: String? = null,
 )

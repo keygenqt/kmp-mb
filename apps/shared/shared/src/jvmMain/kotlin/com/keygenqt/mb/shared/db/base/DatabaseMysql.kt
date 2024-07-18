@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.db.base
 
+import com.keygenqt.mb.shared.utils.Password
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -25,13 +26,25 @@ import org.slf4j.LoggerFactory
 import javax.sql.DataSource
 
 class DatabaseMysql(
-    dbConfig: String,
+    password: String,
+    dbconfig: String,
 ) {
     private var db: Database
     private val log = LoggerFactory.getLogger(this::class.java)
 
+    // Generate default password from configuration file
+    // Only the server has access to the configuration
+    companion object {
+        private lateinit var paswd: String
+        fun getDefaultPassword(): String {
+            return Password.encode(paswd)
+        }
+    }
+
     init {
-        val dataSource = hikari(dbConfig)
+        // Save password before run db and migrations
+        paswd = password
+        val dataSource = hikari(dbconfig)
         db = Database.connect(dataSource)
         runFlyway(dataSource)
     }

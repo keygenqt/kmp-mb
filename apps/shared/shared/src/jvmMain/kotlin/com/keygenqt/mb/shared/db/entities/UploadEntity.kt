@@ -58,6 +58,20 @@ fun UploadEntity.toResponse() = UploadResponse(
 /**
  * Convert to [List]
  */
-fun Iterable<UploadEntity>.toResponse(): List<UploadResponse> {
+fun Iterable<UploadEntity>.toResponses(): List<UploadResponse> {
     return map { it.toResponse() }
+}
+
+/**
+ * Convert to [UploadResponse]
+ */
+fun UploadEntity.toGuestResponse() = UploadResponse(
+    fileName = fileName,
+)
+
+/**
+ * Convert to [List]
+ */
+fun Iterable<UploadEntity>.toGuestResponses(): List<UploadResponse> {
+    return map { it.toGuestResponse() }
 }

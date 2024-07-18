@@ -32,7 +32,7 @@ class UsersService(
      */
     fun getAllExperts() = Users
         .selectAll()
-        .where { Users.role eq UserRole.EXPERT }
+        .where { Users.roles like "%${UserRole.EXPERT.name}%" }
         .orderBy(Pair(Users.lname, SortOrder.ASC))
         .map { UserEntity.wrapRow(it) }
 
@@ -41,9 +41,8 @@ class UsersService(
      */
     fun findByIdExpert(
         id: Int,
-        isPublished: Boolean? = null
     ) = UserEntity
-        .find { (Users.id eq id) and (Users.role eq UserRole.EXPERT) }
+        .find { (Users.id eq id) and (Users.roles like "%${UserRole.EXPERT.name}%") }
         .firstOrNull()
 
 
