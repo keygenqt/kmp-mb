@@ -1,4 +1,41 @@
 services:
+  db:
+    container_name: mb-database
+    platform: linux/x86_64
+    build:
+      context: .
+      dockerfile: db/Dockerfile
+    restart: always
+    tty: true
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./db/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - internal
+
+  phpmyadmin:
+    container_name: mb-phpmyadmin
+    depends_on:
+      db:
+        condition: service_started
+    image: phpmyadmin
+    restart: always
+    tty: true
+    ports:
+      - ${PORT_MY_ADMIN}:80
+    environment:
+      PMA_HOST: db
+      UPLOAD_LIMIT: 25M
+    volumes:
+      # Add to server configuration file
+      - ./configurations/config.secret.inc.php:/etc/phpmyadmin/config.secret.inc.php
+    networks:
+      - internal
+
   gradle:
     container_name: mb-kotlin
     restart: no
@@ -19,6 +56,8 @@ services:
     working_dir: /var/www/src
     volumes:
       - ../apps:/var/www/src
+      # Add to server configuration file
+      - ./configurations/application.conf:/var/www/src/server/src/main/resources/application.conf
 
   node:
     container_name: mb-react
@@ -51,11 +90,12 @@ services:
       dockerfile: java/Dockerfile
     restart: always
     tty: true
-    command: "java -jar mb-server.jar"
+    command: "java -jar build/libs/mb-server.jar"
     ports:
       - ${PORT_API}:3002
-    working_dir: /var/www/src/build/libs
+    working_dir: /var/www/src
     volumes:
+      - ../apps/server/uploads:/var/www/src/uploads
       - ../apps/server/:/var/www/src
     networks:
       - internal
@@ -86,4 +126,4 @@ networks:
     driver: bridge
 
 volumes:
-  kmpms-database:
+  mb-database:

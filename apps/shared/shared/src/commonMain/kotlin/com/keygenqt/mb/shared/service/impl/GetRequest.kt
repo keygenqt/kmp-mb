@@ -22,7 +22,7 @@ import com.keygenqt.mb.shared.responses.UserResponse
 
 class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
-    suspend fun users(): List<UserResponse> {
-        return client.get("users").body()
+    suspend fun experts(): List<UserResponse> {
+        return client.get("experts").body()
     }
 }

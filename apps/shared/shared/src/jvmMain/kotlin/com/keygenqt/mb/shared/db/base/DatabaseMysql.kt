@@ -26,8 +26,10 @@ import org.slf4j.LoggerFactory
 import javax.sql.DataSource
 
 class DatabaseMysql(
-    password: String,
-    dbconfig: String,
+    jdbcUrl: String,
+    dbUsername: String,
+    dbPassword: String,
+    defaultUserPassword: String
 ) {
     private var db: Database
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -35,22 +37,25 @@ class DatabaseMysql(
     // Generate default password from configuration file
     // Only the server has access to the configuration
     companion object {
-        private lateinit var paswd: String
+        private lateinit var userPassword: String
         fun getDefaultPassword(): String {
-            return Password.encode(paswd)
+            return Password.encode(userPassword)
         }
     }
 
     init {
         // Save password before run db and migrations
-        paswd = password
-        val dataSource = hikari(dbconfig)
+        userPassword = defaultUserPassword
+        val dataSource = hikari(jdbcUrl, dbUsername, dbPassword)
         db = Database.connect(dataSource)
         runFlyway(dataSource)
     }
 
-    private fun hikari(configPath: String): DataSource {
-        val config = HikariConfig(configPath).apply {
+    private fun hikari(url: String, user: String, paswd: String): DataSource {
+        val config = HikariConfig().apply {
+            jdbcUrl = url
+            username = user
+            password = paswd
             driverClassName = "com.mysql.cj.jdbc.Driver"
             validate()
         }

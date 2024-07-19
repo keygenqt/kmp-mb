@@ -1,1 +1,6 @@
 .idea
+# Docker .env
+docker/.env
+## Server configs
+docker/configurations/application.conf
+docker/configurations/config.secret.inc.php

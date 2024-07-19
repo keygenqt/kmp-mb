@@ -7,17 +7,14 @@ val hibernate_validator_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.0"
-    id("io.ktor.plugin") version "2.3.11"
+    id("io.ktor.plugin") version "2.3.12"
 }
 
 group = "kmp-mb"
 version = "0.0.1"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+    mainClass.set("com.keygenqt.mb.ApplicationKt")
 }
 
 repositories {
@@ -34,7 +31,6 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-call-logging:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
-    implementation("io.ktor:ktor-server-config-yaml")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.hibernate.validator:hibernate-validator:$hibernate_validator_version")

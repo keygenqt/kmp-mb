@@ -19,79 +19,85 @@ import com.keygenqt.mb.extension.configure
 import com.keygenqt.mb.routing.*
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.service.*
-import com.keygenqt.mb.shared.utils.LoaderConfig
 import com.keygenqt.mb.utils.AppLogger.initAppLogger
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
+import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.routing.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module as koinModule
 
+
 fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
+    embeddedServer(Netty, commandLineEnvironment(args)).start(wait = true)
 }
 
 fun Application.module() {
-    // load config
-    val conf = LoaderConfig.loadProperties("configuration/app.properties")
+    with(environment.config) {
+        val debug = propertyOrNull("ktor.development")?.getString() == "true"
+        val jdbcUrl = propertyOrNull("ktor.application.jdbcUrl")!!.getString()
+        val dbUsername = propertyOrNull("ktor.application.dbUsername")!!.getString()
+        val dbPassword = propertyOrNull("ktor.application.dbPassword")!!.getString()
+        val defaultUserPassword = propertyOrNull("ktor.application.defaultUserPassword")!!.getString()
 
-    // init logger
-    initAppLogger(conf.getPropOrNull("logger") ?: false)
+        // init logger
+        initAppLogger(debug)
 
-    // init db app
-    val db = DatabaseMysql(
-        password = conf.getPropOrNull("password") ?: "",
-        dbconfig = conf.getPropOrNull("dbconfig") ?: ""
-    )
-
-    // init koin
-    startKoin {
-        printLogger()
-        modules(
-            koinModule {
-                // app config
-                single { conf }
-                // db services
-                single { DirectionsService(db) }
-                single { UsersService(db) }
-                single { CitiesService(db) }
-                single { CountriesService(db) }
-                single { UploadsService(db) }
-            }
+        // init db app
+        val db = DatabaseMysql(
+            jdbcUrl = jdbcUrl,
+            dbUsername = dbUsername,
+            dbPassword = dbPassword,
+            defaultUserPassword = defaultUserPassword,
         )
-    }
 
-    // init json
-    install(ContentNegotiation) {
-        json(
-            Json {
-                prettyPrint = true
-                isLenient = true
-                ignoreUnknownKeys = true
-                coerceInputValues = true
-                explicitNulls = false
+        // init koin
+        startKoin {
+            printLogger()
+            modules(
+                koinModule {
+                    single { DirectionsService(db) }
+                    single { UsersService(db) }
+                    single { CitiesService(db) }
+                    single { CountriesService(db) }
+                    single { UploadsService(db) }
+                }
+            )
+        }
+
+        // init json
+        install(ContentNegotiation) {
+            json(
+                Json {
+                    prettyPrint = true
+                    isLenient = true
+                    ignoreUnknownKeys = true
+                    coerceInputValues = true
+                }
+            )
+        }
+
+        // catch errors
+        install(StatusPages) {
+            configure()
+        }
+
+        install(Routing) {
+            staticResources("/static", "assets")
+            home()
+            route("/api") {
+                directions()
+                experts()
+                countries()
+                cities()
+                uploads()
             }
-        )
-    }
-
-    // catch errors
-    install(StatusPages) {
-        configure()
-    }
-
-    install(Routing) {
-        staticResources("/static", "assets")
-        home()
-        route("/api") {
-            directions()
-            experts()
-            countries()
-            cities()
-            uploads()
         }
     }
 }

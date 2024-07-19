@@ -4,8 +4,7 @@ import * as React from 'react';
 import { useEffect } from "react";
 import shared from "shared";
 
-
-const HttpClient = new shared.mb.shared.service.ServiceRequestJS('http://localhost:3001/api/')
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS('http://localhost:3001/api/')
 
 function App() {
 
@@ -22,7 +21,7 @@ function App() {
   const items = []
 
   list.forEach((item) => {
-    items.push(item.name);
+    items.push(item.lname);
   })
 
   return (

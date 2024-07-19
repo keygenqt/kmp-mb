@@ -18,7 +18,6 @@ package com.keygenqt.mb.routing
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getStringParam
 import com.keygenqt.mb.shared.db.entities.UploadEntity
-import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UploadsService
 import com.keygenqt.mb.shared.utils.ConstantsMime.toExtension
