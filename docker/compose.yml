@@ -1,6 +1,9 @@
+version: "3"
+name: kmp-mb
+
 services:
   db:
-    container_name: mb-database
+    container_name: database
     platform: linux/x86_64
     build:
       context: .
@@ -18,7 +21,7 @@ services:
       - internal
 
   phpmyadmin:
-    container_name: mb-phpmyadmin
+    container_name: phpmyadmin
     depends_on:
       db:
         condition: service_started
@@ -37,7 +40,7 @@ services:
       - internal
 
   gradle:
-    container_name: mb-kotlin
+    container_name: kotlin-build
     restart: no
     tty: true
     build:
@@ -60,7 +63,7 @@ services:
       - ./configurations/application.conf:/var/www/src/server/src/main/resources/application.conf
 
   node:
-    container_name: mb-react
+    container_name: js-build
     restart: no
     build:
       context: .
@@ -81,7 +84,7 @@ services:
       - ../apps:/var/www/src
 
   java:
-    container_name: mb-server-run
+    container_name: server-run
     depends_on:
       gradle:
         condition: service_completed_successfully
@@ -101,7 +104,7 @@ services:
       - internal
 
   nginx:
-    container_name: mb-nginx
+    container_name: nginx
     depends_on:
       java:
         condition: service_started
@@ -126,4 +129,4 @@ networks:
     driver: bridge
 
 volumes:
-  mb-database:
+  database:
