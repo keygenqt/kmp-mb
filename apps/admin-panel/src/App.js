@@ -3,8 +3,9 @@ import './App.css';
 import * as React from 'react';
 import { useEffect } from "react";
 import shared from "shared";
+import {AppConf} from "./conf/AppConf";
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS('http://localhost:3001/api/')
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
 
 function App() {
 

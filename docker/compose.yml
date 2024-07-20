@@ -34,8 +34,9 @@ services:
       PMA_HOST: db
       UPLOAD_LIMIT: 25M
     volumes:
-      # Add to server configuration file
-      - ./configurations/config.secret.inc.php:/etc/phpmyadmin/config.secret.inc.php
+      # Phpmyadmin configuration files
+      - ./configurations/phpmyadmin/config.inc.php:/etc/phpmyadmin/config.inc.php
+      - ./configurations/phpmyadmin/config.secret.inc.php:/etc/phpmyadmin/config.secret.inc.php
     networks:
       - internal
 
@@ -59,8 +60,8 @@ services:
     working_dir: /var/www/src
     volumes:
       - ../apps:/var/www/src
-      # Add to server configuration file
-      - ./configurations/application.conf:/var/www/src/server/src/main/resources/application.conf
+      # Server configuration files
+      - ./configurations/server/application.conf:/var/www/src/server/src/main/resources/application.conf
 
   node:
     container_name: js-build
@@ -82,6 +83,9 @@ services:
     working_dir: /var/www/src
     volumes:
       - ../apps:/var/www/src
+        # React configuration files
+      - ./configurations/admin-panel/AppConf.js:/var/www/src/admin-panel/src/conf/AppConf.js
+      - ./configurations/website/AppConf.js:/var/www/src/website/src/conf/AppConf.js
 
   java:
     container_name: server-run
@@ -98,8 +102,9 @@ services:
       - ${PORT_API}:3002
     working_dir: /var/www/src
     volumes:
-      - ../apps/server/uploads:/var/www/src/uploads
       - ../apps/server/:/var/www/src
+      # Mount uploads folder
+      - ../uploads:/var/www/src/uploads
     networks:
       - internal
 

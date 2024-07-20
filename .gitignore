@@ -1,6 +1,22 @@
 .idea
 # Docker .env
 docker/.env
+
+# App uploads
+uploads
+
+## Admin-Panel configs
+docker/configurations/admin-panel/*
+!docker/configurations/admin-panel/_*
+
+## Phpmyadmin configs
+docker/configurations/phpmyadmin/*
+!docker/configurations/phpmyadmin/_*
+
 ## Server configs
-docker/configurations/application.conf
-docker/configurations/config.secret.inc.php
+docker/configurations/server/*
+!docker/configurations/server/_*
+
+## Website configs
+docker/configurations/website/*
+!docker/configurations/website/_*
