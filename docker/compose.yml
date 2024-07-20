@@ -3,7 +3,7 @@ name: kmp-mb
 
 services:
   db:
-    container_name: database
+    container_name: kmp-mb-database
     platform: linux/x86_64
     build:
       context: .
@@ -21,7 +21,7 @@ services:
       - internal
 
   phpmyadmin:
-    container_name: phpmyadmin
+    container_name: kmp-mb-phpmyadmin
     depends_on:
       db:
         condition: service_started
@@ -41,7 +41,7 @@ services:
       - internal
 
   gradle:
-    container_name: kotlin-build
+    container_name: kmp-mb-kotlin-build
     restart: no
     tty: true
     build:
@@ -64,7 +64,7 @@ services:
       - ./configurations/server/application.conf:/var/www/src/server/src/main/resources/application.conf
 
   node:
-    container_name: js-build
+    container_name: kmp-mb-js-build
     restart: no
     build:
       context: .
@@ -88,7 +88,7 @@ services:
       - ./configurations/website/AppConf.js:/var/www/src/website/src/conf/AppConf.js
 
   java:
-    container_name: server-run
+    container_name: kmp-mb-server-run
     depends_on:
       gradle:
         condition: service_completed_successfully
@@ -109,7 +109,7 @@ services:
       - internal
 
   nginx:
-    container_name: nginx
+    container_name: kmp-mb-nginx
     depends_on:
       java:
         condition: service_started
