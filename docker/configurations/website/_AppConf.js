@@ -2,5 +2,6 @@
  * Base configuration
  */
 export const AppConf = {
-    apiUrl: 'https://mb.keygenqt.com/api/',
+    apiUrl: 'http://mb.keygenqt.com',
+    apiPath: 'http://mb.keygenqt.com/api/',
 };

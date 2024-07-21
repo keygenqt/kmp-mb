@@ -28,5 +28,8 @@ class GetRequestJS(
 ) {
     @OptIn(DelicateCoroutinesApi::class)
     fun experts() = GlobalScope.promise { client.get.experts() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun directions() = GlobalScope.promise { client.get.directions() }
 }
 

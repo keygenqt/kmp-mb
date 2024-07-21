@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import shared from "shared";
 import {AppConf} from "./conf/AppConf";
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiPath)
 
 function App() {
 

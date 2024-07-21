@@ -34,44 +34,57 @@ import {
     Typography,
     CardMedia,
     Chip,
+    CircularProgress,
 } from '@mui/material';
+import shared from "shared";
+import {AppConf} from "../../../conf/AppConf";
 
-import {DataExperts} from "../../../base/data/DataExperts";
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiPath)
 
 export function BlockExperts(props) {
+
+    const [dataExperts, setDataExperts] = React.useState(undefined);
+    const [dataDirections, setDirections] = React.useState(undefined);
+
+    const wasCalled = React.useRef(false);
+    React.useEffect(() => {
+      const fetchData = async () => {
+        // Only once
+        if(wasCalled.current) return;
+        wasCalled.current = true;
+        // Delay for loader
+        await new Promise(r => setTimeout(r, 1000));
+        // Get data
+        setDataExperts((await HttpClient.get.experts()).toArray());
+        setDirections((await HttpClient.get.directions()).toArray());
+      }
+      fetchData().catch(console.error);
+    }, []);
 
     const theme = useTheme()
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
 
+    // @todo ru, en, by
     const {t, isLocEn} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
 
     const [search, setSearch] = React.useState('');
     const [direction, setDirection] = React.useState('');
 
-    const directions = []
     const content = []
-    DataExperts.forEach((item) => {
-        // Get localization data
-        const search_name = isLocEn ? item.name_en : item.name_ru
-
-        // Get array for select
-        item.direction.forEach((direction) => {
-            if (!directions.includes(direction)) {
-                directions.push(direction)
-            }
-        })
-        directions.sort()
+    dataExperts?.forEach((item) => {
+        // // Get localization data
+        const fullName = `${item.fname} ${item.lname}`
 
         // Filter direction
-        if (direction && !item.direction.includes(direction)) {
+        if (direction && !item.directions.map((direction) => direction.name).includes(direction)) {
             return;
         }
 
         // Search ru/en name city
         if (!search
-            || item.name_en.toLowerCase().includes(search.toLowerCase())
-            || item.name_ru.toLowerCase().includes(search.toLowerCase())
+            || fullName.toLowerCase().includes(search.toLowerCase())
+            || fullName.toLowerCase().includes(search.toLowerCase())
         ) {
             // Items
             content.push(
@@ -88,17 +101,17 @@ export function BlockExperts(props) {
                     }}>
                         <CardMedia
                             sx={{ height: isSM ? 560 : 380 }}
-                            image={item.image}
-                            title={search_name}
+                            image={`${AppConf.apiUrl}${item.image}`}
+                            title={fullName}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
-                                {search_name}
+                                {fullName}
                             </Typography>
 
                             <Stack className={'ExpertChips'} spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
-                                {item.direction.map((option, index) => (
-                                    <Chip key={`cip-${index}`} className={option.replace(' ', '_')} label={option} variant="outlined" />
+                                {item.directions.map((direction, index) => (
+                                    <Chip key={`cip-${index}`} className={direction.name.replace(' ', '_')} label={direction.name} variant="outlined" />
                                 ))}
                             </Stack>
 
@@ -121,81 +134,89 @@ export function BlockExperts(props) {
     })
 
     return (
-        <Box>
-            <Grid
-                container
-                spacing={isSM ? 4 : 5}
-                rowSpacing={isSM ? 4 : 5}
-                justifyContent="flex-end"
-                sx={{marginBottom: isSM ? 4 : 5}}
-            >
-                <Grid item xl={3} lg={3} md={4} sm={6} xs={12}>
-                    <TextField
-                        id='outlined-basic'
-                        inputProps={{
-                            autoComplete: 'off',
-                            form: {
-                                autoComplete: 'off',
-                            },
-                        }}
-                        label={t('pages.experts.t_filter_search')}
-                        variant='outlined'
-                        sx={{ width: '100%' }}
-                        value={search}
-                        onChange={(event) => {
-                          setSearch(event.target.value);
-                        }}
-                    />
-                </Grid>
-
-                <Grid item xl={3} lg={3} md={4} sm={6} xs={12}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="direction-select-label">
-                        {t('pages.experts.t_filter_direction')}
-                        </InputLabel>
-                        <Select
-                            labelId="direction-select-label"
-                            value={direction}
-                            label={t('pages.experts.t_filter_direction')}
-                            onChange={(event) => {
-                                setDirection(event.target.value);
-                            }}
-                        >
-                            <MenuItem value="">
-                                <em>{t('common.t_none')}</em>
-                            </MenuItem>
-                            {directions.map((option) => (
-                                <MenuItem key={`cat-${option}`} value={option}>
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-            </Grid>
-
-            {content.length !== 0 ? (
+        <>
+        {dataExperts || dataDirections ? (
+            <Box>
                 <Grid
                     container
                     spacing={isSM ? 4 : 5}
                     rowSpacing={isSM ? 4 : 5}
+                    justifyContent="flex-end"
+                    sx={{marginBottom: isSM ? 4 : 5}}
                 >
-                    {content}
-                </Grid>
-            ) : (
-                <Stack spacing={4} sx={{paddingTop: 3, paddingBottom: 3}}>
-                    <Typography variant='h4' color={'text.primary'} sx={{textAlign: 'center'}}>
-                        {t('pages.experts.t_not_found')}
-                    </Typography>
-                    <Box>
-                        <Lottie
-                            className={'NotFoundLottie'}
-                            animationData={DataLottie.not_found}
+                    <Grid item xl={3} lg={3} md={4} sm={6} xs={12}>
+                        <TextField
+                            id='outlined-basic'
+                            inputProps={{
+                                autoComplete: 'off',
+                                form: {
+                                    autoComplete: 'off',
+                                },
+                            }}
+                            label={t('pages.experts.t_filter_search')}
+                            variant='outlined'
+                            sx={{ width: '100%' }}
+                            value={search}
+                            onChange={(event) => {
+                            setSearch(event.target.value);
+                            }}
                         />
-                    </Box>
-                </Stack>
-                )}
-        </Box>
+                    </Grid>
+
+                    <Grid item xl={3} lg={3} md={4} sm={6} xs={12}>
+                        <FormControl sx={{ width: '100%' }}>
+                            <InputLabel id="direction-select-label">
+                            {t('pages.experts.t_filter_direction')}
+                            </InputLabel>
+                            <Select
+                                labelId="direction-select-label"
+                                value={direction}
+                                label={t('pages.experts.t_filter_direction')}
+                                onChange={(event) => {
+                                    setDirection(event.target.value);
+                                }}
+                            >
+                                <MenuItem value="">
+                                    <em>{t('common.t_none')}</em>
+                                </MenuItem>
+                                {dataDirections?.map((direction) => (
+                                    <MenuItem key={`cat-${direction.id}`} value={direction.name}>
+                                        {direction.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                </Grid>
+
+                {content.length !== 0 ? (
+                    <Grid
+                        container
+                        spacing={isSM ? 4 : 5}
+                        rowSpacing={isSM ? 4 : 5}
+                    >
+                        {content}
+                    </Grid>
+                ) : (
+                    <Stack spacing={4} sx={{paddingTop: 3, paddingBottom: 3}}>
+                        <Typography variant='h4' color={'text.primary'} sx={{textAlign: 'center'}}>
+                            {t('pages.experts.t_not_found')}
+                        </Typography>
+                        <Box>
+                            <Lottie
+                                className={'NotFoundLottie'}
+                                animationData={DataLottie.not_found}
+                            />
+                        </Box>
+                    </Stack>
+                    )}
+            </Box>
+        ) : (
+            <Box sx={{textAlign: 'center', padding: 6}}>
+                <CircularProgress />
+            </Box>
+        )}
+        </>
     );
 }
 

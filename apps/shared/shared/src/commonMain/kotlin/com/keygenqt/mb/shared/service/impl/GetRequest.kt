@@ -19,10 +19,16 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import com.keygenqt.mb.shared.responses.UserResponse
+import com.keygenqt.mb.shared.responses.UserDirectionResponse
 
 class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
     suspend fun experts(): List<UserResponse> {
         return client.get("experts").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun directions(): List<UserDirectionResponse> {
+        return client.get("directions").body()
     }
 }
