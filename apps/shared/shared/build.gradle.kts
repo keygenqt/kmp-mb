@@ -44,6 +44,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
+            implementation("io.ktor:ktor-client-core:$ktor_version")
             implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
             implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
         }
