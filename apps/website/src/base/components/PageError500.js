@@ -34,10 +34,9 @@ export function PageError500(props) {
             justifyContent="space-between"
             alignItems="center"
         >
-            {props.children ? props.children : <Box/>}
+            {!props.children ? <Box/> :(<Box sx={{marginBottom: 5}}>{props.children}</Box>)}
 
             <Box sx={{
-                paddingTop: 5,
                 paddingLeft: 3,
                 paddingRight: 3,
                 textAlign: 'center',
