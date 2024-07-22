@@ -19,6 +19,7 @@ export const enLocalization = {
         common: {
             t_more: 'More details',
             t_none: 'None',
+            t_error_500: 'An error occurred, please try again later.',
         },
         layouts: {
             header: {

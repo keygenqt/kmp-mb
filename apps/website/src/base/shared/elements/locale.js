@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -14,13 +15,12 @@
  * limitations under the License.
  */
 
-// common
-@import 'common/style';
+import shared from "shared";
 
-// pages
-@import 'pages/home';
-@import 'pages/community';
-@import 'pages/city';
-@import 'pages/experts';
-@import 'pages/expert';
-@import 'pages/coming_soon';
+const LocaleShared = shared.com.keygenqt.mb.shared.responses.Locale
+
+export const locale = {
+    'ru-RU': 'ru',
+    'by-BY': LocaleShared.BY.name.toLowerCase(),
+    'en-EN': LocaleShared.EN.name.toLowerCase()
+}

@@ -36,4 +36,11 @@ data class CityResponse(
     val locales: Array<ColumnLocaleResponse>? = null,
     val organizers: Array<UserResponse>? = null,
     val uploads: Array<UploadResponse>? = null,
-)
+) {
+    fun getNameLocale(language: String): String {
+        for (item: ColumnLocaleResponse in (locales ?: emptyArray())) {
+            if (item.locale.check(language)) return item.text
+        }
+        return name
+    }
+}

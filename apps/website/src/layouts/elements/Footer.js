@@ -15,7 +15,7 @@
  */
 
 import * as React from 'react';
-import {DataImages, LocalizationContext, RouteContext} from '../../base';
+import {DataImages, LocalizationContext, RouteContext, Shared} from '../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -38,7 +38,7 @@ export function Footer(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const {route} = React.useContext(RouteContext)
-    const {t, i18n, isLocEn} = React.useContext(LocalizationContext)
+    const {t, i18n, language} = React.useContext(LocalizationContext)
 
     return (
         <>
@@ -137,23 +137,17 @@ export function Footer(props) {
                             }
                         }}
                     >
-                        <Button
-                            disabled={isLocEn}
-                            onClick={() => {
-                                i18n.changeLanguage('en-US')
-                            }}
-                        >
-                            <Typography>en</Typography>
-                        </Button>
-
-                        <Button
-                            disabled={!isLocEn}
-                            onClick={() => {
-                                i18n.changeLanguage('ru-RU')
-                            }}
-                        >
-                            <Typography>ru</Typography>
-                        </Button>
+                        {Object.entries(Shared.locale).map(([key, value]) => (
+                            <Button
+                                key={`group-locale-${value}`}
+                                disabled={language === key}
+                                onClick={() => {
+                                    i18n.changeLanguage(key)
+                                }}
+                            >
+                                <Typography>{value}</Typography>
+                            </Button>
+                        ))}
                     </ButtonGroup>
                 </Stack>
             </Stack>

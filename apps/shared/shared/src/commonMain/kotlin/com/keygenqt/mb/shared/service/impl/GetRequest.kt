@@ -28,6 +28,11 @@ class GetRequest(private val client: HttpClient) {
     }
 
     @Throws(Exception::class)
+    suspend fun expert(id: Int): UserResponse {
+        return client.get("experts/$id").body()
+    }
+
+    @Throws(Exception::class)
     suspend fun directions(): List<UserDirectionResponse> {
         return client.get("directions").body()
     }

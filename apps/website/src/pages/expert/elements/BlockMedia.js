@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext} from '../../../base';
+import {LocalizationContext, RouteContext, Shared} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -38,13 +38,13 @@ import {
 
 function getIcon(key) {
     switch(key) {
-        case 'telegram':
+        case Shared.mediaTypes.telegram:
             return <Telegram className={'TelegramIcon'}/>
-        case 'github':
+        case Shared.mediaTypes.github:
             return <GitHub className={'GitHubIcon'}/>
-        case 'youtube':
+        case Shared.mediaTypes.youtube:
             return <YouTube className={'YouTubeIcon'}/>
-        case 'site':
+        case Shared.mediaTypes.site:
             return <Language className={'LanguageIcon'}/>
         default:
             return <CellTower className={'CellTowerIcon'}/>
@@ -63,22 +63,19 @@ export function BlockMedia(props) {
     const {route} = React.useContext(RouteContext)
 
     const content = []
-    Object.keys(media).forEach((key, index) => {
-        if (!media[key]) {
-            return
-        }
+    media?.forEach((model, index) => {
         content.push(
             <Grid key={`media-${index}`} item xl={3} lg={3} md={4} sm={6} xs={12}>
                 <Card color={'primary'}>
                     <CardActionArea
                         sx={{padding: 2}}
                         onClick={() => {
-                            route.openUrlNewTab(media[key])
+                            route.openUrlNewTab(model.link)
                         }}
                     >
                         <Stack>
                             <Box className={'MediaIcon'}>
-                                {getIcon(key)}
+                                {getIcon(model.type.name)}
                             </Box>
                             <Box className={'MediaArrow'}>
                                 <ArrowOutward/>
@@ -111,5 +108,5 @@ export function BlockMedia(props) {
 }
 
 BlockMedia.propTypes = {
-    media: PropTypes.object.isRequired,
+    media: PropTypes.array.isRequired,
 };

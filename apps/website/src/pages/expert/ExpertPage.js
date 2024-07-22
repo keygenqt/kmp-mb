@@ -16,7 +16,13 @@
 
 import * as React from 'react';
 import {useParams} from "react-router";
-import {LocalizationContext} from '../../base';
+import {
+    LocalizationContext,
+    Shared,
+    useHttpQuery,
+    PageError404,
+    PageLoader
+} from '../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -26,23 +32,33 @@ import {
 } from '@mui/material';
 import {FormatQuote} from '@mui/icons-material';
 
-import {DataExperts} from '../../base/data/DataExperts';
 import {BlockInfo} from './elements/BlockInfo'
 import {BlockMedia} from './elements/BlockMedia'
-import {ErrorPage} from "../";
 
 export function ExpertPage(props) {
     let {id} = useParams();
-    const [data] = React.useState(DataExperts.find(x => x.id === parseInt(id)))
+
+    const data = useHttpQuery(Shared.queries.expert, id)
+
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
-    const {isLocEn} = React.useContext(LocalizationContext)
+    const {language} = React.useContext(LocalizationContext)
 
-    if (!data) {
+    // Error get data
+    if (data === null) {
         return (
-            <ErrorPage/>
+            <PageError404/>
         )
     }
+
+    // Loading get data
+    if (data === undefined) {
+        return (
+            <PageLoader/>
+        )
+    }
+
+    const quote = data.getQuoteLocale(language)
 
     return (
         <Stack
@@ -51,17 +67,17 @@ export function ExpertPage(props) {
             alignItems="center"
         >
             <Container maxWidth='xl'>
-                <BlockInfo expert={data}/>
+                <BlockInfo data={data}/>
             </Container>
 
-            {!data.quote_en || !data.quote_ru ? null : (
+            {!quote ? null : (
                 <Container maxWidth='md'>
                     <Stack spacing={3} justifyContent="center" alignItems="center">
                         <Typography color={'text.primary'} sx={{textAlign: 'center'}}>
                             <FormatQuote sx={{ fontSize: 60 }}/>
                         </Typography>
                         <Typography variant={'text1'} color={'text.primary'} sx={{textAlign: 'center'}}>
-                            {isLocEn ? data.quote_en : data.quote_ru}
+                            {quote}
                         </Typography>
                     </Stack>
                 </Container>

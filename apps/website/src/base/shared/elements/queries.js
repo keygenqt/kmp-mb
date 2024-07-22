@@ -1,4 +1,5 @@
-/*
+
+/**
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,26 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.responses
 
-import kotlinx.serialization.Serializable
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
-
-/**
- * User response
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@Serializable
-@Suppress("ArrayInDataClass")
-data class OrganizerResponse(
-    val id: Int? = null,
-    val image: String,
-    val fname: String,
-    val lname: String,
-    val createAt: String? = null,
-    val updateAt: String? = null,
-    val locales: Array<UserLocaleResponse>? = null,
-    val contacts: Array<UserContactResponse>? = null,
-)
+export const queries = {
+    experts: 'experts',
+    expert: 'expert', // id: Int
+    directions: 'directions',
+}

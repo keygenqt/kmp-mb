@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.responses
 
+import com.keygenqt.mb.shared.utils.ConstantsMime.toMime
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
@@ -27,6 +28,12 @@ import kotlin.js.JsExport
 enum class Locale {
     EN, BY
 }
+
+/**
+ * Check [Locale] by string language
+ */
+fun Locale.check(language: String): Boolean =
+    this.name.lowercase() == language.split('-').firstOrNull()?.lowercase()
 
 /**
  * Users locale data

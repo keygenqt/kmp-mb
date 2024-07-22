@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -14,13 +15,13 @@
  * limitations under the License.
  */
 
-// common
-@import 'common/style';
+import shared from "shared";
 
-// pages
-@import 'pages/home';
-@import 'pages/community';
-@import 'pages/city';
-@import 'pages/experts';
-@import 'pages/expert';
-@import 'pages/coming_soon';
+const UserMediaTypes = shared.com.keygenqt.mb.shared.responses.UserMediaTypes
+
+export const mediaTypes = {
+    telegram: UserMediaTypes.TELEGRAM.name,
+    github: UserMediaTypes.GITHUB.name,
+    youtube: UserMediaTypes.YOUTUBE.name,
+    site: UserMediaTypes.SITE.name,
+}

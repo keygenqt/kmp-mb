@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -13,12 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-.ErrorPage .ContentPage {
-    text-align: center;
-}
+import {locale} from "./elements/locale"
+import {queries} from "./elements/queries"
+import {contactTypes} from "./elements/contactTypes"
+import {mediaTypes} from "./elements/mediaTypes"
 
-.ErrorPage .ContentPage .ErrorLottie {
-    width: 300px;
-    margin: -30px auto;
+export const Shared = {
+    locale: locale,
+    queries: queries,
+    contactTypes: contactTypes,
+    mediaTypes: mediaTypes,
 }

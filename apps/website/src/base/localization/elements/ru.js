@@ -19,6 +19,7 @@ export const ruLocalization = {
         common: {
             t_more: 'Подробнее',
             t_none: 'Не выбрано',
+            t_error_500: 'Произошла ошибка, попробуйте позже.',
         },
         layouts: {
             header: {

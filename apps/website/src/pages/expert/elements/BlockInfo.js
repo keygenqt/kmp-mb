@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext} from '../../../base';
+import {LocalizationContext, RouteContext, Shared} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -38,12 +38,18 @@ import {
 export function BlockInfo(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
-    const {isLocEn} = React.useContext(LocalizationContext)
+    const {language} = React.useContext(LocalizationContext)
     const {route} = React.useContext(RouteContext)
 
     const {
-        expert,
+        data,
     } = props
+
+    const fullName = `${data.getFnameLocale(language)} ${data.getLnameLocale(language)}`
+    const about = data.getAboutLocale(language)
+    const telegram = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.telegram)
+    const email = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.email)
+    const linkedin = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.linkedin)
 
     return (
         <Card sx={{padding: isMD ? 2 : 3}}>
@@ -58,27 +64,27 @@ export function BlockInfo(props) {
                             justifyContent="center"
                             alignItems="center"
                         >
-                            <img src={expert.image} alt='Logo' className='LogoExpert' />
+                            <img src={data.image} alt='Logo' className='LogoExpert' />
 
-                            {expert.contacts.telegram || expert.contacts.email || expert.contacts.linkedin ? (
+                            {telegram || email || linkedin ? (
                                 <ButtonGroup color={'primary'} >
-                                    {expert.contacts.telegram ? (
+                                    {telegram ? (
                                         <Button onClick={() => {
-                                            route.openUrlNewTab(expert.contacts.telegram)
+                                            route.openUrlNewTab(telegram.link)
                                         }}>
                                             <Telegram/>
                                         </Button>
                                     ) : null}
-                                    {expert.contacts.email ? (
+                                    {email ? (
                                         <Button onClick={() => {
-                                            route.openEmail(expert.contacts.email)
+                                            route.openEmail(email.link)
                                         }}>
                                             <Email/>
                                         </Button>
                                     ) : null}
-                                    {expert.contacts.linkedin ? (
+                                    {linkedin ? (
                                         <Button onClick={() => {
-                                            route.openUrlNewTab(expert.contacts.linkedin)
+                                            route.openUrlNewTab(linkedin.link)
                                         }}>
                                             <LinkedIn/>
                                         </Button>
@@ -98,12 +104,12 @@ export function BlockInfo(props) {
                             spacing={isMD ? 2 : 3}
                         >
                             <Typography variant="h3" component="div">
-                                {isLocEn ? expert.name_en : expert.name_ru}
+                                {fullName}
                             </Typography>
 
                             <Stack className={'ExpertChips'} spacing={1} direction={'row'} sx={{marginTop: 1.6}}>
-                                {expert.direction.map((option, index) => (
-                                    <Chip key={`cip-${index}`} className={option.replace(' ', '_')} label={option} variant="outlined" />
+                                {data.directions?.map((direction, index) => (
+                                    <Chip key={`cip-${index}`} className={direction.name.replace(' ', '_')} label={direction.name} variant="outlined" />
                                 ))}
                             </Stack>
 
@@ -112,7 +118,7 @@ export function BlockInfo(props) {
                                 color={'text.primary'}
                                 sx={{whiteSpace: 'break-spaces'}}
                             >
-                                {isLocEn ? expert.description_en : expert.description_ru}
+                                {about}
                             </Typography>
                         </Stack>
                     </Stack>
@@ -123,5 +129,5 @@ export function BlockInfo(props) {
 }
 
 BlockInfo.propTypes = {
-    expert: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
 };
