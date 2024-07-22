@@ -33,13 +33,14 @@ export function PageError500(props) {
             direction="column"
             justifyContent="space-between"
             alignItems="center"
-            spacing={2}
         >
-            {props.children ? props.children : (<Box/>)}
+            {props.children ? props.children : <Box/>}
 
             <Box sx={{
+                paddingTop: 5,
+                paddingLeft: 3,
+                paddingRight: 3,
                 textAlign: 'center',
-                padding: 4,
                 '& .PageLottie': {
                     width: '238px',
                     margin: '-5px auto',
@@ -55,7 +56,6 @@ export function PageError500(props) {
                     </Typography>
                 </Stack>
             </Box>
-
             <Box/>
         </Stack>
     );

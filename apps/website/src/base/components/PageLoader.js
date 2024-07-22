@@ -30,16 +30,17 @@ export function PageLoader(props) {
             direction="column"
             justifyContent="space-between"
             alignItems="center"
-            spacing={2}
         >
-            {props.children ? props.children : (<Box/>)}
-
+            {props.children ? props.children : <Box/>}
+            
             <Box sx={{
+                paddingTop: 5,
+                paddingLeft: 3,
+                paddingRight: 3,
                 textAlign: 'center',
-                padding: 4,
                 '& .PageLottie': {
                     width: '238px',
-                    margin: '-41px auto',
+                    margin: '-16px auto',
                 }
             }}>
                 <Lottie
@@ -47,7 +48,6 @@ export function PageLoader(props) {
                     animationData={DataLottie.loader}
                 />
             </Box>
-
             <Box/>
         </Stack>
     );
