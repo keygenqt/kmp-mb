@@ -32,11 +32,4 @@ data class CountryResponse(
     val createAt: String? = null,
     val updateAt: String? = null,
     val locales: Array<ColumnLocaleResponse>? = null,
-) {
-    fun getNameLocale(language: String): String {
-        for (item: ColumnLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.text
-        }
-        return name
-    }
-}
+)

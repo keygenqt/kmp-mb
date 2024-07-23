@@ -22,6 +22,7 @@ import {
     useHttpQuery,
     PageLoader,
     PageError500,
+    ScrollRecovery,
 } from '../../base';
 import {
     useTheme,
@@ -101,19 +102,22 @@ export function ExpertsPage(props) {
     }
 
     return (
-        <Stack
-            spacing={isMD ? 4 : 6}
-            className={'ContentPage'}
-            alignItems="center"
-        >
-            {headerPage}
-            <Container maxWidth='lg'>
-                <BlockExperts
-                    experts={experts}
-                    directions={directions}
-                />
-            </Container>
-        </Stack>
+        <>
+            <ScrollRecovery/>
+            <Stack
+                spacing={isMD ? 4 : 6}
+                className={'ContentPage'}
+                alignItems="center"
+            >
+                {headerPage}
+                <Container maxWidth='lg'>
+                    <BlockExperts
+                        experts={experts}
+                        directions={directions}
+                    />
+                </Container>
+            </Stack>
+        </>
     );
 }
 

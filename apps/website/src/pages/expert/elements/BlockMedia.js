@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext, Shared} from '../../../base';
+import {LocalizationContext, RouteContext, UserMediaTypes} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -38,13 +38,13 @@ import {
 
 function getIcon(key) {
     switch(key) {
-        case Shared.mediaTypes.telegram:
+        case UserMediaTypes.TELEGRAM.name:
             return <Telegram className={'TelegramIcon'}/>
-        case Shared.mediaTypes.github:
+        case UserMediaTypes.GITHUB.name:
             return <GitHub className={'GitHubIcon'}/>
-        case Shared.mediaTypes.youtube:
+        case UserMediaTypes.YOUTUBE.name:
             return <YouTube className={'YouTubeIcon'}/>
-        case Shared.mediaTypes.site:
+        case UserMediaTypes.SITE.name:
             return <Language className={'LanguageIcon'}/>
         default:
             return <CellTower className={'CellTowerIcon'}/>
@@ -75,7 +75,7 @@ export function BlockMedia(props) {
                     >
                         <Stack>
                             <Box className={'MediaIcon'}>
-                                {getIcon(model.type.name)}
+                                {getIcon(model.type)}
                             </Box>
                             <Box className={'MediaArrow'}>
                                 <ArrowOutward/>

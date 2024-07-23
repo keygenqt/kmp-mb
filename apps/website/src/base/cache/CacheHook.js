@@ -15,21 +15,17 @@
  */
 
 import {useCallback, useLayoutEffect, useState} from "react";
-import {CacheTypes} from "./CacheTypes";
 import {CacheStorage} from "./CacheStorage";
 
-export function useCacheStorage(key, valueType = CacheTypes.string, defaultValue = null) {
+export function useCacheStorage(key, defaultValue = undefined) {
     const getValueType = useCallback(
         () => {
-            switch (valueType) {
-                case CacheTypes.bool:
-                    return CacheStorage.booleanGet(key, defaultValue)
-                case CacheTypes.integer:
-                    return CacheStorage.intGet(key, defaultValue)
-                default:
-                    return CacheStorage.stringGet(key, defaultValue)
+            const value = CacheStorage.get(key)
+            if (value) {
+                return value;
             }
-        }, [defaultValue, key, valueType]);
+            return defaultValue
+        }, [defaultValue, key]);
 
     const [value, setValue] = useState(getValueType());
 
@@ -51,7 +47,7 @@ export function useCacheStorage(key, valueType = CacheTypes.string, defaultValue
         return () => {
             observer.disconnect()
         };
-    }, [getValueType, key, valueType]);
+    }, [getValueType, key]);
 
     return value;
 }

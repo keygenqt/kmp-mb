@@ -225,17 +225,6 @@ import meetings_Yekaterinburg_3 from '../../assets/images/community/meetings/Yek
 import meetings_Yekaterinburg_4 from '../../assets/images/community/meetings/Yekaterinburg/a2aecf65-de5c-43c3-bf36-940656eb8b06.jpg';
 import meetings_Yekaterinburg_5 from '../../assets/images/community/meetings/Yekaterinburg/eebbc7e0-c9e0-42f0-82bc-7e80d1d351d0.jpg';
 
-// Experts
-import expert_Evdokimov from '../../assets/images/experts/Evdokimov.jpeg';
-import expert_Gladkov from '../../assets/images/experts/Gladkov.jpeg';
-import expert_Moshkalov from '../../assets/images/experts/Moshkalov.jpeg';
-import expert_Panov from '../../assets/images/experts/Panov.jpeg';
-import expert_Popov from '../../assets/images/experts/Popov.jpeg';
-import expert_Rozov from '../../assets/images/experts/Rozov.jpeg';
-import expert_Zarubin from '../../assets/images/experts/Zarubin.jpeg';
-import expert_Zharkova from '../../assets/images/experts/Zharkova.jpeg';
-import expert_Zonov from '../../assets/images/experts/Zonov.jpeg';
-
 export const DataImages = {
     common: {
         logo: common_logo,
@@ -258,17 +247,6 @@ export const DataImages = {
             home_slider_11,
         ]
     },
-    experts: {
-        Evdokimov: expert_Evdokimov,
-        Gladkov: expert_Gladkov,
-        Moshkalov: expert_Moshkalov,
-        Panov: expert_Panov,
-        Popov: expert_Popov,
-        Rozov: expert_Rozov,
-        Zarubin: expert_Zarubin,
-        Zharkova: expert_Zharkova,
-        Zonov: expert_Zonov,
-   },
     community: {
         meetings: {
             Almaty: [

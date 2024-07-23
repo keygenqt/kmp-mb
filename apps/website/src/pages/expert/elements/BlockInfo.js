@@ -16,7 +16,12 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext, Shared} from '../../../base';
+import {
+    LocalizationContext,
+    RouteContext,
+    Helper,
+    ContactTypes
+} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -45,11 +50,13 @@ export function BlockInfo(props) {
         data,
     } = props
 
-    const fullName = `${data.getFnameLocale(language)} ${data.getLnameLocale(language)}`
-    const about = data.getAboutLocale(language)
-    const telegram = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.telegram)
-    const email = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.email)
-    const linkedin = data.contacts?.find((contact) => contact.type.name === Shared.contactTypes.linkedin)
+    const fname = Helper.locate(data, 'fname', language)
+    const lname = Helper.locate(data, 'lname', language)
+    const about = Helper.locate(data, 'about', language)
+    const fullName = `${fname} ${lname}`
+    const telegram = data.contacts?.find((contact) => contact.type === ContactTypes.TELEGRAM.name)
+    const email = data.contacts?.find((contact) => contact.type === ContactTypes.EMAIL.name)
+    const linkedin = data.contacts?.find((contact) => contact.type === ContactTypes.LINKEDIN.name)
 
     return (
         <Card sx={{padding: isMD ? 2 : 3}}>
@@ -109,7 +116,7 @@ export function BlockInfo(props) {
 
                             <Stack className={'ExpertChips'} spacing={1} direction={'row'} sx={{marginTop: 1.6}}>
                                 {data.directions?.map((direction, index) => (
-                                    <Chip key={`cip-${index}`} className={direction.name.replace(' ', '_')} label={direction.name} variant="outlined" />
+                                    <Chip key={`cip-${index}`} className={direction.replace(' ', '_')} label={direction} variant="outlined" />
                                 ))}
                             </Stack>
 

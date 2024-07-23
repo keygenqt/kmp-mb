@@ -2,6 +2,5 @@
  * Base configuration
  */
 export const AppConf = {
-    apiUrl: 'http://localhost:3000',
-    apiPath: 'http://localhost:3000/api/',
+    apiUrl: 'http://localhost:3000/',
 };

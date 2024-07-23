@@ -392,7 +392,7 @@ export default class RouteCore {
      * Scroll to top page
      */
     scrollToTop() {
-        const el = document.getElementById("pageSelection")
+        const el = document.getElementById("root")
         el.scrollTo(0, 0);
     }
 
@@ -400,7 +400,7 @@ export default class RouteCore {
      * Scroll to top page with smooth
      */
     scrollToTopSmooth() {
-        const el = document.getElementById("pageSelection")
+        const el = document.getElementById("root")
         el.scrollTo({top: 0, behavior: 'smooth'});
     }
 

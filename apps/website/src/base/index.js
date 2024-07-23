@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-// kmp
+// shared module
 export * from './shared/Shared';
 export * from './shared/elements/useHttpQuery';
-
+export * from './shared/mappers/ColumnLocaleResponse';
+export * from './shared/mappers/ContactTypes';
+export * from './shared/mappers/Locale';
+export * from './shared/mappers/UserContactResponse';
+export * from './shared/mappers/UserDirectionResponse';
+export * from './shared/mappers/UserLocaleResponse';
+export * from './shared/mappers/UserMediaResponse';
+export * from './shared/mappers/UserMediaTypes';
+export * from './shared/mappers/UserResponse';
+export * from './shared/mappers/UserRole';
 // components
 export * from './components/PageLoader';
 export * from './components/PageError500';
@@ -31,8 +40,12 @@ export * from './localization/Localization';
 export * from './localization/LocalizationProvider';
 // navigate
 export * from './route/RouteProvider';
+export * from './route/ScrollRecovery';
 // cache
 export * from './cache/CacheHook';
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
-export * from './cache/CacheTypes';
+// utils
+export * from './utils/Helper';
+// hooks
+export * from './hooks/WindowScroll';

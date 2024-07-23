@@ -50,35 +50,4 @@ data class UserResponse(
     val locales: Array<UserLocaleResponse>? = null,
     val contacts: Array<UserContactResponse>? = null,
     val media: Array<UserMediaResponse>? = null,
-) {
-    fun getFnameLocale(language: String): String {
-        for (item: UserLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.fname
-        }
-        return fname
-    }
-    fun getLnameLocale(language: String): String {
-        for (item: UserLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.lname
-        }
-        return lname
-    }
-    fun getShortLocale(language: String): String? {
-        for (item: UserLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.short
-        }
-        return short
-    }
-    fun getAboutLocale(language: String): String? {
-        for (item: UserLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.about
-        }
-        return about
-    }
-    fun getQuoteLocale(language: String): String? {
-        for (item: UserLocaleResponse in (locales ?: emptyArray())) {
-            if (item.locale.check(language)) return item.quote
-        }
-        return quote
-    }
-}
+)

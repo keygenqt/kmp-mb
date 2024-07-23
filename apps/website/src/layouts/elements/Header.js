@@ -22,8 +22,8 @@ import {
     RouteContext,
     CacheStorage,
     CacheKeys,
-    CacheTypes,
     useCacheStorage,
+    Shared,
 } from '../../base';
 import {
     useTheme,
@@ -44,7 +44,7 @@ export function Header(props) {
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
-    const darkMode = useCacheStorage(CacheKeys.darkMode, CacheTypes.bool)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, false)
 
     return (
         <AppBar position='relative' color={'transparent'} elevation={0}>
@@ -95,7 +95,13 @@ export function Header(props) {
                 <Button
                     color='primary'
                     onClick={() => {
-                        route.toLocation(routes.experts)
+                        if (route.isPage(routes.experts)) {
+                            // Clear cache for update
+                            CacheStorage.clearByKey(Shared.queries.experts)
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.experts)
+                        }
                     }}
                 >
                     {t('layouts.header.t_experts')}
@@ -117,7 +123,7 @@ export function Header(props) {
                             top: '4px',
                         } : {}}
                         onClick={() => {
-                            CacheStorage.booleanSet(CacheKeys.darkMode, !darkMode)
+                            CacheStorage.set(CacheKeys.darkMode, !darkMode)
                         }}
                     >
                         {darkMode ? (

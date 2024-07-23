@@ -15,51 +15,91 @@
  */
 
 import {MD5} from 'crypto-js';
+import LZString from "lz-string"
 
 export const CacheStorage = {
-    intGet: function (key, defaultValue = 0) {
-        return parseInt(localStorage.getItem(key)) ?? defaultValue
-    },
-    intSet: function (key, value) {
-        CacheStorage._setItem(key, value)
-    },
-
-    stringGet: function (key, defaultValue = '') {
-        return localStorage.getItem(key) ?? defaultValue
-    },
-    stringSet: function (key, value) {
-        CacheStorage._setItem(key, value)
+    set: function (key, value, isCrypto = true, quiet = false) {
+        if (typeof value == 'object') {
+            CacheStorage._setItem(key, JSON.stringify(value), isCrypto, quiet)
+        } else {
+            CacheStorage._setItem(key, `${value}`, isCrypto, quiet)
+        }
     },
 
-    booleanGet: function (key, defaultValue = false) {
-        return localStorage.getItem(key) === null ? defaultValue : localStorage.getItem(key) === 'true'
-    },
-    booleanSet: function (key, value) {
-        CacheStorage._setItem(key, value)
+    get: function(key, isCrypto = true) {
+        const data = CacheStorage._getItem(key, isCrypto)
+        // Is empty
+        if (!data) {
+            return undefined
+        }
+        // Array & Object
+        if (data[0] === '[' || data[0] === '{') {
+            return JSON.parse(data)
+        }
+        // Bool
+        else if (data === 'true' || data === 'false') {
+            return data === 'true'
+        }
+        // Int
+        else if (/^-?\d+$/.test(data)) {
+            return parseInt(data)
+        }
+        // String
+        return data
     },
 
-    clearByKey: function (key) {
-        localStorage.removeItem(key)
+    clearByKey: function (key, quiet = false) {
+        const hashKey = MD5(key)
+        localStorage.removeItem(hashKey)
+        if (!quiet) {
+            CacheStorage._updateHash()
+        }
     },
-    clearAll: function () {
+
+    clearAll: function (quiet = false) {
         localStorage.clear()
+        if (!quiet) {
+            CacheStorage._updateHash()
+        }
     },
 
-    _setItem: function (key, value) {
-        localStorage.setItem(key, `${value}`)
+    // Private
+    _getItem: function (key, isCrypto) {
+        const val = localStorage.getItem(MD5(key))
+        if (isCrypto) {
+            return val ? LZString.decompress(val) : undefined
+        } else {
+            return val
+        }
+    },
+
+    _setItem: function (key, value, isCrypto, quiet) {
+        const valueKey = MD5(key)
+        if (isCrypto) {
+            localStorage.setItem(valueKey, LZString.compress(value))
+        } else {
+            localStorage.setItem(valueKey, value)
+        }
+        if (!quiet) {
+            CacheStorage._updateHash()
+        }
+    },
+
+    _updateHash: function() {
         const el = document.querySelector('#root');
         const hash = MD5(CacheStorage._allStorage().toString())
         if (el.dataset.cache !== hash) {
             el.dataset.cache = hash
         }
     },
+
     _allStorage: function () {
         let values = [],
             keys = Object.keys(localStorage),
             i = keys.length;
 
         while (i--) {
-            values.push(localStorage.getItem(keys[i]));
+            values.push(LZString.decompress(localStorage.getItem(keys[i])));
         }
 
         return values;

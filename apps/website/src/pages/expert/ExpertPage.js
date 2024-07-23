@@ -21,7 +21,8 @@ import {
     Shared,
     useHttpQuery,
     PageError404,
-    PageLoader
+    PageLoader,
+    Helper
 } from '../../base';
 import {
     useTheme,
@@ -58,7 +59,7 @@ export function ExpertPage(props) {
         )
     }
 
-    const quote = data.getQuoteLocale(language)
+    const quote = Helper.locate(data, 'quote', language)
 
     return (
         <Stack

@@ -21,6 +21,7 @@ import {
     DataLottie,
     LocalizationContext,
     RouteContext,
+    Helper
 } from '../../../base';
 import {
     useTheme,
@@ -56,10 +57,10 @@ export function BlockExperts(props) {
     const content = []
     props.experts?.forEach((item) => {
         // Get localization data
-        const fullName = `${item.getFnameLocale(language)} ${item.getLnameLocale(language)}`
+        const fullName = `${Helper.locate(item, 'fname', language)} ${Helper.locate(item, 'lname', language)}`
 
         // Filter direction
-        if (direction && !item.directions.map((direction) => direction.name).includes(direction)) {
+        if (direction && !item.directions.includes(direction)) {
             return;
         }
 
@@ -90,7 +91,7 @@ export function BlockExperts(props) {
 
                             <Stack className={'ExpertChips'} spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
                                 {item.directions.map((direction, index) => (
-                                    <Chip key={`cip-${index}`} className={direction.name.replace(' ', '_')} label={direction.name} variant="outlined" />
+                                    <Chip key={`cip-${index}`} className={direction.replace(' ', '_')} label={direction} variant="outlined" />
                                 ))}
                             </Stack>
 
@@ -155,9 +156,9 @@ export function BlockExperts(props) {
                             <MenuItem value="">
                                 <em>{t('common.t_none')}</em>
                             </MenuItem>
-                            {props.directions?.map((direction) => (
-                                <MenuItem key={`cat-${direction.id}`} value={direction.name}>
-                                    {direction.name}
+                            {props.directions?.map((direction, index) => (
+                                <MenuItem key={`cat-${index}`} value={direction}>
+                                    {direction}
                                 </MenuItem>
                             ))}
                         </Select>

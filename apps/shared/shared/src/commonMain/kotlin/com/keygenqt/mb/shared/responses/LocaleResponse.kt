@@ -30,12 +30,6 @@ enum class Locale {
 }
 
 /**
- * Check [Locale] by string language
- */
-fun Locale.check(language: String): Boolean =
-    this.name.lowercase() == language.split('-').firstOrNull()?.lowercase()
-
-/**
  * Users locale data
  */
 @OptIn(ExperimentalJsExport::class)

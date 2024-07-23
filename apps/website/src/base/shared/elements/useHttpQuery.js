@@ -16,36 +16,62 @@
 
 import * as React from 'react';
 import shared from "shared";
+import {Shared} from "../Shared";
 import {AppConf} from "../../../conf/AppConf";
+import {CacheStorage} from "../../cache/CacheStorage"
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiPath)
+
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
 
 export function useHttpQuery(method, ...arg) {
-    const [value, setValue] = React.useState(undefined);
-    const wasCalled = React.useRef(false);
+
+    const cacheKey = `${method}${arg.length ? arg : ''}`
+    const cacheData = CacheStorage.get(cacheKey)
+
+    const [value, setValue] = React.useState(cacheData)
+    const wasCalled = React.useRef(false)
+
     React.useEffect(() => {
         if(wasCalled.current) return;
         wasCalled.current = true;
-
         let funcDelay = async function(startTime) {
             var endTime = performance.now();
             var delay = 1500 - (endTime - startTime)
             if (delay > 0) {
-                await new Promise(r => setTimeout(r, delay));
+                await new Promise(r => setTimeout(r, delay))
             }
         }
-
         try {
             // Loading 1.5 second for animation loader
             var startTime = performance.now();
             HttpClient.get[method](arg)
                 .then(async (value) => {
-                    await funcDelay(startTime)
-                    if (typeof value['toArray'] == 'function') {
-                        setValue(value.toArray())
-                    } else {
-                        setValue(value);
+                    if (!cacheData) {
+                        await funcDelay(startTime)
                     }
+                    let mapValue = undefined
+                    // Map http query variant
+                    switch(method) {
+                        case Shared.queries.expert:
+                            mapValue = value.mapToUser()
+                            break;
+                        case Shared.queries.experts:
+                            mapValue = value.toArray().mapToUsers()
+                            break;
+                        case Shared.queries.directions:
+                            mapValue = value.toArray().mapToUserDirections()
+                            break;
+                        default:
+                            if (typeof value['toArray'] == 'function') {
+                                mapValue = value.toArray()
+                            } else {
+                                mapValue = value
+                            }
+                    }
+                    // Save to cache
+                    CacheStorage.set(cacheKey, mapValue)
+                    // Save value
+                    setValue(mapValue)
                 })
                 .catch(async (e) => {
                     await funcDelay(startTime)
@@ -56,6 +82,7 @@ export function useHttpQuery(method, ...arg) {
             setValue(null)
             console.error(e)
         }
-    }, [arg, method]);
-    return value;
+    }, [arg, cacheData, cacheKey, method])
+
+    return value
 }

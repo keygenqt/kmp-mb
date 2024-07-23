@@ -16,12 +16,8 @@
  */
 import {locale} from "./elements/locale"
 import {queries} from "./elements/queries"
-import {contactTypes} from "./elements/contactTypes"
-import {mediaTypes} from "./elements/mediaTypes"
 
 export const Shared = {
     locale: locale,
     queries: queries,
-    contactTypes: contactTypes,
-    mediaTypes: mediaTypes,
 }

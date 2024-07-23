@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -15,13 +14,13 @@
  * limitations under the License.
  */
 
-import shared from "shared";
-
-const UserMediaTypes = shared.com.keygenqt.mb.shared.responses.UserMediaTypes
-
-export const mediaTypes = {
-    telegram: UserMediaTypes.TELEGRAM.name,
-    github: UserMediaTypes.GITHUB.name,
-    youtube: UserMediaTypes.YOUTUBE.name,
-    site: UserMediaTypes.SITE.name,
-}
+export const Helper = {
+    locate: function (object, column, language) {
+        for (const key in object['locales']) {
+            if (language.split('-')[1] === object['locales'][key]['locale']) {
+                return object['locales'][key][column]
+            }
+        }
+        return object[column]
+    },
+};
