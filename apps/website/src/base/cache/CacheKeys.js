@@ -17,4 +17,8 @@
 export const CacheKeys = {
     darkMode: 'darkMode',
     experts: 'experts',
+    expertFilterSearch: 'expertFilterSearch',
+    expertFilterDirection: 'expertFilterDirection',
+    communityFilterSearch: 'communityFilterSearch',
+    communityFilterCountry: 'communityFilterCountry',
 };

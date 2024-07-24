@@ -15,6 +15,8 @@
  */
 package com.keygenqt.mb.shared.service.impl
 
+import com.keygenqt.mb.shared.responses.CityResponse
+import com.keygenqt.mb.shared.responses.CountryResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -35,5 +37,20 @@ class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
     suspend fun directions(): List<UserDirectionResponse> {
         return client.get("api/directions").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun cities(): List<CityResponse> {
+        return client.get("api/cities").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun city(id: Int): CityResponse {
+        return client.get("api/cities/$id").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun countries(): List<CountryResponse> {
+        return client.get("api/countries").body()
     }
 }

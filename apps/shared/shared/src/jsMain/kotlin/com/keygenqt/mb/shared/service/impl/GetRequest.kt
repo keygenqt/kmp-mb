@@ -18,7 +18,11 @@ package com.keygenqt.mb.shared.service.impl
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import com.keygenqt.mb.shared.extensions.promise
+import com.keygenqt.mb.shared.responses.CityResponse
+import com.keygenqt.mb.shared.responses.CountryResponse
 import com.keygenqt.mb.shared.service.ServiceRequest
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 
 @OptIn(ExperimentalJsExport::class)
 @JsExport
@@ -34,5 +38,14 @@ class GetRequestJS(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun directions() = GlobalScope.promise { client.get.directions() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun cities() = GlobalScope.promise { client.get.cities() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun city(id: Int) = GlobalScope.promise { client.get.city(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countries() = GlobalScope.promise { client.get.countries() }
 }
 

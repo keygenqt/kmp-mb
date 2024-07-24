@@ -86,7 +86,21 @@ export function Header(props) {
                 <Button
                     color='primary'
                     onClick={() => {
-                        route.toLocation(routes.community)
+                        if (route.isPage(routes.city)) {
+                            route.toBack()
+                        }
+                        else if (route.isPage(routes.community)) {
+                            // Clear page cache
+                            [
+                                CacheKeys.communityFilterSearch,
+                                CacheKeys.communityFilterCountry,
+                                Shared.queries.countries,
+                            ].forEach(key => CacheStorage.clearByKey(key, true))
+                            // Refresh
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.community)
+                        }
                     }}
                 >
                     {t('layouts.header.t_community')}
@@ -95,9 +109,17 @@ export function Header(props) {
                 <Button
                     color='primary'
                     onClick={() => {
-                        if (route.isPage(routes.experts)) {
-                            // Clear cache for update
-                            CacheStorage.clearByKey(Shared.queries.experts)
+                        if (route.isPage(routes.expert)) {
+                            route.toBack()
+                        }
+                        else if (route.isPage(routes.experts)) {
+                            // Clear page cache
+                            [
+                                CacheKeys.expertFilterSearch,
+                                CacheKeys.expertFilterDirection,
+                                Shared.queries.experts,
+                            ].forEach(key => CacheStorage.clearByKey(key, true))
+                            // Refresh
                             route.refreshPage()
                         } else {
                             route.toLocation(routes.experts)

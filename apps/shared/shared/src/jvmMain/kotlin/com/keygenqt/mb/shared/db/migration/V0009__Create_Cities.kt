@@ -54,6 +54,7 @@ fun initCities() {
 
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Almaty.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+fRX-4bLlJwE2ZjNi"
         this.name = "Алматы"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -83,6 +84,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Bangkok.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+waJtVA6b15MwYTVi"
         this.name = "Бангкок"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -107,6 +109,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Barnaul.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+5xdJ2xYhNAs1ZDJi"
         this.name = "Барнаул"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -136,6 +139,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Bishkek.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+sCEQqYFCoa9hNjk6"
         this.name = "Бишкек"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -165,6 +169,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Chelyabinsk.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+dLM-Gvr_KEtlOTIy"
         this.name = "Челябинск"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -194,6 +199,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Dubai.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+Ovm9HwrXY7tlN2Vi"
         this.name = "Дубай"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -223,6 +229,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Grodno.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+BNCeKxe9fNY1ZmZi"
         this.name = "Гродно"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -252,6 +259,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Innopolis.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+Ei2RO-JG-zA0NDky"
         this.name = "Иннополис"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -281,6 +289,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Istanbul.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+4EgRvRNlQ_k3ODNi"
         this.name = "Стамбул"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -305,6 +314,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Kaliningrad.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+F9KGS7uqcOA4YzQy"
         this.name = "Калининград"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -334,6 +344,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Khujand.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+eD1KD0KqQRZmYWIy"
         this.name = "Худжанд"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -363,6 +374,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Minsk.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+pulQ0CrpIokzMjgy"
         this.name = "Минск"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -392,6 +404,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Moscow.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+BdVoIS5e3hFmM2Ri"
         this.name = "Москва"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -421,6 +434,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Omsk.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+n-nd6GJW1v8xMmVi"
         this.name = "Омск"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -451,6 +465,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Oryol.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+0DRIhOWGJBM4Nzky"
         this.name = "Орел"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -480,6 +495,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Perm.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+ixklyR4pH640NjU6"
         this.name = "Пермь"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -509,6 +525,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Phuket.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+lkSV2vCiDVUwYjMy"
         this.name = "Пхукет"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -533,6 +550,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Rostov-on-Don.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+2DdkcZ2NNhU3MjZi"
         this.name = "Ростов-на-Дону"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -562,6 +580,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Saint-Petersburg.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+7_MHbdAchFljNjFi"
         this.name = "Санкт-Петербург"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -592,6 +611,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Saransk.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+VmvEJ86sdMExYzIy"
         this.name = "Саранск"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -621,6 +641,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Saratov.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+8JXL_yV08i9kODQy"
         this.name = "Саратов"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -650,6 +671,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Tashkent.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+2EXJK3MBLt43ZDQy"
         this.name = "Ташкент"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -679,6 +701,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Tbilisi.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+wbTHqJMLEhtmNzAy"
         this.name = "Тбилиси"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -708,6 +731,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Tomsk.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+twXa448iYR80MTIy"
         this.name = "Томск"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -737,6 +761,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Tyumen.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+tayi6NrmXKAyYjBi"
         this.name = "Тюмень"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -766,6 +791,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Ufa.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+QgbmGp_rCMNkYWM6"
         this.name = "Уфа"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -795,6 +821,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Voronezh.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+Vwngr-PzV4UyZTQ6"
         this.name = "Воронеж"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -824,6 +851,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Yekaterinburg.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+KNYG-E2XKExiZDEy"
         this.name = "Екатеринбург"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
@@ -853,6 +881,7 @@ fun initCities() {
     }
     CityEntity.new {
         this.image = "/api/uploads/${"data/cities/Yerevan.jpg".createFileUpload()?.fileName}"
+        this.link = "https://t.me/+YDyIS39l6hkzMDQy"
         this.name = "Ереван"
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()

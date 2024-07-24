@@ -61,6 +61,15 @@ export function useHttpQuery(method, ...arg) {
                         case Shared.queries.directions:
                             mapValue = value.toArray().mapToUserDirections()
                             break;
+                        case Shared.queries.city:
+                            mapValue = value.mapToCity()
+                            break;
+                        case Shared.queries.cities:
+                            mapValue = value.toArray().mapToCities()
+                            break;
+                        case Shared.queries.countries:
+                            mapValue = value.toArray().mapToCountries()
+                            break;
                         default:
                             if (typeof value['toArray'] == 'function') {
                                 mapValue = value.toArray()

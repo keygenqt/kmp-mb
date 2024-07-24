@@ -70,7 +70,6 @@ export function ExpertPage(props) {
             <Container maxWidth='xl'>
                 <BlockInfo data={data}/>
             </Container>
-
             {!quote ? null : (
                 <Container maxWidth='md'>
                     <Stack spacing={3} justifyContent="center" alignItems="center">
@@ -83,10 +82,11 @@ export function ExpertPage(props) {
                     </Stack>
                 </Container>
             )}
-
-            <Container maxWidth='lg'>
-                <BlockMedia media={data.media}/>
-            </Container>
+            {!data.media ? null : (
+                <Container maxWidth='lg'>
+                    <BlockMedia media={data.media}/>
+                </Container>
+            )}
         </Stack>
     );
 }

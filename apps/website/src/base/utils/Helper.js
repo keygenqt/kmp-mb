@@ -18,7 +18,11 @@ export const Helper = {
     locate: function (object, column, language) {
         for (const key in object['locales']) {
             if (language.split('-')[1] === object['locales'][key]['locale']) {
-                return object['locales'][key][column]
+                if (object['locales'][key].hasOwnProperty('text')) {
+                    return object['locales'][key]['text']
+                } else if (object['locales'][key].hasOwnProperty(column)) {
+                    return object['locales'][key][column]
+                }
             }
         }
         return object[column]

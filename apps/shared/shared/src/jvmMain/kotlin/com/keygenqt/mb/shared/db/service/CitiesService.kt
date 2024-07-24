@@ -32,4 +32,11 @@ class CitiesService(
     fun getAll() = CityEntity
         .all()
         .orderBy(Pair(Cities.name, SortOrder.ASC))
+
+    /**
+     * Find entity by id
+     */
+    fun findById(
+        id: Int
+    ) = CityEntity.findById(id)
 }

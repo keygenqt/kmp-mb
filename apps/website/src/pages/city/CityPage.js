@@ -17,27 +17,41 @@
 import * as React from 'react';
 import {useParams} from "react-router";
 import {
+    Shared,
+    useHttpQuery,
+    PageError404,
+    PageLoader,
+} from '../../base';
+import {
     useTheme,
     useMediaQuery,
     Stack,
     Container,
 } from '@mui/material';
 
-import {DataCities} from '../../base/data/DataCities';
 import {BlockInfo} from './elements/BlockInfo'
 import {BlockCarousel} from './elements/BlockCarousel'
 import {BlockOrganizers} from './elements/BlockOrganizers'
-import {ErrorPage} from "../";
 
 export function CityPage(props) {
     let {id} = useParams();
-    const [data] = React.useState(DataCities.find(x => x.id === parseInt(id)))
+
+    const data = useHttpQuery(Shared.queries.city, id)
+
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
 
-    if (!data) {
+    // Error get data
+    if (data === null) {
         return (
-            <ErrorPage/>
+            <PageError404/>
+        )
+    }
+
+    // Loading get data
+    if (data === undefined) {
+        return (
+            <PageLoader/>
         )
     }
 
@@ -50,12 +64,12 @@ export function CityPage(props) {
             <Container maxWidth='xl'>
                 <BlockInfo city={data}/>
             </Container>
-            {data.images.length === 0 ? null : (
+            {!data.uploads ? null : (
                 <Container maxWidth='lg'>
-                    <BlockCarousel images={data.images}/>
+                    <BlockCarousel images={data.uploads}/>
                 </Container>
             )}
-            {data.organizers.length === 0 ? null : (
+            {!data.organizers ? null : (
                 <Container maxWidth='lg'>
                     <BlockOrganizers organizers={data.organizers}/>
                 </Container>

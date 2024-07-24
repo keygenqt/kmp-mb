@@ -27,6 +27,7 @@ import org.jetbrains.exposed.sql.Table
 object Cities : IntIdTable() {
     val countryID = reference("country", Countries)
     val image = varchar("image", 255)
+    val link = varchar("link", 255)
     val name = varchar("name", 255)
     val createAt = long("createAt")
     val updateAt = long("updateAt")
@@ -54,6 +55,7 @@ class CityEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<CityEntity>(Cities)
 
     var image by Cities.image
+    var link by Cities.link
     var name by Cities.name
     var createAt by Cities.createAt
     var updateAt by Cities.updateAt
@@ -70,6 +72,7 @@ class CityEntity(id: EntityID<Int>) : IntEntity(id) {
 fun CityEntity.toResponse() = CityResponse(
     id = id.value,
     image = image,
+    link = link,
     name = name,
     createAt = createAt.toUTC(),
     updateAt = updateAt.toUTC(),
@@ -92,6 +95,7 @@ fun Iterable<CityEntity>.toResponses(): List<CityResponse> {
 fun CityEntity.toGuestResponse() = CityResponse(
     id = id.value,
     image = image,
+    link = link,
     name = name,
     country = country.toGuestResponse(),
     locales = locales.toGuestResponses().toTypedArray().ifEmpty { null },

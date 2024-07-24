@@ -29,6 +29,7 @@ import kotlin.js.JsExport
 data class CityResponse(
     val id: Int,
     val image: String,
+    val link: String,
     val name: String,
     val createAt: String? = null,
     val updateAt: String? = null,

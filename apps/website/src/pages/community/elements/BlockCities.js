@@ -15,8 +15,16 @@
  */
 
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import Lottie from "lottie-react";
-import {DataLottie, LocalizationContext, RouteContext} from '../../../base';
+import {
+    DataLottie,
+    LocalizationContext,
+    RouteContext,
+    Helper,
+    CacheStorage,
+    CacheKeys,
+} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -34,42 +42,40 @@ import {
     Typography,
 } from '@mui/material';
 
-import {DataCities} from "../../../base/data/DataCities";
-
 export function BlockCities(props) {
 
     const theme = useTheme()
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const {t, isLocEn} = React.useContext(LocalizationContext)
+    const {t, language} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
 
-    const [search, setSearch] = React.useState('');
-    const [country, setCountry] = React.useState('');
+    const cacheSearch = route.type === 'POP' ? CacheStorage.get(CacheKeys.communityFilterSearch) ?? '' : ''
+    const cacheCountry = route.type === 'POP' ? CacheStorage.get(CacheKeys.communityFilterCountry) ?? '' : ''
 
-    const countries = []
-    const content = []
-    DataCities.forEach((item) => {
-        // Get localization data
-        const search_name = isLocEn ? item.en : item.ru
-        const select_country = isLocEn ? item.country_en : item.country_ru
-
-        // Get array for select
-        if (!countries.includes(select_country)) {
-            countries.push(select_country)
+    React.useEffect(() => {
+        if (route.type !== 'POP') {
+            CacheStorage.clearByKey(CacheKeys.communityFilterSearch)
+            CacheStorage.clearByKey(CacheKeys.communityFilterCountry)
         }
-        countries.sort()
+    }, [route]);
+
+    const [search, setSearch] = React.useState(cacheSearch);
+    const [country, setCountry] = React.useState(cacheCountry);
+
+    const content = []
+    props.cities?.forEach((item) => {
+        // Get localization data
+        const fullName = `${Helper.locate(item, 'name', language)} ${Helper.locate(item, 'name', language)}`
+        const countryName = Helper.locate(item.country, 'name', language)
 
         // Filter country
-        if (country && country !== select_country) {
+        if (country && country !== countryName) {
             return;
         }
 
         // Search ru/en name city
-        if (!search
-            || item.en.toLowerCase().includes(search.toLowerCase())
-            || item.ru.toLowerCase().includes(search.toLowerCase())
-        ) {
+        if (!search || fullName.toLowerCase().includes(search.toLowerCase())) {
             // Items
             content.push(
                 <Grid key={item.id} item xl={3} lg={3} md={4} sm={6} xs={12}>
@@ -82,7 +88,7 @@ export function BlockCities(props) {
                         <CardContent>
                             <Stack spacing={1.5}>
                                 <Box className={'CityImage'}>
-                                    <img src={item.image} alt={search_name} />
+                                    <img src={item.image} alt={fullName} />
                                 </Box>
                                 <Stack direction={'row'} justifyContent="flex-end">
                                     <Button
@@ -126,7 +132,8 @@ export function BlockCities(props) {
                         sx={{ width: '100%' }}
                         value={search}
                         onChange={(event) => {
-                          setSearch(event.target.value);
+                            setSearch(event.target.value);
+                            CacheStorage.set(CacheKeys.communityFilterSearch, event.target.value, true, true)
                         }}
                     />
                 </Grid>
@@ -142,14 +149,15 @@ export function BlockCities(props) {
                             label={t('pages.community.t_filter_country')}
                             onChange={(event) => {
                                 setCountry(event.target.value);
+                                CacheStorage.set(CacheKeys.communityFilterCountry, event.target.value, true, true)
                             }}
                         >
                             <MenuItem value="">
                                 <em>{t('common.t_none')}</em>
                             </MenuItem>
-                            {countries.map((option) => (
-                                <MenuItem key={`cat-${option}`} value={option}>
-                                    {option}
+                            {props.countries?.map((country, index) => (
+                                <MenuItem key={`cat-${index}`} value={Helper.locate(country, 'name', language)}>
+                                    {Helper.locate(country, 'name', language)}
                                 </MenuItem>
                             ))}
                         </Select>
@@ -182,4 +190,7 @@ export function BlockCities(props) {
     );
 }
 
-BlockCities.propTypes = {};
+BlockCities.propTypes = {
+    cities: PropTypes.array.isRequired,
+    countries: PropTypes.array.isRequired,
+};

@@ -19,4 +19,7 @@ export const queries = {
     experts: 'experts',
     expert: 'expert', // id: Int
     directions: 'directions',
+    cities: 'cities',
+    city: 'city', // id: Int
+    countries: 'countries',
 }

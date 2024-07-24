@@ -220,11 +220,15 @@ fun initUsers() {
                 }
             ).toTypedArray()
         )
-        this.media = SizedCollection(
+        this.contacts = SizedCollection(
             *listOf(
-                UserMediaEntity.new {
+                UserContactEntity.new {
                     this.link = "https://t.me/CLTanuki"
-                    this.type = UserMediaTypes.TELEGRAM
+                    this.type = ContactTypes.TELEGRAM
+                },
+                UserContactEntity.new {
+                    this.link = "CLTanuki@gmail.com"
+                    this.type = ContactTypes.EMAIL
                 },
             ).toTypedArray()
         )

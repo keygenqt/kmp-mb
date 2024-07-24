@@ -17,9 +17,12 @@
 // shared module
 export * from './shared/Shared';
 export * from './shared/elements/useHttpQuery';
+export * from './shared/mappers/CityResponse';
 export * from './shared/mappers/ColumnLocaleResponse';
 export * from './shared/mappers/ContactTypes';
+export * from './shared/mappers/CountryResponse';
 export * from './shared/mappers/Locale';
+export * from './shared/mappers/UploadResponse';
 export * from './shared/mappers/UserContactResponse';
 export * from './shared/mappers/UserDirectionResponse';
 export * from './shared/mappers/UserLocaleResponse';
@@ -34,7 +37,6 @@ export * from './components/PageError404';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';
-export * from './data/DataCities';
 // locale
 export * from './localization/Localization';
 export * from './localization/LocalizationProvider';

@@ -16,7 +16,11 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext} from '../../../base';
+import {
+    LocalizationContext,
+    RouteContext,
+    Helper
+} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -31,12 +35,14 @@ import {
 export function BlockInfo(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
-    const {t, isLocEn} = React.useContext(LocalizationContext)
+    const {t, language} = React.useContext(LocalizationContext)
     const {route} = React.useContext(RouteContext)
 
     const {
         city,
     } = props
+
+    const name = Helper.locate(city, 'name', language)
 
     return (
         <Card sx={{padding: isMD ? 2 : 3}}>
@@ -59,11 +65,11 @@ export function BlockInfo(props) {
                             spacing={isMD ? 2 : 3}
                         >
                             <Typography variant="h3" component="div">
-                                {isLocEn ? city.en : city.ru}
+                                {name}
                             </Typography>
 
                             <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
-                                {t('pages.city.t_text1', { city: isLocEn ? city.en : city.ru})}
+                                {t('pages.city.t_text1', {city: name})}
                             </Typography>
 
                             <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
@@ -80,7 +86,7 @@ export function BlockInfo(props) {
                                 <Button
                                     variant='contained'
                                     onClick={() => {
-                                        route.openUrlNewTab(city.telegram)
+                                        route.openUrlNewTab(city.link)
                                     }}
                                 >
                                     {t('pages.city.t_join_btn')}

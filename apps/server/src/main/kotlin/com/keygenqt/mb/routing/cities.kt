@@ -15,7 +15,11 @@
  */
 package com.keygenqt.mb.routing
 
+import com.keygenqt.mb.base.Exceptions
+import com.keygenqt.mb.extension.getNumberParam
+import com.keygenqt.mb.shared.db.entities.toGuestResponse
 import com.keygenqt.mb.shared.db.entities.toGuestResponses
+import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.CitiesService
 import com.keygenqt.mb.shared.responses.UserRole
@@ -38,6 +42,19 @@ fun Route.cities() {
                     UserRole.GUEST -> getAll().toGuestResponses()
                     else -> getAll().toResponses()
                 }
+            }
+            // response
+            call.respond(response)
+        }
+        get("/{id}") {
+            // get request
+            val id = call.getNumberParam()
+            // act
+            val response = citiesService.transaction {
+                when (role) {
+                    UserRole.GUEST -> findById(id)?.toGuestResponse()
+                    else -> findById(id)?.toResponse()
+                } ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

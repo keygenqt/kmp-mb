@@ -17,7 +17,7 @@
 
 import React from 'react';
 import {useLocation} from 'react-router-dom';
-import {CacheStorage, useWindowScroll} from '../index';
+import {RouteContext, CacheStorage, useWindowScroll} from '../index';
 
 /**
  * Component for scroll to top if change location
@@ -25,7 +25,8 @@ import {CacheStorage, useWindowScroll} from '../index';
 export function ScrollRecovery(props) {
 
     const {pathname} = useLocation();
-    let {y: scrollY} = useWindowScroll();
+    let {y: scrollY} = useWindowScroll()
+    const {route} = React.useContext(RouteContext)
     const [key, setKey] = React.useState(null);
 
     React.useEffect(() => {
@@ -37,9 +38,11 @@ export function ScrollRecovery(props) {
     React.useEffect(() => {
         const key = `scroll-recovery-${pathname}`
         const el = document.getElementById("root")
-        el.scrollTo(0, CacheStorage.get(key, false));
+        if (route.type === 'POP') {
+            el.scrollTo(0, CacheStorage.get(key, false));
+        }
         setKey(key)
-    }, [pathname]);
+    }, [pathname, route]);
 
     return null;
 }

@@ -16,7 +16,12 @@
 
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {LocalizationContext, RouteContext} from '../../../base';
+import {
+    LocalizationContext,
+    RouteContext,
+    Helper,
+    ContactTypes
+} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -38,11 +43,20 @@ import {
 export function BlockOrganizers(props) {
     const theme = useTheme()
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
-    const {t} = React.useContext(LocalizationContext)
+    const {t, language} = React.useContext(LocalizationContext)
     const {route} = React.useContext(RouteContext)
 
     const content = []
     props.organizers.forEach((item) => {
+
+        const fname = Helper.locate(item, 'fname', language)
+        const lname = Helper.locate(item, 'lname', language)
+        const short = Helper.locate(item, 'short', language)
+        const fullName = `${fname} ${lname}`
+        const telegram = item.contacts?.find((contact) => contact.type === ContactTypes.TELEGRAM.name)
+        const email = item.contacts?.find((contact) => contact.type === ContactTypes.EMAIL.name)
+
+        // @todo Nikita Moshkalov
         content.push(
             <Grid key={item.id} item xl={3} lg={3} md={4} sm={6} xs={12}>
                 <Card color={'primary'} sx={{
@@ -54,39 +68,45 @@ export function BlockOrganizers(props) {
                     <CardMedia
                         sx={{ height: 270 }}
                         image={item.image}
-                        title={item.name}
+                        title={fullName}
                     />
                     <Stack>
                         <CardContent>
                             <Typography gutterBottom={item.about !== undefined} variant="h5" component="div" sx={{whiteSpace: 'break-spaces'}}>
-                                {item.name}
+                                {fullName}
                             </Typography>
-                            {item.about === undefined ? null : (
+                            {short ? (
                                 <Typography variant="body2" color="text.secondary">
-                                    {item.about}
+                                    {short}
                                 </Typography>
-                            )}
+                            ) : null}
                         </CardContent>
-                        <CardActions disableSpacing>
-                            <IconButton
-                                aria-label="Mail"
-                                onClick={() => {
-                                    route.openEmail(item.email)
-                                }}
-                            >
-                                <Mail />
-                            </IconButton>
-                            <IconButton
-                                aria-label="Telegram"
-                                onClick={() => {
-                                    route.openUrlNewTab(item.telegram)
-                                }}
-                            >
-                                <Telegram />
-                            </IconButton>
-                        </CardActions>
-                    </Stack>
 
+                        {telegram || email ? (
+                            <CardActions disableSpacing>
+                                {telegram ? (
+                                    <IconButton
+                                        aria-label="Telegram"
+                                        onClick={() => {
+                                            route.openUrlNewTab(telegram.link)
+                                        }}
+                                    >
+                                        <Telegram />
+                                    </IconButton>
+                                ) : null}
+                                {email ? (
+                                    <IconButton
+                                        aria-label="Mail"
+                                        onClick={() => {
+                                            route.openEmail(email.link)
+                                        }}
+                                    >
+                                        <Mail />
+                                    </IconButton>
+                                ) : null}
+                            </CardActions>
+                        ) : <Box sx={{height: 20}} />}
+                    </Stack>
                 </Card>
             </Grid>
         )

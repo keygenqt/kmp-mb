@@ -44,6 +44,4 @@ class UsersService(
     ) = UserEntity
         .find { (Users.id eq id) and (Users.roles like "%${UserRole.EXPERT.name}%") }
         .firstOrNull()
-
-
 }

@@ -21,7 +21,9 @@ import {
     DataLottie,
     LocalizationContext,
     RouteContext,
-    Helper
+    Helper,
+    CacheStorage,
+    CacheKeys,
 } from '../../../base';
 import {
     useTheme,
@@ -51,8 +53,18 @@ export function BlockExperts(props) {
     const {t, language} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
 
-    const [search, setSearch] = React.useState('');
-    const [direction, setDirection] = React.useState('');
+    const cacheSearch = route.type === 'POP' ? CacheStorage.get(CacheKeys.expertFilterSearch) ?? '' : ''
+    const cacheDirection = route.type === 'POP' ? CacheStorage.get(CacheKeys.expertFilterDirection) ?? '' : ''
+
+    React.useEffect(() => {
+        if (route.type !== 'POP') {
+            CacheStorage.clearByKey(CacheKeys.expertFilterSearch)
+            CacheStorage.clearByKey(CacheKeys.expertFilterDirection)
+        }
+    }, [route]);
+
+    const [search, setSearch] = React.useState(cacheSearch);
+    const [direction, setDirection] = React.useState(cacheDirection);
 
     const content = []
     props.experts?.forEach((item) => {
@@ -135,7 +147,8 @@ export function BlockExperts(props) {
                         sx={{ width: '100%' }}
                         value={search}
                         onChange={(event) => {
-                        setSearch(event.target.value);
+                            setSearch(event.target.value);
+                            CacheStorage.set(CacheKeys.expertFilterSearch, event.target.value, true, true)
                         }}
                     />
                 </Grid>
@@ -150,7 +163,8 @@ export function BlockExperts(props) {
                             value={direction}
                             label={t('pages.experts.t_filter_direction')}
                             onChange={(event) => {
-                                setDirection(event.target.value);
+                                setDirection(event.target.value)
+                                CacheStorage.set(CacheKeys.expertFilterDirection, event.target.value, true, true)
                             }}
                         >
                             <MenuItem value="">
