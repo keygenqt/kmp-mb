@@ -1,0 +1,77 @@
+/**
+ * Copyright 2024 Vitaliy Zarubin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import * as React from 'react';
+import {useParams} from "react-router";
+import {LocalizationContext} from '../../base';
+import {
+    useTheme,
+    useMediaQuery,
+    Stack,
+    Container,
+    Typography,
+} from '@mui/material';
+import {FormatQuote} from '@mui/icons-material';
+
+import {DataExperts} from '../../base/data/DataExperts';
+import {BlockInfo} from './elements/BlockInfo'
+import {BlockMedia} from './elements/BlockMedia'
+import {ErrorPage} from "../";
+
+export function ExpertPage(props) {
+    let {id} = useParams();
+    const [data] = React.useState(DataExperts.find(x => x.id === parseInt(id)))
+    const theme = useTheme()
+    const isMD = useMediaQuery(theme.breakpoints.down('md'))
+    const {isLocEn} = React.useContext(LocalizationContext)
+
+    if (!data) {
+        return (
+            <ErrorPage/>
+        )
+    }
+
+    return (
+        <Stack
+            spacing={isMD ? 4 : 6}
+            className={'ContentPage'}
+            alignItems="center"
+        >
+            <Container maxWidth='xl'>
+                <BlockInfo expert={data}/>
+            </Container>
+
+            {!data.quote_en || !data.quote_ru ? null : (
+                <Container maxWidth='md'>
+                    <Stack spacing={3} justifyContent="center" alignItems="center">
+                        <Typography color={'text.primary'} sx={{textAlign: 'center'}}>
+                            <FormatQuote sx={{ fontSize: 60 }}/>
+                        </Typography>
+                        <Typography variant={'text1'} color={'text.primary'} sx={{textAlign: 'center'}}>
+                            {isLocEn ? data.quote_en : data.quote_ru}
+                        </Typography>
+                    </Stack>
+                </Container>
+            )}
+
+            <Container maxWidth='lg'>
+                <BlockMedia media={data.media}/>
+            </Container>
+        </Stack>
+    );
+}
+
+ExpertPage.propTypes = {};
