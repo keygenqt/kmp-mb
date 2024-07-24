@@ -8,7 +8,7 @@ Project using
 [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 and native UI implementation.
 
-![preview.png](data/preview1.png)
+![preview.png](data/preview.png)
 
 ### Includes
 
