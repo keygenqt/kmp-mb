@@ -1,26 +1,8 @@
-# KMP Mobile Broadcast
+# Mobile Broadcast
 
-### Subscribe and like! <img src="https://github.com/keygenqt/kmp-mb/blob/main/data/star.gif?raw=true" width="16px"/>
+Just React website.
 
-> The project is under development.
-
-Project using
-[Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
-and native UI implementation.
-
-![preview.png](data/preview1.png)
-
-### Includes
-
-- Website - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- Admin-Panel - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- API - [Ktor](https://ktor.io/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-
-### Links
-
-- Website - https://mb.keygenqt.com
-- Admin-Panel - https://mb-admin.keygenqt.com
-- API - https://mb-api.keygenqt.com
+https://mb-static.keygenqt.com
 
 ### License
 
