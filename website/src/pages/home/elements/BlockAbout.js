@@ -15,7 +15,14 @@
  */
 
 import * as React from 'react';
-import {DataImages, LocalizationContext, RouteContext} from '../../../base';
+import {
+    DataImages,
+    LocalizationContext,
+    RouteContext,
+    useCacheStorage,
+    CacheKeys,
+    CacheTypes,
+} from '../../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -31,6 +38,7 @@ export function BlockAbout(props) {
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, CacheTypes.bool, false)
 
     return (
         <Box className={'BlockAbout'} sx={{ textAlign: isLG ? 'center' : 'inherit', overflow: 'hidden' }} >
@@ -65,7 +73,10 @@ export function BlockAbout(props) {
                 </Grid>
                 <Grid item xl={6} lg={6} md={12} sm={12} xs={12}>
                     <Box sx={{width: '100%', textAlign: 'center'}}>
-                        <img style={{width: '100%', maxWidth: '600px', maxHeight: '330px'}} src={DataImages.home.map} alt='Map' />
+                        <img
+                            style={{width: '100%', maxWidth: '600px', maxHeight: '330px'}}
+                            src={darkMode ? DataImages.home.map_dark : DataImages.home.map_light}
+                            alt='Map' />
                     </Box>
                 </Grid>
             </Grid>

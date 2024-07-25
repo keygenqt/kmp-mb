@@ -44,7 +44,7 @@ export function Header(props) {
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
-    const darkMode = useCacheStorage(CacheKeys.darkMode, CacheTypes.bool)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, CacheTypes.bool, false)
 
     return (
         <AppBar position='relative' color={'transparent'} elevation={0}>
