@@ -95,7 +95,7 @@ export function Header(props) {
                                 CacheKeys.communityFilterSearch,
                                 CacheKeys.communityFilterCountry,
                                 Shared.queries.countries,
-                            ].forEach(key => CacheStorage.clearByKey(key, true))
+                            ].forEach(key => CacheStorage.clearByKey(key))
                             // Refresh
                             route.refreshPage()
                         } else {
@@ -118,7 +118,7 @@ export function Header(props) {
                                 CacheKeys.expertFilterSearch,
                                 CacheKeys.expertFilterDirection,
                                 Shared.queries.experts,
-                            ].forEach(key => CacheStorage.clearByKey(key, true))
+                            ].forEach(key => CacheStorage.clearByKey(key))
                             // Refresh
                             route.refreshPage()
                         } else {

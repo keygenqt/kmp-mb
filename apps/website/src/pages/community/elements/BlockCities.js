@@ -24,6 +24,7 @@ import {
     Helper,
     CacheStorage,
     CacheKeys,
+    useCacheStorage,
 } from '../../../base';
 import {
     useTheme,
@@ -49,11 +50,20 @@ export function BlockCities(props) {
     const theme = useTheme()
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
 
-    const {t, language} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
 
-    const cacheSearch = route.type === 'POP' ? CacheStorage.get(CacheKeys.communityFilterSearch) ?? '' : ''
-    const cacheCountry = route.type === 'POP' ? CacheStorage.get(CacheKeys.communityFilterCountry) ?? '' : ''
+    const {t, language} = React.useContext(LocalizationContext)
+
+    let search = useCacheStorage(CacheKeys.communityFilterSearch, '')
+    let country = useCacheStorage(CacheKeys.communityFilterCountry, '')
+
+    // Clear filter for fist open
+    const isOpenPage = React.useRef(true)
+    if (isOpenPage.current & route.type === 'PUSH') {
+        search = ''
+        country = ''
+        isOpenPage.current = false;
+    }
 
     React.useEffect(() => {
         if (route.type !== 'POP') {
@@ -61,9 +71,6 @@ export function BlockCities(props) {
             CacheStorage.clearByKey(CacheKeys.communityFilterCountry)
         }
     }, [route]);
-
-    const [search, setSearch] = React.useState(cacheSearch);
-    const [country, setCountry] = React.useState(cacheCountry);
 
     const content = []
     props.cities?.forEach((item) => {
@@ -148,8 +155,7 @@ export function BlockCities(props) {
                         sx={{ width: '100%' }}
                         value={search}
                         onChange={(event) => {
-                            setSearch(event.target.value);
-                            CacheStorage.set(CacheKeys.communityFilterSearch, event.target.value, true, true)
+                            CacheStorage.set(CacheKeys.communityFilterSearch, event.target.value)
                         }}
                     />
                 </Grid>
@@ -164,8 +170,7 @@ export function BlockCities(props) {
                             value={country}
                             label={t('pages.community.t_filter_country')}
                             onChange={(event) => {
-                                setCountry(event.target.value);
-                                CacheStorage.set(CacheKeys.communityFilterCountry, event.target.value, true, true)
+                                CacheStorage.set(CacheKeys.communityFilterCountry, event.target.value)
                             }}
                         >
                             <MenuItem value="">

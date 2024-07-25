@@ -15,7 +15,14 @@
  */
 
 import * as React from 'react';
-import {DataImages, LocalizationContext, RouteContext, Shared} from '../../base';
+import {
+    DataImages,
+    LocalizationContext,
+    RouteContext,
+    Shared,
+    CacheStorage,
+    CacheKeys,
+} from '../../base';
 import {
     useTheme,
     useMediaQuery,
@@ -142,6 +149,13 @@ export function Footer(props) {
                                 key={`group-locale-${value}`}
                                 disabled={language === key}
                                 onClick={() => {
+                                    // Clear page cache
+                                    [
+                                        CacheKeys.expertFilterSearch,
+                                        CacheKeys.expertFilterDirection,
+                                        CacheKeys.communityFilterSearch,
+                                        CacheKeys.communityFilterCountry,
+                                    ].forEach(key => CacheStorage.clearByKey(key))
                                     i18n.changeLanguage(key)
                                 }}
                             >
