@@ -13,17 +13,93 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 .CommunityPage .ContentPage .NotFoundLottie {
     width: 315px;
     margin: -53px auto -96px auto;
 }
 
-.CommunityPage .ContentPage .CityImage img {
-    width: 100%;
+.CommunityPage .ContentPage .CityImage {
     border-radius: 20px;
+    background-color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.CommunityPage .ContentPage .CityImage img {
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    height: 100%;
+}
+
+.CommunityPage .ContentPage .CityImage .MuiCircularProgress-root {
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
 }
 
 .ThemeDark .CommunityPage .ContentPage .CityImage img {
     opacity: 0.9;
+}
+
+// Chips Expert
+.ContentPage .CountryChips .MuiChip-root {
+    color: white;
+    border: none;
+}
+
+.ContentPage .CountryChips .MuiChip-root {
+    background-color: #4f4f4f;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Армения {
+    background-color: #ed941b;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Беларусь {
+    background-color: #01782E;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Грузия {
+    background-color: #F60003;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Казахстан {
+    background-color: #01AAC4;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Кыргызстан {
+    background-color: #dfbd00;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-ОАЭ {
+    background-color: #020708;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Россия {
+    background-color: #061A75;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Таджикистан {
+    background-color: #018f00;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Тайланд {
+    background-color: #1c44ad;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Турция {
+    background-color: #bb0c17;
+}
+
+.ContentPage .CountryChips .MuiChip-root.Country-Узбекистан {
+    background-color: #0094AF;
 }

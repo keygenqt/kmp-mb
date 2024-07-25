@@ -40,6 +40,8 @@ import {
     Select,
     TextField,
     Typography,
+    CircularProgress,
+    Chip,
 } from '@mui/material';
 
 export function BlockCities(props) {
@@ -66,7 +68,7 @@ export function BlockCities(props) {
     const content = []
     props.cities?.forEach((item) => {
         // Get localization data
-        const fullName = `${Helper.locate(item, 'name', language)} ${Helper.locate(item, 'name', language)}`
+        const fullName = Helper.locate(item, 'name', language)
         const countryName = Helper.locate(item.country, 'name', language)
 
         // Filter country
@@ -88,8 +90,22 @@ export function BlockCities(props) {
                         <CardContent>
                             <Stack spacing={1.5}>
                                 <Box className={'CityImage'}>
-                                    <img src={item.image} alt={fullName} />
+                                    <Stack>
+                                        <img src={item.image} alt={fullName} />
+                                        <CircularProgress size={24} />
+                                    </Stack>
                                 </Box>
+                                <Typography gutterBottom variant="h5" component="div" sx={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}>
+                                    {fullName}
+                                </Typography>
+
+                                <Stack className={'CountryChips'} spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
+                                    <Chip className={`Country-${item.country.name}`} label={countryName} variant="outlined" />
+                                </Stack>
+
                                 <Stack direction={'row'} justifyContent="flex-end">
                                     <Button
                                         color='primary'

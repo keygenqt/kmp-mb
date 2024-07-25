@@ -42,6 +42,7 @@ import {
     Typography,
     CardMedia,
     Chip,
+    CircularProgress,
 } from '@mui/material';
 import {AppConf} from "../../../conf/AppConf";
 
@@ -91,13 +92,19 @@ export function BlockExperts(props) {
                             }
                         }
                     }}>
-                        <CardMedia
-                            sx={{ height: isSM ? 560 : 380 }}
-                            image={`${AppConf.apiUrl}${item.image}`}
-                            title={fullName}
-                        />
+                        <Box className={'ExpertImage'}>
+                            <CardMedia
+                                sx={{ height: isSM ? 560 : 380 }}
+                                image={`${AppConf.apiUrl}${item.image}`}
+                                title={fullName}
+                            />
+                            <CircularProgress size={24} />
+                        </Box>
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
+                            <Typography gutterBottom variant="h5" component="div" sx={{
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>
                                 {fullName}
                             </Typography>
 

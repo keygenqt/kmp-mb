@@ -20,7 +20,8 @@ import common_rozov from '../../assets/images/common/photo1704995037.jpeg';
 import common_gladkov from '../../assets/images/common/photo1704995038.jpeg';
 
 // Home
-import home_map from '../../assets/images/home/map.png';
+import home_map_dark from '../../assets/images/home/map_dark.png';
+import home_map_light from '../../assets/images/home/map_light.png';
 import home_slider_1 from '../../assets/images/home/slider/photo1718970610.jpeg';
 import home_slider_2 from '../../assets/images/home/slider/photo1719067445.jpeg';
 import home_slider_3 from '../../assets/images/home/slider/photo1719124963.jpeg';
@@ -40,7 +41,8 @@ export const DataImages = {
         gladkov: common_gladkov,
     },
     home: {
-        map: home_map,
+        map_light: home_map_light,
+        map_dark: home_map_dark,
         slider: [
             home_slider_1,
             home_slider_2,

@@ -23,9 +23,6 @@ import {
     PageError500,
     PageLoader,
     ScrollRecovery,
-    CacheKeys,
-    CacheStorage,
-    useCacheStorage,
 } from '../../base';
 import {
     useTheme,

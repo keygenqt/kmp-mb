@@ -27,3 +27,17 @@
 .ThemeDark .ExpertsPage .ContentPage .CityImage img {
     opacity: 0.9;
 }
+
+.ExpertsPage .ContentPage .ExpertImage {
+    position: relative;
+}
+.ExpertsPage .ContentPage .ExpertImage .MuiCardMedia-root {
+    position: relative;
+    z-index: 2;
+}
+
+.ExpertsPage .ContentPage .ExpertImage .MuiCircularProgress-root {
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 10px);
+}
