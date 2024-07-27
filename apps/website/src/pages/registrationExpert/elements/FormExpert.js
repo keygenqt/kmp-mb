@@ -39,6 +39,7 @@ import {
 } from '../../../base';
 import {
     DoneOutlined,
+    NewReleases,
 } from "@mui/icons-material";
 
 
@@ -339,7 +340,7 @@ export function FormExpert(props) {
                                             variant={'contained'}
                                             size={'large'}
                                             color={'secondary'}
-                                            disabled={isSubmitting}
+                                            disabled={Boolean(isSubmitting || Object.keys(errors).length !== 0 || Object.keys(touched).length === 0)}
                                             startIcon={isSubmitting ? (
                                                 <CircularProgress sx={{
                                                     mr: 0.5,
@@ -347,12 +348,10 @@ export function FormExpert(props) {
                                                     width: '18px !important'
                                                 }}/>
                                             ) : (
-                                                <DoneOutlined sx={{
-                                                    height: 18
-                                                }}/>
+                                                <DoneOutlined sx={{height: 18}}/>
                                             )}
                                         >
-                                            Отправить
+                                            {'Отправить'}
                                         </Button>
                                     </Box>
                                 </Stack>
