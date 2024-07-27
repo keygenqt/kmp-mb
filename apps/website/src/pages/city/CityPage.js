@@ -61,9 +61,8 @@ export function CityPage(props) {
             className={'ContentPage'}
             alignItems="center"
         >
-            <Container maxWidth='xl'>
-                <BlockInfo city={data}/>
-            </Container>
+            <BlockInfo city={data}/>
+            
             {!data.uploads ? null : (
                 <Container maxWidth='lg'>
                     <BlockCarousel images={data.uploads}/>

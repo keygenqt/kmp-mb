@@ -21,6 +21,18 @@ export const enLocalization = {
             t_none: 'None',
             t_error_500: 'An error occurred, please try again later.',
         },
+        components: {
+            error: {
+                t_title: 'Page not found.',
+                t_text: "The Page you are looking for doesn't exist.",
+                t_btn: 'Go to Home',
+            },
+            coming_soon: {
+                t_title: 'Under construction.',
+                t_text: 'The page you have arrived at is still under construction.',
+                t_btn: 'Go to Home',
+            },
+        },
         layouts: {
             header: {
                 t_community: 'Community',
@@ -80,16 +92,6 @@ export const enLocalization = {
             },
             expert: {
                 t_media: 'Media'
-            },
-            error: {
-                t_title: 'Page not found.',
-                t_text: "The Page you are looking for doesn't exist.",
-                t_btn: 'Go to Home',
-            },
-            coming_soon: {
-                t_title: 'Under construction.',
-                t_text: 'The page you have arrived at is still under construction.',
-                t_btn: 'Go to Home',
             },
         }
     },

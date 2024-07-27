@@ -19,6 +19,16 @@
  * @link https://mui.com/material-ui/customization/theme-components/
  */
 export const components = {
+    MuiFormGroup: {
+        styleOverrides: {
+            root: ({ theme }) =>
+                theme.unstable_sx({
+                    '& .MuiInputBase-root': {
+                        background: theme.palette.mode === 'dark' ? '#3B3B3B57' : '#E3E3E357'
+                    }
+                }),
+        }
+    },
     MuiChip: {
         styleOverrides: {
             root: {

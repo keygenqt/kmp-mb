@@ -31,10 +31,13 @@ export * from './shared/mappers/UserMediaTypes';
 export * from './shared/mappers/UserResponse';
 export * from './shared/mappers/UserRole';
 // components
-export * from './components/PageLoader';
-export * from './components/PageError500';
-export * from './components/PageError404';
-export * from './components/ComingSoon';
+export * from './components/states/PageLoader';
+export * from './components/states/PageError500';
+export * from './components/states/PageError404';
+export * from './components/states/ComingSoon';
+export * from './components/alerts/AlertError';
+export * from './components/alerts/AlertSuccess';
+export * from './components/other/PageHeader';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

@@ -29,6 +29,9 @@ export const palette = {
     text: {
         primary: '#3d3d3d'
     },
+    success: {
+        main: '#329132',
+    },
     white: {
         main: '#ffffff',
     },

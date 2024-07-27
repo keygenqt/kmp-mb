@@ -19,13 +19,12 @@ import PropTypes from 'prop-types';
 import {
     LocalizationContext,
     RouteContext,
-    Helper
+    Helper,
+    PageHeader
 } from '../../../base';
 import {
     useTheme,
     useMediaQuery,
-    Card,
-    CardContent,
     Stack,
     Typography,
     Box,
@@ -45,58 +44,56 @@ export function BlockInfo(props) {
     const name = Helper.locate(city, 'name', language)
 
     return (
-        <Card sx={{padding: isMD ? 2 : 3}}>
-            <CardContent>
-                <Stack
-                    direction={isMD ? 'column' : 'row'}
-                    spacing={4}
-                >
-                    <Box sx={{textAlign: 'center'}}>
-                        <img src={city.image} alt='Logo' className='LogoCity' />
-                    </Box>
+        <PageHeader>
+            <Stack
+                direction={isMD ? 'column' : 'row'}
+                spacing={4}
+            >
+                <Box sx={{textAlign: 'center'}}>
+                    <img src={city.image} alt='Logo' className='LogoCity' />
+                </Box>
 
+                <Stack
+                    spacing={isMD ? 2 : 3}
+                    direction="column"
+                    justifyContent="space-between"
+                    sx={{ flexGrow: 1 }}
+                >
                     <Stack
                         spacing={isMD ? 2 : 3}
-                        direction="column"
-                        justifyContent="space-between"
-                        sx={{ flexGrow: 1 }}
                     >
-                        <Stack
-                            spacing={isMD ? 2 : 3}
-                        >
-                            <Typography variant="h3" component="div">
-                                {name}
-                            </Typography>
+                        <Typography variant="h3" component="div">
+                            {name}
+                        </Typography>
 
-                            <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
-                                {t('pages.city.t_text1', {city: name})}
-                            </Typography>
+                        <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
+                            {t('pages.city.t_text1', {city: name})}
+                        </Typography>
 
-                            <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
-                                {t('pages.city.t_text2')}
-                            </Typography>
+                        <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
+                            {t('pages.city.t_text2')}
+                        </Typography>
 
-                            <Typography variant={'text1'} color={'text.primary'} sx={{fontWeight: 500}}>
-                                {t('pages.city.t_text3')}
-                            </Typography>
-                        </Stack>
+                        <Typography variant={'text1'} color={'text.primary'} sx={{fontWeight: 500}}>
+                            {t('pages.city.t_text3')}
+                        </Typography>
+                    </Stack>
 
-                        <Stack textAlign="right">
-                            <Box>
-                                <Button
-                                    variant='contained'
-                                    onClick={() => {
-                                        route.openUrlNewTab(city.link)
-                                    }}
-                                >
-                                    {t('pages.city.t_join_btn')}
-                                </Button>
-                            </Box>
-                        </Stack>
+                    <Stack textAlign="right">
+                        <Box>
+                            <Button
+                                variant='contained'
+                                onClick={() => {
+                                    route.openUrlNewTab(city.link)
+                                }}
+                            >
+                                {t('pages.city.t_join_btn')}
+                            </Button>
+                        </Box>
                     </Stack>
                 </Stack>
-            </CardContent>
-        </Card>
+            </Stack>
+        </PageHeader>
     );
 }
 

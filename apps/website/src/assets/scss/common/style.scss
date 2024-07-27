@@ -34,6 +34,20 @@ html, body, .App {
     width: 100%;
 }
 
+a {
+    outline: none;
+    text-decoration: none;
+    color: #40287F;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.ThemeDark a {
+    color: #CB8FF7;
+}
+
 // Table
 .Table {
     display: table;

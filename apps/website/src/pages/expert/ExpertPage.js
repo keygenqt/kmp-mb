@@ -67,9 +67,8 @@ export function ExpertPage(props) {
             className={'ContentPage'}
             alignItems="center"
         >
-            <Container maxWidth='xl'>
-                <BlockInfo data={data}/>
-            </Container>
+            <BlockInfo data={data}/>
+            
             {!quote ? null : (
                 <Container maxWidth='md'>
                     <Stack spacing={3} justifyContent="center" alignItems="center">

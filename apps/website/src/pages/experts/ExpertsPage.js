@@ -22,6 +22,7 @@ import {
     useHttpQuery,
     PageLoader,
     PageError500,
+    PageHeader,
     ScrollRecovery,
 } from '../../base';
 import {
@@ -30,8 +31,6 @@ import {
     Container,
     Box,
     Stack,
-    Card,
-    CardContent,
     Typography,
     Button,
 } from '@mui/material';
@@ -50,44 +49,38 @@ export function ExpertsPage(props) {
     const experts = useHttpQuery(Shared.queries.experts)
     const directions = useHttpQuery(Shared.queries.directions)
 
-    const headerPage = (
-        <Container maxWidth='xl'>
-            <Card sx={{padding: isMD ? 2 : 3}}>
-                <CardContent>
-                    <Stack spacing={isMD ? 2 : 3}>
-                        <Stack spacing={2} direction={isSM ? 'column' : 'row'} alignItems={isSM ? 'right' : 'center'}>
-                            <Star fontSize="large"/>
-                            <Typography variant="h3" component="div">
-                                {t('pages.experts.t_title')}
-                            </Typography>
-                        </Stack>
-                        <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
-                            {t('pages.experts.t_text')}
-                        </Typography>
-                        <Typography variant={'text1'} color={'text.primary'} sx={{fontWeight: 500}}>
-                            {t('pages.experts.t_subtext')}
-                        </Typography>
-                        <Box>
-                            <Button
-                                variant='contained'
-                                onClick={() => {
-                                    route.toLocation(routes.registrationExpert)
-                                }}
-                            >
-                                {t('pages.experts.t_btn')}
-                            </Button>
-                        </Box>
-                    </Stack>
-                </CardContent>
-            </Card>
-        </Container>
-    );
+    const pageHeader = (
+        <PageHeader>
+            <Stack spacing={2} direction={isSM ? 'column' : 'row'} alignItems={isSM ? 'right' : 'center'}>
+                <Star fontSize="large"/>
+                <Typography variant="h3" component="div">
+                    {t('pages.experts.t_title')}
+                </Typography>
+            </Stack>
+            <Typography variant={isMD ? 'text2' : 'text1'} color={'text.primary'}>
+                {t('pages.experts.t_text')}
+            </Typography>
+            <Typography variant={'text1'} color={'text.primary'} sx={{fontWeight: 500}}>
+                {t('pages.experts.t_subtext')}
+            </Typography>
+            <Box>
+                <Button
+                    variant='contained'
+                    onClick={() => {
+                        route.toLocation(routes.registrationExpert)
+                    }}
+                >
+                    {t('pages.experts.t_btn')}
+                </Button>
+            </Box>
+        </PageHeader>
+    )
 
     // Error get data
     if (experts === null || directions === null) {
         return (
             <PageError500>
-                {headerPage}
+                {pageHeader}
             </PageError500>
         )
     }
@@ -96,7 +89,7 @@ export function ExpertsPage(props) {
     if (experts === undefined || directions === undefined) {
         return (
             <PageLoader>
-                {headerPage}
+                {pageHeader}
             </PageLoader>
         )
     }
@@ -109,7 +102,7 @@ export function ExpertsPage(props) {
                 className={'ContentPage'}
                 alignItems="center"
             >
-                {headerPage}
+                {pageHeader}
                 <Container maxWidth='lg'>
                     <BlockExperts
                         experts={experts}

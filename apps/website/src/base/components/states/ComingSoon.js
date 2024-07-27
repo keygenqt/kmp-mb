@@ -15,18 +15,19 @@
  */
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Lottie from "lottie-react";
-import {DataLottie} from '../data/DataLottie';
-import {LocalizationContext} from '../../base';
+import {DataLottie} from '../../data/DataLottie';
+import {LocalizationContext, RouteContext} from '../..';
 import {
     Box,
     Stack,
-    Typography
+    Typography,
+    Button
 } from '@mui/material';
 
-export function PageError500(props) {
+export function ComingSoon(props) {
     const {t} = React.useContext(LocalizationContext)
+    const {route, routes} = React.useContext(RouteContext)
     return (
         <Stack
             sx={{height: '100%'}}
@@ -41,25 +42,47 @@ export function PageError500(props) {
                 paddingRight: 3,
                 textAlign: 'center',
                 '& .PageLottie': {
-                    width: '238px',
+                    width: '275px',
                     margin: '-5px auto',
+                    position: 'relative',
+                    left: '-23px'
                 }
             }}>
-                <Stack spacing={3}>
-                    <Lottie
-                        className={'PageLottie'}
-                        animationData={DataLottie.error_500}
-                    />
-                    <Typography variant='text1' color={'text.primary'}>
-                        {t('common.t_error_500')}
+                <Stack spacing={4}>
+
+                    <Typography variant='h2' color={'text.primary'}>
+                        {t('components.coming_soon.t_title')}
                     </Typography>
+
+                    <Box>
+                        <Lottie
+                            className={'PageLottie'}
+                            loop={false}
+                            animationData={DataLottie.coming_soon}
+                        />
+                    </Box>
+
+                    <Typography variant='text1' color={'text.primary'}>
+                        {t('components.coming_soon.t_text')}
+                    </Typography>
+
+                    <Box>
+                        <Button
+                            variant='contained'
+                            onClick={() => {
+                                route.toLocation(routes.home)
+                            }}
+                        >
+                            {t('components.coming_soon.t_btn')}
+                        </Button>
+                    </Box>
+
                 </Stack>
             </Box>
+
             <Box/>
         </Stack>
     );
 }
 
-PageError500.propTypes = {
-    children: PropTypes.element,
-};
+ComingSoon.propTypes = {};

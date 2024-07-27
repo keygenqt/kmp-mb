@@ -79,7 +79,7 @@ export function BlockExperts(props) {
         const fullName = `${Helper.locate(item, 'fname', language)} ${Helper.locate(item, 'lname', language)}`
 
         // Filter direction
-        if (direction && !item.directions.includes(direction)) {
+        if (direction && !item.directions.map(e => e.name).includes(direction)) {
             return;
         }
 
@@ -115,8 +115,12 @@ export function BlockExperts(props) {
                             </Typography>
 
                             <Stack className={'ExpertChips'} spacing={0.5} direction={'row'} sx={{marginTop: 1.6}}>
-                                {item.directions.map((direction, index) => (
-                                    <Chip key={`cip-${index}`} className={direction.replace(' ', '_')} label={direction} variant="outlined" />
+                                {item.directions.map((direction) => (
+                                    <Chip
+                                        key={`direction-${direction.id}`}
+                                        className={direction.name.replace(' ', '_')}
+                                        label={direction.name} variant="outlined"
+                                    />
                                 ))}
                             </Stack>
 
@@ -181,9 +185,9 @@ export function BlockExperts(props) {
                             <MenuItem value="">
                                 <em>{t('common.t_none')}</em>
                             </MenuItem>
-                            {props.directions?.map((direction, index) => (
-                                <MenuItem key={`cat-${index}`} value={direction}>
-                                    {direction}
+                            {props.directions?.map((direction) => (
+                                <MenuItem key={`direction-${direction.id}`} value={direction.name}>
+                                    {direction.name}
                                 </MenuItem>
                             ))}
                         </Select>

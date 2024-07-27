@@ -17,13 +17,16 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import Lottie from "lottie-react";
-import {DataLottie} from '../data/DataLottie';
+import {DataLottie} from '../../data/DataLottie';
+import {LocalizationContext} from '../..';
 import {
     Box,
-    Stack
+    Stack,
+    Typography
 } from '@mui/material';
 
-export function PageLoader(props) {
+export function PageError500(props) {
+    const {t} = React.useContext(LocalizationContext)
     return (
         <Stack
             sx={{height: '100%'}}
@@ -39,19 +42,24 @@ export function PageLoader(props) {
                 textAlign: 'center',
                 '& .PageLottie': {
                     width: '238px',
-                    margin: '-16px auto',
+                    margin: '-5px auto',
                 }
             }}>
-                <Lottie
-                    className={'PageLottie'}
-                    animationData={DataLottie.loader}
-                />
+                <Stack spacing={3}>
+                    <Lottie
+                        className={'PageLottie'}
+                        animationData={DataLottie.error_500}
+                    />
+                    <Typography variant='text1' color={'text.primary'}>
+                        {t('common.t_error_500')}
+                    </Typography>
+                </Stack>
             </Box>
             <Box/>
         </Stack>
     );
 }
 
-PageLoader.propTypes = {
+PageError500.propTypes = {
     children: PropTypes.element,
 };

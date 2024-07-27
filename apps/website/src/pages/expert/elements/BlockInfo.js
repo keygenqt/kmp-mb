@@ -20,13 +20,12 @@ import {
     LocalizationContext,
     RouteContext,
     Helper,
-    ContactTypes
+    ContactTypes,
+    PageHeader,
 } from '../../../base';
 import {
     useTheme,
     useMediaQuery,
-    Card,
-    CardContent,
     Stack,
     Typography,
     Box,
@@ -59,79 +58,81 @@ export function BlockInfo(props) {
     const linkedin = data.contacts?.find((contact) => contact.type === ContactTypes.LINKEDIN.name)
 
     return (
-        <Card sx={{padding: isMD ? 2 : 3}}>
-            <CardContent>
+        <PageHeader>
+            <Stack
+                direction={isMD ? 'column' : 'row'}
+                spacing={4}
+            >
+                <Box sx={{textAlign: 'center'}}>
+                    <Stack
+                        spacing={2}
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <img src={data.image} alt='Logo' className='LogoExpert' />
+
+                        {telegram || email || linkedin ? (
+                            <ButtonGroup color={'primary'} >
+                                {telegram ? (
+                                    <Button onClick={() => {
+                                        route.openUrlNewTab(telegram.link)
+                                    }}>
+                                        <Telegram/>
+                                    </Button>
+                                ) : null}
+                                {email ? (
+                                    <Button onClick={() => {
+                                        route.openEmail(email.link)
+                                    }}>
+                                        <Email/>
+                                    </Button>
+                                ) : null}
+                                {linkedin ? (
+                                    <Button onClick={() => {
+                                        route.openUrlNewTab(linkedin.link)
+                                    }}>
+                                        <LinkedIn/>
+                                    </Button>
+                                ) : null}
+                            </ButtonGroup>
+                        ) : null}
+                    </Stack>
+                </Box>
+
                 <Stack
-                    direction={isMD ? 'column' : 'row'}
-                    spacing={4}
+                    spacing={isMD ? 2 : 3}
+                    direction="column"
+                    justifyContent="space-between"
+                    sx={{ flexGrow: 1 }}
                 >
-                    <Box sx={{textAlign: 'center'}}>
-                        <Stack
-                            spacing={2}
-                            justifyContent="center"
-                            alignItems="center"
-                        >
-                            <img src={data.image} alt='Logo' className='LogoExpert' />
-
-                            {telegram || email || linkedin ? (
-                                <ButtonGroup color={'primary'} >
-                                    {telegram ? (
-                                        <Button onClick={() => {
-                                            route.openUrlNewTab(telegram.link)
-                                        }}>
-                                            <Telegram/>
-                                        </Button>
-                                    ) : null}
-                                    {email ? (
-                                        <Button onClick={() => {
-                                            route.openEmail(email.link)
-                                        }}>
-                                            <Email/>
-                                        </Button>
-                                    ) : null}
-                                    {linkedin ? (
-                                        <Button onClick={() => {
-                                            route.openUrlNewTab(linkedin.link)
-                                        }}>
-                                            <LinkedIn/>
-                                        </Button>
-                                    ) : null}
-                                </ButtonGroup>
-                            ) : null}
-                        </Stack>
-                    </Box>
-
                     <Stack
                         spacing={isMD ? 2 : 3}
-                        direction="column"
-                        justifyContent="space-between"
-                        sx={{ flexGrow: 1 }}
                     >
-                        <Stack
-                            spacing={isMD ? 2 : 3}
-                        >
-                            <Typography variant="h3" component="div">
-                                {fullName}
-                            </Typography>
+                        <Typography variant="h3" component="div">
+                            {fullName}
+                        </Typography>
 
-                            <Stack className={'ExpertChips'} spacing={1} direction={'row'} sx={{marginTop: 1.6}}>
-                                {data.directions?.map((direction, index) => (
-                                    <Chip key={`cip-${index}`} className={direction.replace(' ', '_')} label={direction} variant="outlined" />
-                                ))}
-                            </Stack>
-
-                            <Typography
-                                variant={isMD ? 'text2' : 'text1'}
-                                color={'text.primary'}
-                                sx={{whiteSpace: 'break-spaces'}}
-                            >
-                                {about}
-                            </Typography>
+                        <Stack className={'ExpertChips'} spacing={1} direction={'row'} sx={{marginTop: 1.6}}>
+                            {data.directions?.map((direction) => (
+                                <Chip
+                                    key={`direction-${direction.id}`}
+                                    className={direction.name.replace(' ', '_')}
+                                    label={direction.name} variant="outlined"
+                                />
+                            ))}
                         </Stack>
+
+                        <Typography
+                            variant={isMD ? 'text2' : 'text1'}
+                            color={'text.primary'}
+                            sx={{whiteSpace: 'break-spaces'}}
+                        >
+                            {about}
+                        </Typography>
                     </Stack>
                 </Stack>
-            </CardContent>
-        </Card>
+            </Stack>
+        </PageHeader>
     );
 }
 

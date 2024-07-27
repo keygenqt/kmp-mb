@@ -12,7 +12,10 @@ export const UserDirectionResponse = shared.com.keygenqt.mb.shared.responses.Use
  * Map [UserDirectionResponse] to object
  */
 UserDirectionResponse.prototype.mapToUserDirection = function () {
-    return this.name
+    return {
+        id: this.id,
+        name: this.name,
+    }
 };
 
 /**

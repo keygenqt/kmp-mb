@@ -70,6 +70,12 @@ export const typography = {
         fontSize: 24,
         lineHeight: '1.5',
     },
+    subtitle2: {
+        fontSize: 19,
+        lineHeight: '1.5',
+        fontWeight: 'normal',
+        fontStyle: 'italic'
+    },
     text1: {
         fontSize: 20,
     },
