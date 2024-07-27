@@ -19,13 +19,14 @@ import shared from "shared";
 import {Shared} from "../Shared";
 import {AppConf} from "../../../conf/AppConf";
 import {CacheStorage} from "../../cache/CacheStorage"
+import {CacheVersion} from "../../cache/CacheVersion"
 
 
 const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
 
 export function useHttpQuery(method, ...arg) {
 
-    const cacheKey = `${method}${arg.length ? arg : ''}`
+    const cacheKey = `${method}${arg.length ? arg : ''}-${CacheVersion}`
     const cacheData = CacheStorage.get(cacheKey)
 
     const [value, setValue] = React.useState(cacheData)

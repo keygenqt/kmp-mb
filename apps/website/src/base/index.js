@@ -51,6 +51,7 @@ export * from './route/ScrollRecovery';
 export * from './cache/CacheHook';
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
+export * from './cache/CacheVersion';
 // utils
 export * from './utils/Helper';
 // hooks

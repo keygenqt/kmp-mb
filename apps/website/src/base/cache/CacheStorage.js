@@ -17,6 +17,7 @@
 import {MD5} from 'crypto-js';
 import LZString from "lz-string"
 
+// @todo expired delay
 export const CacheStorage = {
     set: function (key, value, isCrypto = true, quiet = false) {
         if (typeof value == 'object') {
