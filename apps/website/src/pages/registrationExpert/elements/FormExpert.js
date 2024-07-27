@@ -39,7 +39,6 @@ import {
 } from '../../../base';
 import {
     DoneOutlined,
-    NewReleases,
 } from "@mui/icons-material";
 
 
@@ -132,7 +131,7 @@ export function FormExpert(props) {
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            Ссылки для ознакомления: <a target='_blank' href='https://androidbroadcast.notion.site/e1b8387ec122428dba6ecfbb8cdff76d'>кто может стать экспертом</a>, <a target='_blank' href='https://www.notion.so/androidbroadcast/73574a646d304384be3eb189b16e0c81?pvs=4'>что должен делать эксперт</a>.
+                                            Ссылки для ознакомления: <a target='_blank' rel="noreferrer" href='https://androidbroadcast.notion.site/e1b8387ec122428dba6ecfbb8cdff76d'>кто может стать экспертом</a>, <a target='_blank' rel="noreferrer" href='https://www.notion.so/androidbroadcast/73574a646d304384be3eb189b16e0c81?pvs=4'>что должен делать эксперт</a>.
                                         </Typography>
                                     </Stack>
 
@@ -313,7 +312,7 @@ export function FormExpert(props) {
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            Расскажите о своих публичных активностях минимум за прошедший год с момента подачи заявки, указывая ссылки и охваты (сколько было зрителей, просмотров или прочее). На основе этой информации мы будем оценивать ваш вклад в развитие сообщества по технологии
+                                            Расскажите о своих публичных активностях минимум за прошедший год с момента подачи заявки, указывая ссылки и охваты (сколько было зрителей, просмотров или прочее). На основе этой информации мы будем оценивать ваш вклад в развитие сообщества по технологии.
                                         </Typography>
                                     </Stack>
 
