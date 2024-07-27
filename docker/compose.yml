@@ -63,8 +63,27 @@ services:
       # Server configuration files
       - ./configurations/server/application.conf:/var/www/src/server/src/main/resources/application.conf
 
-  node:
-    container_name: kmp-mb-js-build
+  node1:
+    container_name: kmp-mb-build-admin-panel
+    restart: no
+    build:
+      context: .
+      dockerfile: node/Dockerfile
+    command:
+      - /bin/bash
+      - -c
+      - |
+        cd /var/www/src/admin-panel
+        npm install
+        npm run build
+    working_dir: /var/www/src
+    volumes:
+      - ../apps:/var/www/src
+        # React configuration files
+      - ./configurations/admin-panel/AppConf.js:/var/www/src/admin-panel/src/conf/AppConf.js
+
+  node2:
+    container_name: kmp-mb-build-website
     restart: no
     build:
       context: .
@@ -76,15 +95,10 @@ services:
         cd /var/www/src/website
         npm install
         npm run build
-
-        cd /var/www/src/admin-panel
-        npm install
-        npm run build
     working_dir: /var/www/src
     volumes:
       - ../apps:/var/www/src
         # React configuration files
-      - ./configurations/admin-panel/AppConf.js:/var/www/src/admin-panel/src/conf/AppConf.js
       - ./configurations/website/AppConf.js:/var/www/src/website/src/conf/AppConf.js
 
   java:
@@ -113,7 +127,9 @@ services:
     depends_on:
       java:
         condition: service_started
-      node:
+      node1:
+        condition: service_completed_successfully
+      node2:
         condition: service_completed_successfully
     build:
       context: .
