@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-export * from './home/HomePage';
-export * from './community/CommunityPage';
 export * from './city/CityPage';
-export * from './experts/ExpertsPage';
-export * from './expert/ExpertPage';
-export * from './error/ErrorPage';
 export * from './coming_soon/ComingSoonPage';
+export * from './community/CommunityPage';
+export * from './error/ErrorPage';
+export * from './expert/ExpertPage';
+export * from './experts/ExpertsPage';
+export * from './home/HomePage';
+export * from './registrationExpert/RegistrationExpertPage';
+export * from './registrationOrganizer/RegistrationOrganizerPage';
+export * from './registrationPartner/RegistrationPartnerPage';

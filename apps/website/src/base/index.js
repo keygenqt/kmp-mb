@@ -34,6 +34,7 @@ export * from './shared/mappers/UserRole';
 export * from './components/PageLoader';
 export * from './components/PageError500';
 export * from './components/PageError404';
+export * from './components/ComingSoon';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

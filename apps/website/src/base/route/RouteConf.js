@@ -24,21 +24,43 @@ import {
     CommunityPage,
     CityPage,
     ExpertPage,
+    RegistrationExpertPage,
+    RegistrationOrganizerPage,
+    RegistrationPartnerPage,
+    ComingSoonPage,
 } from "../../pages";
 
 export const RouteConf = {
     delay: 200,
     routes: {
-        home: {
-            path: '/',
+        city: {
+            path: '/city/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={false} className={'HomePage'}>
-                            <HomePage/>
+                        <BaseLayout isCenter={false} className={'CityPage'}>
+                            <CityPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        comingSoon: {
+            path: '/coming-soon',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout className={'ComingSoonPage'}>
+                            <ComingSoonPage/>
                         </BaseLayout>
                     }
                 />
@@ -59,34 +81,16 @@ export const RouteConf = {
                 />
             }
         },
-        city: {
-            path: '/city/:id',
-            match: {
-                id: RouteTypes.integer,
-            },
+        404: {
+            path: '*',
             render: function (key, path) {
                 return <Route
                     key={key}
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={false} className={'CityPage'}>
-                            <CityPage/>
-                        </BaseLayout>
-                    }
-                />
-            }
-        },
-        experts: {
-            path: '/experts',
-            render: function (key, path) {
-                return <Route
-                    key={key}
-                    exact
-                    path={path}
-                    element={
-                        <BaseLayout isCenter={false} className={'ExpertsPage'}>
-                            <ExpertsPage/>
+                        <BaseLayout isCenter={true} className={'ErrorPage'}>
+                            <ErrorPage/>
                         </BaseLayout>
                     }
                 />
@@ -110,16 +114,76 @@ export const RouteConf = {
                 />
             }
         },
-        404: {
-            path: '*',
+        experts: {
+            path: '/experts',
             render: function (key, path) {
                 return <Route
                     key={key}
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'ErrorPage'}>
-                            <ErrorPage/>
+                        <BaseLayout isCenter={false} className={'ExpertsPage'}>
+                            <ExpertsPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        home: {
+            path: '/',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'HomePage'}>
+                            <HomePage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        registrationExpert: {
+            path: '/registration-expert',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'RegistrationExpertPage'}>
+                            <RegistrationExpertPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        registrationOrganizer: {
+            path: '/registration-organizer',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'RegistrationOrganizerPage'}>
+                            <RegistrationOrganizerPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        registrationPartner: {
+            path: '/registration-partner',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'RegistrationPartnerPage'}>
+                            <RegistrationPartnerPage/>
                         </BaseLayout>
                     }
                 />

@@ -44,7 +44,7 @@ export function CommunityPage(props) {
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {t} = React.useContext(LocalizationContext)
-    const {route} = React.useContext(RouteContext)
+    const {route, routes} = React.useContext(RouteContext)
 
     // Get data
     const cities = useHttpQuery(Shared.queries.cities)
@@ -71,7 +71,7 @@ export function CommunityPage(props) {
                             <Button
                                 variant='contained'
                                 onClick={() => {
-                                    route.openUrlNewTab("https://docs.google.com/forms/d/1Oqt0y2dgP9NjVqxW3CBEaIWEPlZPKW1NmPHu_BuKYVA/viewform?edit_requested=true")
+                                    route.toLocation(routes.registrationOrganizer)
                                 }}
                             >
                                 {t('pages.community.t_btn')}

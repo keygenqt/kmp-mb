@@ -26,7 +26,7 @@ import {
 
 export function BlockPartners(props) {
     const {t} = React.useContext(LocalizationContext)
-    const {route} = React.useContext(RouteContext)
+    const {route, routes} = React.useContext(RouteContext)
 
     return (
         <Box className={'BlockPartners'} sx={{textAlign: 'center'}}>
@@ -50,7 +50,7 @@ export function BlockPartners(props) {
                     <Button
                         variant='contained'
                         onClick={() => {
-                            route.openUrlNewTab('https://docs.google.com/forms/d/e/1FAIpQLScfD4eQ1IIWhBSXZr87dorYbW-Em9Z8wTpD2UEEQxjVj-eZ0w/viewform')
+                            route.toLocation(routes.registrationPartner)
                         }}
                     >
                         {t('pages.home.t_BlockPartners_btn')}

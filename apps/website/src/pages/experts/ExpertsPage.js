@@ -44,7 +44,7 @@ export function ExpertsPage(props) {
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {t} = React.useContext(LocalizationContext)
-    const {route} = React.useContext(RouteContext)
+    const {route, routes} = React.useContext(RouteContext)
 
     // Get data
     const experts = useHttpQuery(Shared.queries.experts)
@@ -71,7 +71,7 @@ export function ExpertsPage(props) {
                             <Button
                                 variant='contained'
                                 onClick={() => {
-                                    route.openUrlNewTab("https://docs.google.com/forms/d/1o-GCn8g4oWgs_-ZML2YijOBzp9yxjJjWwIy_ie6W-ow/viewform?ts=65637ba7&edit_requested=true")
+                                    route.toLocation(routes.registrationExpert)
                                 }}
                             >
                                 {t('pages.experts.t_btn')}

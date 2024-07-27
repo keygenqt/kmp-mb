@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
-.ComingSoonPage .ContentPage {
-    text-align: center;
+
+import * as React from 'react';
+import {ComingSoon} from '../../base';
+
+
+export function RegistrationPartnerPage(props) {
+    return (
+        <ComingSoon/>
+    );
 }
 
-.ComingSoonPage .ContentPage .ComingSoonLottie {
-    width: 315px;
-    margin: 0 auto;
-    position: relative;
-    left: -28px;
-    top: -16px;
-}
+RegistrationPartnerPage.propTypes = {};

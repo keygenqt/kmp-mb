@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-// common
-@import 'common/style';
+import * as React from 'react';
+import {ComingSoon} from '../../base';
 
-// pages
-@import 'pages/home';
-@import 'pages/community';
-@import 'pages/city';
-@import 'pages/experts';
-@import 'pages/expert';
+
+export function RegistrationOrganizerPage(props) {
+    return (
+        <ComingSoon/>
+    );
+}
+
+RegistrationOrganizerPage.propTypes = {};
