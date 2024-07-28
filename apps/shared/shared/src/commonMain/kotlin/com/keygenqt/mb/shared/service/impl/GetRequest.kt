@@ -15,13 +15,10 @@
  */
 package com.keygenqt.mb.shared.service.impl
 
-import com.keygenqt.mb.shared.responses.CityResponse
-import com.keygenqt.mb.shared.responses.CountryResponse
+import com.keygenqt.mb.shared.responses.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import com.keygenqt.mb.shared.responses.UserResponse
-import com.keygenqt.mb.shared.responses.UserDirectionResponse
 
 class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
@@ -52,5 +49,15 @@ class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
     suspend fun countries(): List<CountryResponse> {
         return client.get("api/countries").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationExperts(): List<RegExpertResponse> {
+        return client.get("api/registration-experts").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationExpert(id: Int): RegExpertResponse {
+        return client.get("api/registration-experts/$id").body()
     }
 }

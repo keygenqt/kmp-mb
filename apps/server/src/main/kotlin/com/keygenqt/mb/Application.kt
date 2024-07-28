@@ -67,6 +67,7 @@ fun Application.module() {
                     single { CitiesService(db) }
                     single { CountriesService(db) }
                     single { UploadsService(db) }
+                    single { RegExpertsService(db) }
                 }
             )
         }
@@ -97,6 +98,7 @@ fun Application.module() {
                 countries()
                 cities()
                 uploads()
+                registrationExperts()
             }
         }
     }

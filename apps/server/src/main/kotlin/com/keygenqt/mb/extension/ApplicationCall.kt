@@ -17,6 +17,8 @@ package com.keygenqt.mb.extension
 
 import com.keygenqt.mb.base.Exceptions
 import io.ktor.server.application.*
+import io.ktor.server.request.*
+import jakarta.validation.Validation
 
 /**
  * Get value from params with validate
@@ -49,3 +51,22 @@ fun ApplicationCall.getNumbersQueryParam(key: String = "ids") =
 fun ApplicationCall.getDoublesQueryParam(key: String = "ids") =
     request.queryParameters.entries().find { it.key == key }?.value?.mapNotNull { it.toDoubleOrNull() }
         ?: throw throw Exceptions.NotFound()
+
+/**
+ * Get request with validate
+ */
+suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(): T {
+    val request = try {
+        receive<T>()
+    } catch (ex: Exception) {
+        throw Exceptions.BadRequest()
+    }
+
+    val validate = Validation.buildDefaultValidatorFactory().validator.validate(request)
+
+    if (validate.isEmpty()) {
+        return request
+    } else {
+        throw Exceptions.UnprocessableEntity(validate)
+    }
+}
