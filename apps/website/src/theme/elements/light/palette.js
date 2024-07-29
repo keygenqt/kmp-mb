@@ -32,6 +32,9 @@ export const palette = {
     success: {
         main: '#329132',
     },
+    error: {
+        dark: '#d43030'
+    },
     white: {
         main: '#ffffff',
     },

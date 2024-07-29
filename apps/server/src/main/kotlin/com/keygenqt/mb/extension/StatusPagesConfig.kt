@@ -16,7 +16,8 @@
 package com.keygenqt.mb.extension
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.shared.responses.ErrorResponse
+import com.keygenqt.mb.shared.responses.StateResponse
+import com.keygenqt.mb.utils.AppLogger
 import io.ktor.http.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
@@ -26,22 +27,37 @@ import io.ktor.server.response.*
  */
 fun StatusPagesConfig.configure() {
     exception<Throwable> { call, cause ->
-        if (cause is Exceptions) {
-            call.respond(
-                status = cause.status,
-                message = ErrorResponse(
-                    code = cause.status.value,
-                    message = cause.status.description
+        when (cause) {
+            is Exceptions.UnprocessableEntity -> {
+                call.respond(
+                    status = cause.status,
+                    message = StateResponse(
+                        code = cause.status.value,
+                        message = cause.status.description,
+                        validates = cause.validate.toResponse().toTypedArray()
+                    )
                 )
-            )
-        } else {
-            call.respond(
-                status = HttpStatusCode.InternalServerError,
-                message = ErrorResponse(
-                    code = HttpStatusCode.InternalServerError.value,
-                    message = HttpStatusCode.InternalServerError.description
+            }
+            is Exceptions -> {
+                call.respond(
+                    status = cause.status,
+                    message = StateResponse(
+                        code = cause.status.value,
+                        message = cause.status.description
+                    )
                 )
-            )
+            }
+
+            else -> {
+                call.respond(
+                    status = HttpStatusCode.InternalServerError,
+                    message = StateResponse(
+                        code = HttpStatusCode.InternalServerError.value,
+                        message = HttpStatusCode.InternalServerError.description
+                    )
+                )
+            }
         }
+        AppLogger.log.error("StatusPagesConfig", cause)
     }
 }

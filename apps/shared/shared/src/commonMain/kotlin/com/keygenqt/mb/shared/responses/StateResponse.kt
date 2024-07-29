@@ -13,22 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.service
+package com.keygenqt.mb.shared.responses
 
-import com.keygenqt.mb.shared.service.impl.GetRequestJS
-import com.keygenqt.mb.shared.service.impl.PostRequestJS
-import io.ktor.client.*
-import io.ktor.client.engine.js.*
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-actual fun httpClient(config: HttpClientConfig<*>.() -> Unit) = HttpClient(Js) {
-    config(this)
-}
-
+/**
+ * State response common
+ */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
-class ServiceRequestJS(url: String) {
-    private val request = ServiceRequest(url)
+@Serializable
+@Suppress("ArrayInDataClass")
+data class StateResponse(
+    val code: Int,
+    val message: String,
+    val validates: Array<StateValidateResponse>? = null,
+)
 
-    val get = GetRequestJS(request)
-    val post = PostRequestJS(request)
-}
+/**
+ * State validate response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+@Suppress("ArrayInDataClass")
+data class StateValidateResponse(
+    val filed: String,
+    val errors: Array<String>
+)

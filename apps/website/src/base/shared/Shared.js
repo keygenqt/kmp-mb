@@ -14,10 +14,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import shared from "shared";
+import {AppConf} from "../../conf/AppConf";
 import {locale} from "./elements/locale"
 import {queries} from "./elements/queries"
+
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
+const Requests = shared.com.keygenqt.mb.shared.requests
 
 export const Shared = {
     locale: locale,
     queries: queries,
+    httpClient: HttpClient,
+    requests: Requests,
 }

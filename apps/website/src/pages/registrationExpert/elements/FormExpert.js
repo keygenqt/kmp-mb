@@ -36,6 +36,7 @@ import {
     AlertSuccess,
     LocalizationContext,
     Helper,
+    Shared,
 } from '../../../base';
 import {
     DoneOutlined,
@@ -51,8 +52,8 @@ export function FormExpert(props) {
     return (
         <Formik
             initialValues={{
-                direction: '',
-                expert: '',
+                directionID: '',
+                expertID: '',
                 why: '',
                 fname: '',
                 lname: '',
@@ -65,29 +66,64 @@ export function FormExpert(props) {
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                direction: Yup.number().required('Field is required'),
-                expert: Yup.number().required('Field is required'),
-                why: Yup.string().required('Field is required.'),
-                fname: Yup.string().required('Field is required.'),
-                lname: Yup.string().required('Field is required.'),
-                location: Yup.string().required('Field is required.'),
-                email: Yup.string().required('Field is required.').email('Email must be valid.'),
-                telegram: Yup.string().required('Field is required.').url('The link must be valid.'),
-                cv: Yup.string().required('Field is required.').url('The link must be valid.'),
-                experience: Yup.string().required('Field is required.'),
-                contribution: Yup.string().required('Field is required.'),
+                directionID: Yup.number().required('Must not be null and not blank.'),
+                expertID: Yup.number().required('Must not be null and not blank.'),
+                why: Yup.string().required('Must not be null and not blank.'),
+                fname: Yup.string().required('Must not be null and not blank.'),
+                lname: Yup.string().required('Must not be null and not blank.'),
+                email: Yup.string().required('Must not be null and not blank.').email('Must be a well-formed email address.'),
+                telegram: Yup.string().required('Must not be null and not blank.').url('Must be a valid URL.'),
+                cv: Yup.string().required('Must not be null and not blank.').url('Must be a valid URL.'),
+                location: Yup.string().required('Must not be null and not blank.'),
+                experience: Yup.string().required('Must not be null and not blank.'),
+                contribution: Yup.string().required('Must not be null and not blank.'),
             })}
             onSubmit={async (values, {setErrors, setStatus, resetForm}) => {
                 setStatus({success: null});
                 setErrors({submit: null});
 
-                // Demo loading
-                await new Promise(r => setTimeout(r, 2000));
+                // Loading for animation
+                await new Promise(r => setTimeout(r, 500));
 
-                resetForm();
-                setStatus({success: true});
+                const response = await Shared.httpClient.post.registrationExpert(new Shared.requests.RegExpertRequest(
+                    values.directionID,
+                    values.expertID,
+                    values.why,
+                    values.fname,
+                    values.lname,
+                    values.email,
+                    values.telegram,
+                    values.cv,
+                    values.location,
+                    values.experience,
+                    values.contribution,
+                ))
 
-                // Scroll to success
+                if (response.code === 200) {
+                    resetForm();
+                    setStatus({success: true});
+                } else if (response.code === 422 && response.validates !== null) {
+                    setErrors({
+                        directionID: Helper.findError('directionID', response),
+                        expertID: Helper.findError('expertID', response),
+                        why: Helper.findError('why', response),
+                        fname: Helper.findError('fname', response),
+                        lname: Helper.findError('lname', response),
+                        email: Helper.findError('email', response),
+                        telegram: Helper.findError('telegram', response),
+                        cv: Helper.findError('cv', response),
+                        location: Helper.findError('location', response),
+                        experience: Helper.findError('experience', response),
+                        contribution: Helper.findError('contribution', response),
+                        submit: 'The form is filled out incorrectly, please check it.'
+                    });
+                } else {
+                    setErrors({
+                        submit: response.message
+                    });
+                }
+
+                // Scroll to top
                 const root = document.getElementById("root")
                 const element = document.getElementById("FormId")
                 root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
@@ -137,10 +173,10 @@ export function FormExpert(props) {
 
                                     <TextField
                                         type={'text'}
-                                        name={'direction'}
-                                        value={values.direction}
-                                        helperText={touched.direction && errors.direction ? errors.direction : 'Если вы хотите подать заявки по другим направлениям то это можно будет сделать после рассмотрения первой заявки в частном порядке.'}
-                                        error={Boolean(touched.direction && errors.direction)}
+                                        name={'directionID'}
+                                        value={values.directionID}
+                                        helperText={touched.directionID && errors.directionID ? errors.directionID : 'Если вы хотите подать заявки по другим направлениям то это можно будет сделать после рассмотрения первой заявки в частном порядке.'}
+                                        error={Boolean(touched.directionID && errors.directionID)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         select
@@ -156,10 +192,10 @@ export function FormExpert(props) {
 
                                     <TextField
                                         type={'text'}
-                                        name={'expert'}
-                                        value={values.expert}
-                                        helperText={touched.expert && errors.expert ? errors.expert : 'Чтобы подать заявку на присвоение статуса MBE кто-то из существующих экспертов по любой технологии должен будет поддержать вашу заявку.'}
-                                        error={Boolean(touched.expert && errors.expert)}
+                                        name={'expertID'}
+                                        value={values.expertID}
+                                        helperText={touched.expertID && errors.expertID ? errors.expertID : 'Чтобы подать заявку на присвоение статуса MBE кто-то из существующих экспертов по любой технологии должен будет поддержать вашу заявку.'}
+                                        error={Boolean(touched.expertID && errors.expertID)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         select

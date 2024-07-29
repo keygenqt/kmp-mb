@@ -15,6 +15,9 @@
  */
 
 export const Helper = {
+    /**
+     * Find locale data
+     */
     locate: function (object, column, language) {
         for (const key in object['locales']) {
             if (language.split('-')[1] === object['locales'][key]['locale']) {
@@ -26,5 +29,23 @@ export const Helper = {
             }
         }
         return object[column]
+    },
+    /**
+     * Find error array validate
+     */
+    findError: function (field, stateResponse) {
+        if (!stateResponse.validates) {
+            return null
+        }
+        const error = stateResponse.validates
+            .find(el => el['filed'] === field)
+            ?.errors.map((e, index) => index === 0 ? e.charAt(0).toUpperCase() + e.slice(1) : e.charAt(0).toLowerCase() + e.slice(1))
+            ?.join(', ')
+            ?? null
+        if (error) {
+            return error + '.'
+        } else {
+            return null
+        }
     },
 };

@@ -15,14 +15,10 @@
  */
 
 import * as React from 'react';
-import shared from "shared";
-import {Shared} from "../Shared";
-import {AppConf} from "../../../conf/AppConf";
-import {CacheStorage} from "../../cache/CacheStorage"
-import {CacheVersion} from "../../cache/CacheVersion"
+import {Shared} from "../shared/Shared";
+import {CacheStorage} from "../cache/CacheStorage"
+import {CacheVersion} from "../cache/CacheVersion"
 
-
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
 
 export function useHttpQuery(method, ...arg) {
 
@@ -45,7 +41,7 @@ export function useHttpQuery(method, ...arg) {
         try {
             // Loading 1.5 second for animation loader
             var startTime = performance.now();
-            HttpClient.get[method](arg)
+            Shared.httpClient.get[method](arg)
                 .then(async (value) => {
                     if (!cacheData) {
                         await funcDelay(startTime)

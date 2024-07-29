@@ -18,71 +18,17 @@ package com.keygenqt.mb.routing
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getNumberParam
 import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.shared.db.entities.RegExpertEntity
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.RegExpertsService
+import com.keygenqt.mb.shared.responses.StateResponse
 import com.keygenqt.mb.shared.responses.UserRole
-import com.keygenqt.mb.validators.NotNullNotBlank
+import com.keygenqt.mb.validators.models.RegExpertValidate
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.NotNull
-import jakarta.validation.constraints.Size
-import kotlinx.serialization.Serializable
-import org.hibernate.validator.constraints.URL
 import org.koin.ktor.ext.inject
-
-/**
- * Request insert [RegExpertEntity]
- */
-@Serializable
-data class RegExpertRequest(
-    @field:NotNull
-    val directionID: Int,
-
-    @field:NotNull
-    val expertID: Int,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 1000)
-    val why: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val fname: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val lname: String,
-
-    @field:NotNullNotBlank
-    @field:Email
-    val email: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    @field:URL
-    val telegram: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    @field:URL
-    val cv: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val location: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 1000)
-    val experience: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 1000)
-    val contribution: String,
-)
 
 fun Route.registrationExperts() {
 
@@ -117,9 +63,9 @@ fun Route.registrationExperts() {
         }
         post {
             // get request
-            val request = call.receiveValidate<RegExpertRequest>()
+            val request = call.receiveValidate<RegExpertValidate>()
             // act
-            val response = regExpertsService.transaction {
+            regExpertsService.transaction {
                 insert(
                     directionID = request.directionID,
                     expertID = request.expertID,
@@ -135,7 +81,10 @@ fun Route.registrationExperts() {
                 ).toResponse()
             }
             // response
-            call.respond(response)
+            call.respond(StateResponse(
+                code = HttpStatusCode.OK.value,
+                message = HttpStatusCode.OK.description
+            ))
         }
     }
 }

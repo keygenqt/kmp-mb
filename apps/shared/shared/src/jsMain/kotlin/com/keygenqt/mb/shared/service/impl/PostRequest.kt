@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.service
+package com.keygenqt.mb.shared.service.impl
 
-import com.keygenqt.mb.shared.service.impl.GetRequestJS
-import com.keygenqt.mb.shared.service.impl.PostRequestJS
-import io.ktor.client.*
-import io.ktor.client.engine.js.*
-
-actual fun httpClient(config: HttpClientConfig<*>.() -> Unit) = HttpClient(Js) {
-    config(this)
-}
+import com.keygenqt.mb.shared.extensions.promise
+import com.keygenqt.mb.shared.requests.RegExpertRequest
+import com.keygenqt.mb.shared.service.ServiceRequest
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 
 @OptIn(ExperimentalJsExport::class)
 @JsExport
-class ServiceRequestJS(url: String) {
-    private val request = ServiceRequest(url)
-
-    val get = GetRequestJS(request)
-    val post = PostRequestJS(request)
+@Suppress("unused", "NON_EXPORTABLE_TYPE")
+class PostRequestJS(
+    private val client: ServiceRequest
+) {
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationExpert(
+        request: RegExpertRequest
+    ) = GlobalScope.promise { client.post.registrationExpert(request) }
 }
+

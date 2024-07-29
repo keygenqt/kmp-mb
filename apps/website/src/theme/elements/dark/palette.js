@@ -30,7 +30,10 @@ export const palette = {
         primary: '#e7e7e7'
     },
     success: {
-        main: '#002900',
+        main: '#074f07',
+    },
+    error: {
+        main: '#d32f2f',
     },
     white: {
         main: '#ffffff',

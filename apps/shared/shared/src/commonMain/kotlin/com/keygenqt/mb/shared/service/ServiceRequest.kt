@@ -21,8 +21,8 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import com.keygenqt.mb.shared.base.ResponseException
 import com.keygenqt.mb.shared.service.impl.GetRequest
+import com.keygenqt.mb.shared.service.impl.PostRequest
 
 /**
  * Get platform client
@@ -41,29 +41,16 @@ class ServiceRequest(url: String) {
     }
 
     private var httpClient = httpClient {
-
         expectSuccess = false
-
-        HttpResponseValidator {
-            validateResponse { response ->
-                if (response.status != HttpStatusCode.OK) {
-                    throw ResponseException(
-                        code = response.status.value,
-                        error = "Error KM js client"
-                    )
-                }
-            }
-        }
-
         install(DefaultRequest) {
             url(url)
             contentType(ContentType.Application.Json)
         }
-
         install(ContentNegotiation) {
             json(json)
         }
     }
 
     val get = GetRequest(httpClient)
+    val post = PostRequest(httpClient)
 }

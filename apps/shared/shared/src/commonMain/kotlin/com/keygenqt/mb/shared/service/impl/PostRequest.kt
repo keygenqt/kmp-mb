@@ -13,14 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.base
+package com.keygenqt.mb.shared.service.impl
 
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
+import com.keygenqt.mb.shared.requests.RegExpertRequest
+import com.keygenqt.mb.shared.responses.*
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-data class ResponseException(
-    val code: Int,
-    val error: String,
-) : RuntimeException()
+class PostRequest(private val client: HttpClient) {
+    /**
+     * Registration expert
+     */
+    @Throws(Exception::class)
+    suspend fun registrationExpert(
+        request: RegExpertRequest
+    ): StateResponse {
+        return client.post("api/registration-experts") { setBody(request) }.body()
+    }
+}

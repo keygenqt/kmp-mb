@@ -34,17 +34,24 @@ export function AlertError(props) {
                 style={props.style}
                 severity="error"
                 sx={{
-                    color: 'error.dark',
-                    backgroundColor: 'error.light',
+                    color: 'white.main',
+                    backgroundColor: 'error.dark',
                     borderRadius: 1,
-                    '& svg': {
-                        color: 'error.dark',
+                    '& .MuiAlert-icon': {
+                        color: 'white.main',
+                        position: 'relative',
+                        top: '2px'
+                    },
+                    '& .MuiButtonBase-root': {
+                        color: 'white.main',
+                        position: 'relative',
+                        top: '2px'
                     }
                 }}
                 action={
                     <IconButton
                         aria-label="close"
-                        color="inherit"
+                        color="white.main"
                         size="small"
                         onClick={() => {
                             setCollapse(false);
@@ -55,7 +62,7 @@ export function AlertError(props) {
                     </IconButton>
                 }
             >
-                <Typography gutterBottom variant="text3">
+                <Typography gutterBottom variant="text2">
                     {props.children}
                 </Typography>
             </Alert>

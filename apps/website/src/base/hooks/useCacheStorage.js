@@ -15,7 +15,7 @@
  */
 
 import {useCallback, useLayoutEffect, useState} from "react";
-import {CacheStorage} from "./CacheStorage";
+import {CacheStorage} from "../cache/CacheStorage";
 
 export function useCacheStorage(key, defaultValue = undefined) {
     const getValueType = useCallback(

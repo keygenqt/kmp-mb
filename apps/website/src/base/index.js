@@ -16,7 +16,7 @@
 
 // shared module
 export * from './shared/Shared';
-export * from './shared/elements/useHttpQuery';
+export * from './hooks/useHttpQuery';
 export * from './shared/mappers/CityResponse';
 export * from './shared/mappers/ColumnLocaleResponse';
 export * from './shared/mappers/ContactTypes';
@@ -48,11 +48,11 @@ export * from './localization/LocalizationProvider';
 export * from './route/RouteProvider';
 export * from './route/ScrollRecovery';
 // cache
-export * from './cache/CacheHook';
+export * from './hooks/useCacheStorage';
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
 export * from './cache/CacheVersion';
 // utils
 export * from './utils/Helper';
 // hooks
-export * from './hooks/WindowScroll';
+export * from './hooks/useWindowScroll';
