@@ -33,7 +33,7 @@ export const palette = {
         main: '#329132',
     },
     error: {
-        dark: '#d43030'
+        main: '#d43030'
     },
     white: {
         main: '#ffffff',

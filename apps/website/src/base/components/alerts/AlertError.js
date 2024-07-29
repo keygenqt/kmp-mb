@@ -35,7 +35,7 @@ export function AlertError(props) {
                 severity="error"
                 sx={{
                     color: 'white.main',
-                    backgroundColor: 'error.dark',
+                    backgroundColor: 'error.main',
                     borderRadius: 1,
                     '& .MuiAlert-icon': {
                         color: 'white.main',
