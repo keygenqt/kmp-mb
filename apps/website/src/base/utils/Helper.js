@@ -33,19 +33,14 @@ export const Helper = {
     /**
      * Find error array validate
      */
-    findError: function (field, stateResponse) {
+    findError: function (t, field, stateResponse) {
         if (!stateResponse.validates) {
             return null
         }
-        const error = stateResponse.validates
+        return stateResponse.validates
             .find(el => el['filed'] === field)
-            ?.errors.map((e, index) => index === 0 ? e.charAt(0).toUpperCase() + e.slice(1) : e.charAt(0).toLowerCase() + e.slice(1))
-            ?.join(', ')
+            ?.errors.map((e) => t(e.charAt(0).toUpperCase() + e.slice(1) + '.'))
+            ?.join(' ')
             ?? null
-        if (error) {
-            return error + '.'
-        } else {
-            return null
-        }
     },
 };

@@ -71,7 +71,7 @@ export function RegistrationExpertPage(props) {
             </PageHeader>
 
             <Container maxWidth='md'>
-                <Typography variant={'subtitle2'} color={'text.primary'} sx={{textAlign: 'center', paddingX: 2}}>
+                <Typography variant={'subtitle2'} color={'text.primary'} sx={{textAlign: 'center', paddingX: 3}}>
                     {t('pages.registrationExpert.t_subtext')}
                 </Typography>
             </Container>

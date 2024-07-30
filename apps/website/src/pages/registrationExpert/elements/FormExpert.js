@@ -37,6 +37,7 @@ import {
     LocalizationContext,
     Helper,
     Shared,
+    YupLocalization
 } from '../../../base';
 import {
     DoneOutlined,
@@ -66,17 +67,62 @@ export function FormExpert(props) {
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                directionID: Yup.number().required('Must not be null and not blank.'),
-                expertID: Yup.number().required('Must not be null and not blank.'),
-                why: Yup.string().required('Must not be null and not blank.'),
-                fname: Yup.string().required('Must not be null and not blank.'),
-                lname: Yup.string().required('Must not be null and not blank.'),
-                email: Yup.string().required('Must not be null and not blank.').email('Must be a well-formed email address.'),
-                telegram: Yup.string().required('Must not be null and not blank.').url('Must be a valid URL.'),
-                cv: Yup.string().required('Must not be null and not blank.').url('Must be a valid URL.'),
-                location: Yup.string().required('Must not be null and not blank.'),
-                experience: Yup.string().required('Must not be null and not blank.'),
-                contribution: Yup.string().required('Must not be null and not blank.'),
+                directionID: Yup
+                    .number()
+                    .positive(t('Must be greater than or equal to 1.'))
+                    .required(t('Must be greater than or equal to 1.')),
+                expertID: Yup
+                    .number()
+                    .positive(t('Must be greater than or equal to 1.'))
+                    .required(t('Must be greater than or equal to 1.')),
+                why: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
+                fname: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.')),
+                lname: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.')),
+                email: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.'))
+                    .email(t('Must be a well-formed email address.')),
+                telegram: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.'))
+                    .url(t('Must be a valid URL.')),
+                cv: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.'))
+                    .url(t('Must be a valid URL.')),
+                location: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.')),
+                experience: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
+                contribution: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
             })}
             onSubmit={async (values, {setErrors, setStatus, resetForm}) => {
                 setStatus({success: null});
@@ -104,19 +150,20 @@ export function FormExpert(props) {
                     setStatus({success: true});
                 } else if (response.code === 422 && response.validates !== null) {
                     setErrors({
-                        directionID: Helper.findError('directionID', response),
-                        expertID: Helper.findError('expertID', response),
-                        why: Helper.findError('why', response),
-                        fname: Helper.findError('fname', response),
-                        lname: Helper.findError('lname', response),
-                        email: Helper.findError('email', response),
-                        telegram: Helper.findError('telegram', response),
-                        cv: Helper.findError('cv', response),
-                        location: Helper.findError('location', response),
-                        experience: Helper.findError('experience', response),
-                        contribution: Helper.findError('contribution', response),
-                        submit: 'The form is filled out incorrectly, please check it.'
+                        directionID: Helper.findError(t, 'directionID', response),
+                        expertID: Helper.findError(t, 'expertID', response),
+                        why: Helper.findError(t, 'why', response),
+                        fname: Helper.findError(t, 'fname', response),
+                        lname: Helper.findError(t, 'lname', response),
+                        email: Helper.findError(t, 'email', response),
+                        telegram: Helper.findError(t, 'telegram', response),
+                        cv: Helper.findError(t, 'cv', response),
+                        location: Helper.findError(t, 'location', response),
+                        experience: Helper.findError(t, 'experience', response),
+                        contribution: Helper.findError(t, 'contribution', response),
+                        submit: t('pages.registrationExpert.t_error_form')
                     });
+                    console.log('set error 1')
                 } else {
                     setErrors({
                         submit: response.message
@@ -131,15 +178,15 @@ export function FormExpert(props) {
         >
             {({
                   status,
-                  setStatus,
                   errors,
+                  touched,
+                  values,
+                  isSubmitting,
+                  setStatus,
                   setErrors,
                   handleBlur,
                   handleChange,
                   handleSubmit,
-                  isSubmitting,
-                  touched,
-                  values
               }) => (
                 <form noValidate onSubmit={handleSubmit}>
                     <FormGroup>
@@ -149,6 +196,8 @@ export function FormExpert(props) {
                                     spacing={isMD ? 2 : 3}
                                     sx={{ p: isMD ? 2 : 3}}
                                 >
+                                    <YupLocalization/>
+
                                     {errors.submit && (
                                         <AlertError onClose={() => setErrors({submit: null})}>
                                             {errors.submit}
@@ -157,17 +206,17 @@ export function FormExpert(props) {
 
                                     {status && status.success && (
                                         <AlertSuccess onClose={() => setStatus({success: false})}>
-                                            Заявка отправлена. Спасибо!
+                                            {t('pages.registrationExpert.t_success_reg')}
                                         </AlertSuccess>
                                     )}
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            Направление
+                                            {t('pages.registrationExpert.t_block1_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            Ссылки для ознакомления: <a target='_blank' rel="noreferrer" href='https://androidbroadcast.notion.site/e1b8387ec122428dba6ecfbb8cdff76d'>кто может стать экспертом</a>, <a target='_blank' rel="noreferrer" href='https://www.notion.so/androidbroadcast/73574a646d304384be3eb189b16e0c81?pvs=4'>что должен делать эксперт</a>.
+                                            {t('pages.registrationExpert.t_block1_subtitle')} <a target='_blank' rel="noreferrer" href='https://androidbroadcast.notion.site/e1b8387ec122428dba6ecfbb8cdff76d'>{t('pages.registrationExpert.t_block1_subtitle_link1')}</a>, <a target='_blank' rel="noreferrer" href='https://www.notion.so/androidbroadcast/73574a646d304384be3eb189b16e0c81?pvs=4'>{t('pages.registrationExpert.t_block1_subtitle_link2')}</a>.
                                         </Typography>
                                     </Stack>
 
@@ -175,13 +224,13 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'directionID'}
                                         value={values.directionID}
-                                        helperText={touched.directionID && errors.directionID ? errors.directionID : 'Если вы хотите подать заявки по другим направлениям то это можно будет сделать после рассмотрения первой заявки в частном порядке.'}
+                                        helperText={touched.directionID && errors.directionID ? errors.directionID : t('pages.registrationExpert.t_field_directionID_help')}
                                         error={Boolean(touched.directionID && errors.directionID)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         select
                                         fullWidth
-                                        label='Направление'
+                                        label={t('pages.registrationExpert.t_field_directionID')}
                                     >
                                         {props.directions?.map((direction) => (
                                             <MenuItem key={`direction-${direction.id}`} value={direction.id}>
@@ -194,13 +243,13 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'expertID'}
                                         value={values.expertID}
-                                        helperText={touched.expertID && errors.expertID ? errors.expertID : 'Чтобы подать заявку на присвоение статуса MBE кто-то из существующих экспертов по любой технологии должен будет поддержать вашу заявку.'}
+                                        helperText={touched.expertID && errors.expertID ? errors.expertID : t('pages.registrationExpert.t_field_expertID_help')}
                                         error={Boolean(touched.expertID && errors.expertID)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         select
                                         fullWidth
-                                        label='Эксперт'
+                                        label={t('pages.registrationExpert.t_field_expertID')}
                                     >
                                         {props.experts?.map((expert) => (
                                             <MenuItem key={`expert-${expert.id}`} value={expert.id}>
@@ -214,7 +263,7 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'why'}
                                         value={values.why}
-                                        helperText={touched.why && errors.why ? errors.why : 'Расскажите про вашу мотивацию стать MBE.'}
+                                        helperText={touched.why && errors.why ? errors.why : t('pages.registrationExpert.t_field_why_help')}
                                         error={Boolean(touched.why && errors.why)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
@@ -222,21 +271,20 @@ export function FormExpert(props) {
                                         multiline
                                         minRows={3}
                                         maxRows={15}
-                                        label="Мотивация"
+                                        label={t('pages.registrationExpert.t_field_why')}
                                     />
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            О себе
+                                            {t('pages.registrationExpert.t_block2_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            Представьтесь и оставьте свои контакты.
+                                            {t('pages.registrationExpert.t_block2_subtitle')}
                                         </Typography>
                                     </Stack>
 
                                     <Stack spacing={isMD ? 2 : 3} direction={isSM ? 'column' : 'row'}>
-
                                         <TextField
                                             disabled={isSubmitting}
                                             type={'text'}
@@ -247,7 +295,7 @@ export function FormExpert(props) {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fullWidth
-                                            label="Имя"
+                                            label={t('pages.registrationExpert.t_field_fname')}
                                         />
 
                                         <TextField
@@ -260,7 +308,7 @@ export function FormExpert(props) {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fullWidth
-                                            label="Фамилия"
+                                            label={t('pages.registrationExpert.t_field_lname')}
                                         />
                                     </Stack>
 
@@ -274,7 +322,7 @@ export function FormExpert(props) {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label="E-Mail"
+                                        label={t('pages.registrationExpert.t_field_email')}
                                     />
 
                                     <TextField
@@ -287,7 +335,7 @@ export function FormExpert(props) {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label="Telegram"
+                                        label={t('pages.registrationExpert.t_field_telegram')}
                                     />
 
                                     <TextField
@@ -300,7 +348,7 @@ export function FormExpert(props) {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label="CV"
+                                        label={t('pages.registrationExpert.t_field_cv')}
                                     />
 
                                     <TextField
@@ -308,21 +356,21 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'location'}
                                         value={values.location}
-                                        helperText={touched.location && errors.location ? errors.location : 'Город, Страна, Координаты...'}
+                                        helperText={touched.location && errors.location ? errors.location : t('pages.registrationExpert.t_field_location_help')}
                                         error={Boolean(touched.location && errors.location)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label="Где вы находитесь?"
+                                        label={t('pages.registrationExpert.t_field_location')}
                                     />
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            Экспертность
+                                            {t('pages.registrationExpert.t_block3_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            В рамках этой секции вы должны подтвердить свой опыт в технологи и что вы разрабатывали сложные проекты с её применением. Тут будет полезно рассказать про проекты и что вы в них делали, а также ссылки на Open Source проекты в которые вы контрибьютили.
+                                            {t('pages.registrationExpert.t_block3_subtitle')}
                                         </Typography>
                                     </Stack>
 
@@ -331,7 +379,7 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'experience'}
                                         value={values.experience}
-                                        helperText={touched.experience && errors.experience ? errors.experience : 'Расскажите почему вы выдающийся специалист в указанной технологии.'}
+                                        helperText={touched.experience && errors.experience ? errors.experience : t('pages.registrationExpert.t_field_experience_help')}
                                         error={Boolean(touched.experience && errors.experience)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
@@ -339,16 +387,16 @@ export function FormExpert(props) {
                                         multiline
                                         minRows={3}
                                         maxRows={15}
-                                        label="Опыт в технологии"
+                                        label={t('pages.registrationExpert.t_field_experience')}
                                     />
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            Вклад в сообщество
+                                            {t('pages.registrationExpert.t_block4_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            Расскажите о своих публичных активностях минимум за прошедший год с момента подачи заявки, указывая ссылки и охваты (сколько было зрителей, просмотров или прочее). На основе этой информации мы будем оценивать ваш вклад в развитие сообщества по технологии.
+                                            {t('pages.registrationExpert.t_block4_subtitle')}
                                         </Typography>
                                     </Stack>
 
@@ -357,7 +405,7 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'contribution'}
                                         value={values.contribution}
-                                        helperText={touched.contribution && errors.contribution ? errors.contribution : 'Расскажите о своих публичных активностях минимум за прошедший год с момента подачи заявки, указывая ссылки и охваты (сколько было зрителей, просмотров или прочее). На основе этой информации мы будем оценивать ваш вклад в развитие сообщества по технологии.'}
+                                        helperText={touched.contribution && errors.contribution ? errors.contribution : t('pages.registrationExpert.t_field_contribution_help')}
                                         error={Boolean(touched.contribution && errors.contribution)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
@@ -365,7 +413,7 @@ export function FormExpert(props) {
                                         multiline
                                         minRows={3}
                                         maxRows={15}
-                                        label="Деятельность"
+                                        label={t('pages.registrationExpert.t_field_contribution')}
                                     />
 
                                     <Box sx={{textAlign: 'right'}}>
@@ -386,11 +434,11 @@ export function FormExpert(props) {
                                                 <DoneOutlined sx={{height: 18}}/>
                                             )}
                                         >
-                                            {'Отправить'}
+                                            {t('pages.registrationExpert.t_button_submit')}
                                         </Button>
                                     </Box>
                                 </Stack>
-                                </Card>
+                            </Card>
                         </Box>
                     </FormGroup>
                 </form>

@@ -16,7 +16,6 @@
 
 // shared module
 export * from './shared/Shared';
-export * from './hooks/useHttpQuery';
 export * from './shared/mappers/CityResponse';
 export * from './shared/mappers/ColumnLocaleResponse';
 export * from './shared/mappers/ContactTypes';
@@ -38,6 +37,7 @@ export * from './components/states/ComingSoon';
 export * from './components/alerts/AlertError';
 export * from './components/alerts/AlertSuccess';
 export * from './components/other/PageHeader';
+export * from './components/other/YupLocalization';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';
@@ -48,11 +48,12 @@ export * from './localization/LocalizationProvider';
 export * from './route/RouteProvider';
 export * from './route/ScrollRecovery';
 // cache
-export * from './hooks/useCacheStorage';
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
 export * from './cache/CacheVersion';
 // utils
 export * from './utils/Helper';
 // hooks
+export * from './hooks/useHttpQuery';
 export * from './hooks/useWindowScroll';
+export * from './hooks/useCacheStorage';
