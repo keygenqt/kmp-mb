@@ -13,28 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.requests
+package com.keygenqt.mb.shared.responses
 
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Request RegExpert
+ * Registration processing status
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+enum class RegPartnerState {
+    WAITING, HOLD, CLOSE, DONE
+}
+
+/**
+ * Registration partner response
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
-data class RegExpertRequest(
-    val directionID: Int,
-    val expertID: Int,
-    val why: String,
+data class RegPartnerResponse(
+    val id: Int,
+    val company: String,
     val fname: String,
     val lname: String,
     val email: String,
-    val telegram: String,
-    val cv: String,
-    val location: String,
-    val experience: String,
-    val contribution: String,
+    val telegram: String?,
+    val phone: String,
+    val format: String,
+    val note: String?,
+    val state: RegPartnerState,
+    val createAt: String,
+    val updateAt: String,
 )

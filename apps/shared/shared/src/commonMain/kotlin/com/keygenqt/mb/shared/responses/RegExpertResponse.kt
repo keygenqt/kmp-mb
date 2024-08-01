@@ -20,7 +20,7 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * User roles
+ * Registration processing status
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport

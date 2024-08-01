@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.requests
+package com.keygenqt.mb.shared.db.migration
 
-import kotlinx.serialization.Serializable
-import kotlin.js.ExperimentalJsExport
-import kotlin.js.JsExport
+import com.keygenqt.mb.shared.db.entities.RegPartners
+import org.flywaydb.core.api.migration.BaseJavaMigration
+import org.flywaydb.core.api.migration.Context
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
-/**
- * Request RegExpert
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@Serializable
-data class RegExpertRequest(
-    val directionID: Int,
-    val expertID: Int,
-    val why: String,
-    val fname: String,
-    val lname: String,
-    val email: String,
-    val telegram: String,
-    val cv: String,
-    val location: String,
-    val experience: String,
-    val contribution: String,
-)
+@Suppress("unused", "ClassName")
+class V0012__Create_RegPartners : BaseJavaMigration() {
+    override fun migrate(context: Context?) {
+        transaction {
+            SchemaUtils.create(RegPartners)
+        }
+    }
+}

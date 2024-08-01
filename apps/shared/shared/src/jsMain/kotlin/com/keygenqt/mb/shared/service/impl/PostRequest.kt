@@ -17,6 +17,8 @@ package com.keygenqt.mb.shared.service.impl
 
 import com.keygenqt.mb.shared.extensions.promise
 import com.keygenqt.mb.shared.requests.RegExpertRequest
+import com.keygenqt.mb.shared.requests.RegOrganizerRequest
+import com.keygenqt.mb.shared.requests.RegPartnerRequest
 import com.keygenqt.mb.shared.service.ServiceRequest
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -31,5 +33,14 @@ class PostRequestJS(
     fun registrationExpert(
         request: RegExpertRequest
     ) = GlobalScope.promise { client.post.registrationExpert(request) }
-}
 
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationOrganizer(
+        request: RegOrganizerRequest
+    ) = GlobalScope.promise { client.post.registrationOrganizer(request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationPartner(
+        request: RegPartnerRequest
+    ) = GlobalScope.promise { client.post.registrationPartner(request) }
+}

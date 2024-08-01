@@ -68,6 +68,8 @@ fun Application.module() {
                     single { CountriesService(db) }
                     single { UploadsService(db) }
                     single { RegExpertsService(db) }
+                    single { RegOrganizersService(db) }
+                    single { RegPartnersService(db) }
                 }
             )
         }
@@ -99,6 +101,8 @@ fun Application.module() {
                 cities()
                 uploads()
                 registrationExperts()
+                registrationOrganizers()
+                registrationPartners()
             }
         }
     }

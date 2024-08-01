@@ -20,21 +20,17 @@ import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Request RegExpert
+ * Request RegPartner
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
-data class RegExpertRequest(
-    val directionID: Int,
-    val expertID: Int,
-    val why: String,
+data class RegPartnerRequest(
+    val company: String,
     val fname: String,
     val lname: String,
     val email: String,
-    val telegram: String,
-    val cv: String,
-    val location: String,
-    val experience: String,
-    val contribution: String,
+    val telegram: String?,
+    val phone: String,
+    val format: String,
 )

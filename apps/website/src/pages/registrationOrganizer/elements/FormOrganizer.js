@@ -15,7 +15,6 @@
  */
 
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
@@ -29,7 +28,8 @@ import {
     TextField,
     Card,
     Typography,
-    MenuItem,
+    FormControlLabel,
+    Checkbox,
 } from "@mui/material";
 import {
     AlertError,
@@ -44,42 +44,30 @@ import {
 } from "@mui/icons-material";
 
 
-export function FormExpert(props) {
+export function FormOrganizer(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'));
     const isSM = useMediaQuery(theme.breakpoints.down('sm'));
-    const {t, language} = React.useContext(LocalizationContext)
+    const {t} = React.useContext(LocalizationContext)
 
     return (
         <Formik
             initialValues={{
-                directionID: '',
-                expertID: '',
-                why: '',
                 fname: '',
                 lname: '',
-                location: '',
-                email: '',
-                telegram: '',
+                why: '',
                 experience: '',
-                cv: '',
-                contribution: '',
+                activity: '',
+                email: '',
+                emailNotion: '',
+                telegram: '',
+                city: '',
+                country: '',
+                expectations: '',
+                agreement: false,
                 submit: null
             }}
             validationSchema={Yup.object().shape({
-                directionID: Yup
-                    .number()
-                    .positive(t('Must be greater than or equal to 1.'))
-                    .required(t('Must be greater than or equal to 1.')),
-                expertID: Yup
-                    .number()
-                    .positive(t('Must be greater than or equal to 1.'))
-                    .required(t('Must be greater than or equal to 1.')),
-                why: Yup
-                    .string()
-                    .min(3, t('Size must be between 3 and 1000.'))
-                    .max(1000, t('Size must be between 3 and 1000.'))
-                    .required(t('Must not be null and not blank.')),
                 fname: Yup
                     .string()
                     .min(3, t('Size must be between 3 and 250.'))
@@ -90,7 +78,28 @@ export function FormExpert(props) {
                     .min(3, t('Size must be between 3 and 250.'))
                     .max(250, t('Size must be between 3 and 250.'))
                     .required(t('Must not be null and not blank.')),
+                why: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
+                experience: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
+                activity: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 1000.'))
+                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .required(t('Must not be null and not blank.')),
                 email: Yup
+                    .string()
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
+                    .required(t('Must not be null and not blank.'))
+                    .email(t('Must be a well-formed email address.')),
+                emailNotion: Yup
                     .string()
                     .min(3, t('Size must be between 3 and 250.'))
                     .max(250, t('Size must be between 3 and 250.'))
@@ -102,23 +111,17 @@ export function FormExpert(props) {
                     .max(250, t('Size must be between 3 and 250.'))
                     .required(t('Must not be null and not blank.'))
                     .url(t('Must be a valid URL.')),
-                cv: Yup
-                    .string()
-                    .min(3, t('Size must be between 3 and 250.'))
-                    .max(250, t('Size must be between 3 and 250.'))
-                    .required(t('Must not be null and not blank.'))
-                    .url(t('Must be a valid URL.')),
-                location: Yup
+                city: Yup
                     .string()
                     .min(3, t('Size must be between 3 and 250.'))
                     .max(250, t('Size must be between 3 and 250.'))
                     .required(t('Must not be null and not blank.')),
-                experience: Yup
+                country: Yup
                     .string()
-                    .min(3, t('Size must be between 3 and 1000.'))
-                    .max(1000, t('Size must be between 3 and 1000.'))
+                    .min(3, t('Size must be between 3 and 250.'))
+                    .max(250, t('Size must be between 3 and 250.'))
                     .required(t('Must not be null and not blank.')),
-                contribution: Yup
+                expectations: Yup
                     .string()
                     .min(3, t('Size must be between 3 and 1000.'))
                     .max(1000, t('Size must be between 3 and 1000.'))
@@ -131,18 +134,18 @@ export function FormExpert(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
-                const response = await Shared.httpClient.post.registrationExpert(new Shared.requests.RegExpertRequest(
-                    values.directionID,
-                    values.expertID,
-                    values.why,
+                const response = await Shared.httpClient.post.registrationOrganizer(new Shared.requests.RegOrganizerRequest(
                     values.fname,
                     values.lname,
-                    values.email,
-                    values.telegram,
-                    values.cv,
-                    values.location,
+                    values.why,
                     values.experience,
-                    values.contribution,
+                    values.activity,
+                    values.email,
+                    values.emailNotion,
+                    values.telegram,
+                    values.city,
+                    values.country,
+                    values.expectations,
                 ))
 
                 if (response.code === 200) {
@@ -150,18 +153,18 @@ export function FormExpert(props) {
                     setStatus({success: true});
                 } else if (response.code === 422 && response.validates !== null) {
                     setErrors({
-                        directionID: Helper.findError(t, 'directionID', response),
-                        expertID: Helper.findError(t, 'expertID', response),
-                        why: Helper.findError(t, 'why', response),
                         fname: Helper.findError(t, 'fname', response),
                         lname: Helper.findError(t, 'lname', response),
-                        email: Helper.findError(t, 'email', response),
-                        telegram: Helper.findError(t, 'telegram', response),
-                        cv: Helper.findError(t, 'cv', response),
-                        location: Helper.findError(t, 'location', response),
+                        why: Helper.findError(t, 'why', response),
                         experience: Helper.findError(t, 'experience', response),
-                        contribution: Helper.findError(t, 'contribution', response),
-                        submit: t('pages.registrationExpert.t_error_form')
+                        activity: Helper.findError(t, 'activity', response),
+                        email: Helper.findError(t, 'email', response),
+                        emailNotion: Helper.findError(t, 'emailNotion', response),
+                        telegram: Helper.findError(t, 'telegram', response),
+                        city: Helper.findError(t, 'city', response),
+                        country: Helper.findError(t, 'country', response),
+                        expectations: Helper.findError(t, 'expectations', response),
+                        submit: t('pages.registrationOrganizer.t_error_form')
                     });
                 } else {
                     setErrors({
@@ -186,6 +189,7 @@ export function FormExpert(props) {
                   handleBlur,
                   handleChange,
                   handleSubmit,
+                  setFieldValue,
               }) => (
                 <form noValidate onSubmit={handleSubmit}>
                     <FormGroup>
@@ -205,91 +209,17 @@ export function FormExpert(props) {
 
                                     {status && status.success && (
                                         <AlertSuccess onClose={() => setStatus({success: false})}>
-                                            {t('pages.registrationExpert.t_success_reg')}
+                                            {t('pages.registrationOrganizer.t_success_reg')}
                                         </AlertSuccess>
                                     )}
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block1_title')}
+                                            {t('pages.registrationOrganizer.t_block1_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block1_subtitle')}
-                                            {' '}
-                                            <a target='_blank' rel="noreferrer" href='https://androidbroadcast.notion.site/e1b8387ec122428dba6ecfbb8cdff76d'>{t('pages.registrationExpert.t_block1_subtitle_link1')}</a>
-                                            {', '}
-                                            <a target='_blank' rel="noreferrer" href='https://www.notion.so/androidbroadcast/73574a646d304384be3eb189b16e0c81?pvs=4'>{t('pages.registrationExpert.t_block1_subtitle_link2')}</a>
-                                            .
-                                        </Typography>
-                                    </Stack>
-
-                                    <TextField
-                                        disabled={isSubmitting}
-                                        required
-                                        type={'text'}
-                                        name={'directionID'}
-                                        value={values.directionID}
-                                        helperText={touched.directionID && errors.directionID ? errors.directionID : t('pages.registrationExpert.t_field_directionID_help')}
-                                        error={Boolean(touched.directionID && errors.directionID)}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        select
-                                        fullWidth
-                                        label={t('pages.registrationExpert.t_field_directionID')}
-                                    >
-                                        {props.directions?.map((direction) => (
-                                            <MenuItem key={`direction-${direction.id}`} value={direction.id}>
-                                                {direction.name}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-
-                                    <TextField
-                                        disabled={isSubmitting}
-                                        required
-                                        type={'text'}
-                                        name={'expertID'}
-                                        value={values.expertID}
-                                        helperText={touched.expertID && errors.expertID ? errors.expertID : t('pages.registrationExpert.t_field_expertID_help')}
-                                        error={Boolean(touched.expertID && errors.expertID)}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        select
-                                        fullWidth
-                                        label={t('pages.registrationExpert.t_field_expertID')}
-                                    >
-                                        {props.experts?.map((expert) => (
-                                            <MenuItem key={`expert-${expert.id}`} value={expert.id}>
-                                                {`${Helper.locate(expert, 'fname', language)} ${Helper.locate(expert, 'lname', language)}`}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-
-                                    <TextField
-                                        disabled={isSubmitting}
-                                        required
-                                        type={'text'}
-                                        name={'why'}
-                                        value={values.why}
-                                        helperText={touched.why && errors.why ? errors.why : t('pages.registrationExpert.t_field_why_help')}
-                                        error={Boolean(touched.why && errors.why)}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        multiline
-                                        minRows={3}
-                                        maxRows={15}
-                                        label={t('pages.registrationExpert.t_field_why')}
-                                    />
-
-                                    <Stack spacing={2}>
-                                        <Typography variant='h5' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block2_title')}
-                                        </Typography>
-
-                                        <Typography variant='body2' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block2_subtitle')}
+                                            {t('pages.registrationOrganizer.t_block1_subtitle')}
                                         </Typography>
                                     </Stack>
 
@@ -305,7 +235,7 @@ export function FormExpert(props) {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fullWidth
-                                            label={t('pages.registrationExpert.t_field_fname')}
+                                            label={t('pages.registrationOrganizer.t_field_fname')}
                                         />
 
                                         <TextField
@@ -319,23 +249,9 @@ export function FormExpert(props) {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             fullWidth
-                                            label={t('pages.registrationExpert.t_field_lname')}
+                                            label={t('pages.registrationOrganizer.t_field_lname')}
                                         />
                                     </Stack>
-
-                                    <TextField
-                                        disabled={isSubmitting}
-                                        required
-                                        type={'text'}
-                                        name={'email'}
-                                        value={values.email}
-                                        helperText={touched.email && errors.email ? errors.email : ''}
-                                        error={Boolean(touched.email && errors.email)}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        label={t('pages.registrationExpert.t_field_email')}
-                                    />
 
                                     <TextField
                                         disabled={isSubmitting}
@@ -348,46 +264,101 @@ export function FormExpert(props) {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={t('pages.registrationExpert.t_field_telegram')}
+                                        label={t('pages.registrationOrganizer.t_field_telegram')}
                                     />
 
                                     <TextField
                                         disabled={isSubmitting}
                                         required
                                         type={'text'}
-                                        name={'cv'}
-                                        value={values.cv}
-                                        helperText={touched.cv && errors.cv ? errors.cv : ''}
-                                        error={Boolean(touched.cv && errors.cv)}
+                                        name={'email'}
+                                        value={values.email}
+                                        helperText={touched.email && errors.email ? errors.email : ''}
+                                        error={Boolean(touched.email && errors.email)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={t('pages.registrationExpert.t_field_cv')}
+                                        label={t('pages.registrationOrganizer.t_field_email')}
                                     />
 
                                     <TextField
                                         disabled={isSubmitting}
                                         required
                                         type={'text'}
-                                        name={'location'}
-                                        value={values.location}
-                                        helperText={touched.location && errors.location ? errors.location : t('pages.registrationExpert.t_field_location_help')}
-                                        error={Boolean(touched.location && errors.location)}
+                                        name={'emailNotion'}
+                                        value={values.emailNotion}
+                                        helperText={touched.emailNotion && errors.emailNotion ? errors.emailNotion : t('pages.registrationOrganizer.t_field_emailNotion_help')}
+                                        error={Boolean(touched.emailNotion && errors.emailNotion)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={t('pages.registrationExpert.t_field_location')}
+                                        label={t('pages.registrationOrganizer.t_field_emailNotion')}
                                     />
 
                                     <Stack spacing={2}>
                                         <Typography variant='h5' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block3_title')}
+                                            {t('pages.registrationOrganizer.t_block2_title')}
                                         </Typography>
 
                                         <Typography variant='body2' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block3_subtitle')}
+                                            {t('pages.registrationOrganizer.t_block2_subtitle')}
                                         </Typography>
                                     </Stack>
+
+                                    <TextField
+                                        disabled={isSubmitting}
+                                        required
+                                        type={'text'}
+                                        name={'city'}
+                                        value={values.city}
+                                        helperText={touched.city && errors.city ? errors.city : ''}
+                                        error={Boolean(touched.city && errors.city)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        label={t('pages.registrationOrganizer.t_field_city')}
+                                    />
+
+                                    <TextField
+                                        disabled={isSubmitting}
+                                        required
+                                        type={'text'}
+                                        name={'country'}
+                                        value={values.country}
+                                        helperText={touched.country && errors.country ? errors.country : ''}
+                                        error={Boolean(touched.country && errors.country)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        label={t('pages.registrationOrganizer.t_field_country')}
+                                    />
+
+                                    <Stack spacing={2}>
+                                        <Typography variant='h5' color={'text.primary'}>
+                                            {t('pages.registrationOrganizer.t_block3_title')}
+                                        </Typography>
+
+                                        <Typography variant='body2' color={'text.primary'}>
+                                            {t('pages.registrationOrganizer.t_block3_subtitle')}
+                                        </Typography>
+                                    </Stack>
+
+                                    <TextField
+                                        disabled={isSubmitting}
+                                        required
+                                        type={'text'}
+                                        name={'activity'}
+                                        value={values.activity}
+                                        helperText={touched.activity && errors.activity ? errors.activity : t('pages.registrationOrganizer.t_field_activity_help')}
+                                        error={Boolean(touched.activity && errors.activity)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        multiline
+                                        minRows={3}
+                                        maxRows={15}
+                                        label={t('pages.registrationOrganizer.t_field_activity')}
+                                    />
 
                                     <TextField
                                         disabled={isSubmitting}
@@ -395,7 +366,7 @@ export function FormExpert(props) {
                                         type={'text'}
                                         name={'experience'}
                                         value={values.experience}
-                                        helperText={touched.experience && errors.experience ? errors.experience : t('pages.registrationExpert.t_field_experience_help')}
+                                        helperText={touched.experience && errors.experience ? errors.experience : t('pages.registrationOrganizer.t_field_experience_help')}
                                         error={Boolean(touched.experience && errors.experience)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
@@ -403,35 +374,63 @@ export function FormExpert(props) {
                                         multiline
                                         minRows={3}
                                         maxRows={15}
-                                        label={t('pages.registrationExpert.t_field_experience')}
+                                        label={t('pages.registrationOrganizer.t_field_experience')}
                                     />
-
-                                    <Stack spacing={2}>
-                                        <Typography variant='h5' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block4_title')}
-                                        </Typography>
-
-                                        <Typography variant='body2' color={'text.primary'}>
-                                            {t('pages.registrationExpert.t_block4_subtitle')}
-                                        </Typography>
-                                    </Stack>
 
                                     <TextField
                                         disabled={isSubmitting}
                                         required
                                         type={'text'}
-                                        name={'contribution'}
-                                        value={values.contribution}
-                                        helperText={touched.contribution && errors.contribution ? errors.contribution : t('pages.registrationExpert.t_field_contribution_help')}
-                                        error={Boolean(touched.contribution && errors.contribution)}
+                                        name={'why'}
+                                        value={values.why}
+                                        helperText={touched.why && errors.why ? errors.why : t('pages.registrationOrganizer.t_field_why_help')}
+                                        error={Boolean(touched.why && errors.why)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
                                         multiline
                                         minRows={3}
                                         maxRows={15}
-                                        label={t('pages.registrationExpert.t_field_contribution')}
+                                        label={t('pages.registrationOrganizer.t_field_why')}
                                     />
+
+                                    <TextField
+                                        disabled={isSubmitting}
+                                        required
+                                        type={'text'}
+                                        name={'expectations'}
+                                        value={values.expectations}
+                                        helperText={touched.expectations && errors.expectations ? errors.expectations : t('pages.registrationOrganizer.t_field_expectations_help')}
+                                        error={Boolean(touched.expectations && errors.expectations)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        multiline
+                                        minRows={3}
+                                        maxRows={15}
+                                        label={t('pages.registrationOrganizer.t_field_expectations')}
+                                    />
+
+                                    <Box sx={{
+                                        '& .MuiTypography-root': {
+                                            userSelect: 'none'
+                                        }
+                                    }}>
+                                        <FormControlLabel
+                                            disabled={isSubmitting}
+                                            required
+                                            control={<Checkbox />}
+                                            checked={values.agreement}
+                                            onChange={(event, checked) => setFieldValue('agreement', checked)}
+                                            label={t('pages.registrationOrganizer.t_field_checkbox')}
+                                        />
+                                    </Box>
+
+                                    <Typography variant='body2' color={'text.primary'}>
+                                        {t('pages.registrationOrganizer.t_checkbox_info')}
+                                        <a target='_blank' rel="noreferrer" href='https://androidbroadcast.notion.site/40badb571b2246afa6a52f063ec712d2'>{t('pages.registrationOrganizer.t_checkbox_info_link')}</a>
+                                        .
+                                    </Typography>
 
                                     <Box sx={{textAlign: 'right'}}>
                                         <Button
@@ -440,7 +439,7 @@ export function FormExpert(props) {
                                             variant={'contained'}
                                             size={'large'}
                                             color={'secondary'}
-                                            disabled={Boolean(isSubmitting || Object.keys(errors).length !== 0 || Object.keys(touched).length === 0)}
+                                            disabled={Boolean(isSubmitting || Object.keys(errors).length !== 0 || Object.keys(touched).length === 0 || values.agreement === false)}
                                             startIcon={isSubmitting ? (
                                                 <CircularProgress sx={{
                                                     mr: 0.5,
@@ -451,7 +450,7 @@ export function FormExpert(props) {
                                                 <DoneOutlined sx={{height: 18}}/>
                                             )}
                                         >
-                                            {t('pages.registrationExpert.t_button_submit')}
+                                            {t('pages.registrationOrganizer.t_button_submit')}
                                         </Button>
                                     </Box>
                                 </Stack>
@@ -464,7 +463,4 @@ export function FormExpert(props) {
     );
 }
 
-FormExpert.propTypes = {
-    experts: PropTypes.array.isRequired,
-    directions: PropTypes.array.isRequired,
-};
+FormOrganizer.propTypes = {};
