@@ -32,6 +32,9 @@ dependencies {
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-server-call-logging:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-server-sessions-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
 
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.hibernate.validator:hibernate-validator:$hibernate_validator_version")

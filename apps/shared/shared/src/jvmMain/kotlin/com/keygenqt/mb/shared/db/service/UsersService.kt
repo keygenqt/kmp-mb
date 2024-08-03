@@ -20,6 +20,7 @@ import com.keygenqt.mb.shared.db.entities.UserEntity
 import com.keygenqt.mb.shared.db.entities.Users
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.shared.utils.Password
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -44,4 +45,21 @@ class UsersService(
     ) = UserEntity
         .find { (Users.id eq id) and (Users.roles like "%${UserRole.EXPERT.name}%") }
         .firstOrNull()
+
+    /**
+     * Get entity with check password for auth
+     */
+    fun findUserByAuth(
+        lname: String?,
+        password: String?
+    ) = UserEntity
+        .find { (Users.lname eq (lname ?: "")) and (Users.roles like "%${UserRole.ADMIN.name}%") }
+        .firstOrNull()
+        ?.let {
+            if (it.paswd != null && Password.validate(password, it.paswd!!)) {
+                it
+            } else {
+                null
+            }
+        }
 }

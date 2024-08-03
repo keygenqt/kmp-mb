@@ -15,19 +15,24 @@
  */
 package com.keygenqt.mb
 
+import com.keygenqt.mb.base.SessionService
+import com.keygenqt.mb.extension.auth
 import com.keygenqt.mb.extension.configure
+import com.keygenqt.mb.extension.session
 import com.keygenqt.mb.routing.*
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.service.*
 import com.keygenqt.mb.utils.AppLogger.initAppLogger
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.http.content.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
@@ -45,6 +50,8 @@ fun Application.module() {
         val dbUsername = propertyOrNull("ktor.application.dbUsername")!!.getString()
         val dbPassword = propertyOrNull("ktor.application.dbPassword")!!.getString()
         val defaultUserPassword = propertyOrNull("ktor.application.defaultUserPassword")!!.getString()
+        val secretSession = propertyOrNull("ktor.secrets.session")!!.getString()
+        val secretSignKey = propertyOrNull("ktor.secrets.signKey")!!.getString()
 
         // init logger
         initAppLogger(debug)
@@ -70,6 +77,7 @@ fun Application.module() {
                     single { RegExpertsService(db) }
                     single { RegOrganizersService(db) }
                     single { RegPartnersService(db) }
+                    single { SessionService(db, secretSession) }
                 }
             )
         }
@@ -86,6 +94,19 @@ fun Application.module() {
             )
         }
 
+        // init session
+        install(Sessions) {
+            session(
+                secret = secretSession,
+                signKey = secretSignKey
+            )
+        }
+
+        // init auth
+        install(Authentication) {
+            auth()
+        }
+
         // catch errors
         install(StatusPages) {
             configure()
@@ -95,6 +116,7 @@ fun Application.module() {
             staticResources("/static", "assets")
             home()
             route("/api") {
+                login()
                 directions()
                 experts()
                 countries()

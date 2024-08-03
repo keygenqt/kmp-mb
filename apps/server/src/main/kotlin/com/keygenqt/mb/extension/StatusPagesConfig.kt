@@ -26,6 +26,15 @@ import io.ktor.server.response.*
  * Catch errors
  */
 fun StatusPagesConfig.configure() {
+    status(HttpStatusCode.Unauthorized, HttpStatusCode.NotFound) { call, cause ->
+        call.respond(
+            status = cause,
+            message = StateResponse(
+                code = cause.value,
+                message = cause.description
+            )
+        )
+    }
     exception<Throwable> { call, cause ->
         when (cause) {
             is Exceptions.UnprocessableEntity -> {
@@ -47,7 +56,6 @@ fun StatusPagesConfig.configure() {
                     )
                 )
             }
-
             else -> {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,
