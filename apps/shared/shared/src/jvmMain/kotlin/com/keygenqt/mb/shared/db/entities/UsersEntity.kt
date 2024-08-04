@@ -16,8 +16,10 @@
 package com.keygenqt.mb.shared.db.entities
 
 import com.keygenqt.mb.shared.extension.fromTextUserRole
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.UserResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -84,53 +86,33 @@ class UserEntity(id: EntityID<Int>) : IntEntity(id) {
 
 /**
  * Convert to [UserResponse]
+ * @todo https://youtrack.jetbrains.com/issue/EXPOSED-448/Relationship-many-to-many-with-condition.
  */
-fun UserEntity.toResponse() = UserResponse(
+fun UserEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = UserResponse(
     id = id.value,
-    roles = roles.fromTextUserRole().toTypedArray().ifEmpty { null },
+    roles = this.roles.fromTextUserRole().toTypedArray().ifEmpty { null },
     image = image,
     fname = fname,
     lname = lname,
     short = short,
     about = about,
     quote = quote,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-    directions = directions.toResponses().toTypedArray().ifEmpty { null },
-    locales = locales.toResponses().toTypedArray().ifEmpty { null },
-    contacts = contacts.toResponses().toTypedArray().ifEmpty { null },
-    media = media.toResponses().toTypedArray().ifEmpty { null },
+    directions = directions.toResponses(roles).toTypedArray().ifEmpty { null },
+    locales = locales.toResponses(roles).toTypedArray().ifEmpty { null },
+    contacts = contacts.toResponses(roles).toTypedArray().ifEmpty { null },
+    media = media.toResponses(roles).toTypedArray().ifEmpty { null },
+    // Not guest
+    createAt = roles.isNotGuest { createAt.toUTC() },
+    updateAt = roles.isNotGuest { updateAt.toUTC() }
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<UserEntity>.toResponses(): List<UserResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [UserResponse]
- */
-// @todo https://youtrack.jetbrains.com/issue/EXPOSED-448/Relationship-many-to-many-with-condition.
-fun UserEntity.toGuestResponse() = UserResponse(
-    id = id.value,
-    roles = roles.fromTextUserRole().toTypedArray().ifEmpty { null },
-    image = image,
-    fname = fname,
-    lname = lname,
-    short = short,
-    about = about,
-    quote = quote,
-    directions = directions.toGuestResponses().toTypedArray().ifEmpty { null },
-    locales = locales.toGuestResponses().toTypedArray().ifEmpty { null },
-    contacts = contacts.toGuestResponses().toTypedArray().ifEmpty { null },
-    media = media.toGuestResponses().toTypedArray().ifEmpty { null },
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<UserEntity>.toGuestResponses(): List<UserResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<UserEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<UserResponse> {
+    return map { it.toResponse(roles) }
 }

@@ -15,25 +15,28 @@
  */
 package com.keygenqt.mb.routing
 
-import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.shared.db.entities.toResponses
-import com.keygenqt.mb.shared.db.service.CountriesService
+import com.keygenqt.mb.base.SessionUser
+import com.keygenqt.mb.extension.userRoleHasForbidden
+import com.keygenqt.mb.shared.responses.StateResponse
+import com.keygenqt.mb.shared.responses.UserRole
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.inject
+import io.ktor.server.sessions.*
 
-fun Route.countries() {
-    val countriesService: CountriesService by inject()
-
-    route("/countries") {
-        get {
-            // act
-            val response = countriesService.transaction {
-                getAll().toResponses(call.getUserRoles())
-            }
-            // response
-            call.respond(response)
-        }
+fun Route.logout() {
+    post("/logout") {
+        // check role
+        call.userRoleHasForbidden(UserRole.GUEST)
+        // act
+        call.sessions.clear<SessionUser>()
+        // response
+        call.respond(
+            StateResponse(
+                code = HttpStatusCode.OK.value,
+                message = HttpStatusCode.OK.description
+            )
+        )
     }
 }

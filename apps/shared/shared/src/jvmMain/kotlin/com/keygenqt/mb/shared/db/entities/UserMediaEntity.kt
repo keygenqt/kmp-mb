@@ -15,8 +15,10 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.responses.UserMediaResponse
 import com.keygenqt.mb.shared.responses.UserMediaTypes
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -38,30 +40,20 @@ class UserMediaEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [UserMediaResponse]
  */
-fun UserMediaEntity.toResponse() = UserMediaResponse(
-    id = id.value,
+fun UserMediaEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = UserMediaResponse(
     link = link,
     type = type,
+    // Not guest
+    id = roles.isNotGuest { id.value },
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<UserMediaEntity>.toResponses(): List<UserMediaResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [UserMediaResponse]
- */
-fun UserMediaEntity.toGuestResponse() = UserMediaResponse(
-    link = link,
-    type = type,
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<UserMediaEntity>.toGuestResponses(): List<UserMediaResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<UserMediaEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<UserMediaResponse> {
+    return map { it.toResponse(roles) }
 }

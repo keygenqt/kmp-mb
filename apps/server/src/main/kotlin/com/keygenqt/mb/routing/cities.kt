@@ -17,31 +17,23 @@ package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.shared.db.entities.toGuestResponse
-import com.keygenqt.mb.shared.db.entities.toGuestResponses
+import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.CitiesService
-import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Route.cities() {
-
     val citiesService: CitiesService by inject()
-
-    val role = UserRole.GUEST
 
     route("/cities") {
         get {
             // act
             val response = citiesService.transaction {
-                when (role) {
-                    UserRole.GUEST -> getAll().toGuestResponses()
-                    else -> getAll().toResponses()
-                }
+                getAll().toResponses(call.getUserRoles())
             }
             // response
             call.respond(response)
@@ -51,10 +43,7 @@ fun Route.cities() {
             val id = call.getNumberParam()
             // act
             val response = citiesService.transaction {
-                when (role) {
-                    UserRole.GUEST -> findById(id)?.toGuestResponse()
-                    else -> findById(id)?.toResponse()
-                } ?: throw Exceptions.NotFound()
+                findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

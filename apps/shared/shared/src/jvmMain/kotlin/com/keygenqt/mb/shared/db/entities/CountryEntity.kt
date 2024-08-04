@@ -15,8 +15,10 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.CountryResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -49,33 +51,22 @@ class CountryEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [CountryResponse]
  */
-fun CountryEntity.toResponse() = CountryResponse(
+fun CountryEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = CountryResponse(
     id = id.value,
     name = name,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-    locales = locales.toResponses().toTypedArray().ifEmpty { null },
+    locales = locales.toResponses(roles).toTypedArray().ifEmpty { null },
+    // Not guest
+    createAt = roles.isNotGuest { createAt.toUTC() },
+    updateAt = roles.isNotGuest { updateAt.toUTC() }
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<CountryEntity>.toResponses(): List<CountryResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [CountryResponse]
- */
-fun CountryEntity.toGuestResponse() = CountryResponse(
-    id = id.value,
-    name = name,
-    locales = locales.toGuestResponses().toTypedArray().ifEmpty { null },
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<CountryEntity>.toGuestResponses(): List<CountryResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<CountryEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<CountryResponse> {
+    return map { it.toResponse(roles) }
 }

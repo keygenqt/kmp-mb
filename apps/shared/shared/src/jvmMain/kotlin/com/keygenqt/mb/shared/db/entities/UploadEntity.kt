@@ -15,8 +15,10 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.UploadResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -47,31 +49,22 @@ class UploadEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [UploadResponse]
  */
-fun UploadEntity.toResponse() = UploadResponse(
-    id = id.value,
+fun UploadEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = UploadResponse(
     fileName = fileName,
-    fileMime = fileMime,
-    originalFileName = originalFileName,
-    createAt = createAt.toUTC(),
+    // Not guest
+    id = roles.isNotGuest { id.value },
+    fileMime = roles.isNotGuest { fileMime },
+    originalFileName = roles.isNotGuest { originalFileName },
+    createAt = roles.isNotGuest { createAt.toUTC() },
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<UploadEntity>.toResponses(): List<UploadResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [UploadResponse]
- */
-fun UploadEntity.toGuestResponse() = UploadResponse(
-    fileName = fileName,
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<UploadEntity>.toGuestResponses(): List<UploadResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<UploadEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<UploadResponse> {
+    return map { it.toResponse(roles) }
 }

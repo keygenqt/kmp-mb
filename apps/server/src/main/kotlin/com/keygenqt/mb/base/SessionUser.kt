@@ -23,6 +23,6 @@ import io.ktor.server.auth.*
  */
 data class SessionUser(
     val userId: Int,
-    val role: List<UserRole>?,
+    val roles: List<UserRole>?,
     val token: String
 ) : Principal

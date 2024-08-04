@@ -117,6 +117,7 @@ fun Application.module() {
             home()
             route("/api") {
                 login()
+                logout()
                 directions()
                 experts()
                 countries()

@@ -15,8 +15,10 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.UserDirectionResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -45,31 +47,21 @@ class UserDirectionEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [UserDirectionResponse]
  */
-fun UserDirectionEntity.toResponse() = UserDirectionResponse(
+fun UserDirectionEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = UserDirectionResponse(
     id = id.value,
     name = name,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
+    // Not guest
+    createAt = roles.isNotGuest { createAt.toUTC() },
+    updateAt = roles.isNotGuest { updateAt.toUTC() }
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<UserDirectionEntity>.toResponses(): List<UserDirectionResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [UserDirectionResponse]
- */
-fun UserDirectionEntity.toGuestResponse() = UserDirectionResponse(
-    id = id.value,
-    name = name,
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<UserDirectionEntity>.toGuestResponses(): List<UserDirectionResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<UserDirectionEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<UserDirectionResponse> {
+    return map { it.toResponse(roles) }
 }

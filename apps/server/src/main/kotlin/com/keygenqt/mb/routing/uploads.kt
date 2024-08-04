@@ -17,6 +17,7 @@ package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getStringParam
+import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.shared.db.entities.UploadEntity
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UploadsService
@@ -78,7 +79,7 @@ fun Route.uploads() {
                 part.dispose()
             }
             // response
-            call.respond(uploads.toResponses())
+            call.respond(uploads.toResponses(call.getUserRoles()))
         }
         delete("/{name}") {
             // get request

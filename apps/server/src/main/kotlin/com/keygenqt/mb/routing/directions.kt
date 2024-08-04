@@ -15,10 +15,9 @@
  */
 package com.keygenqt.mb.routing
 
-import com.keygenqt.mb.shared.db.entities.toGuestResponses
+import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.DirectionsService
-import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -28,16 +27,11 @@ fun Route.directions() {
 
     val directionsService: DirectionsService by inject()
 
-    val role = UserRole.GUEST
-
     route("/directions") {
         get {
             // act
             val response = directionsService.transaction {
-                when (role) {
-                    UserRole.GUEST -> getAll().toGuestResponses()
-                    else -> getAll().toResponses()
-                }
+                getAll().toResponses(call.getUserRoles())
             }
             // response
             call.respond(response)

@@ -15,8 +15,11 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
+import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.ColumnLocaleResponse
 import com.keygenqt.mb.shared.responses.Locale
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -37,30 +40,20 @@ class ColumnLocaleEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [ColumnLocaleResponse]
  */
-fun ColumnLocaleEntity.toResponse() = ColumnLocaleResponse(
-    id = id.value,
+fun ColumnLocaleEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = ColumnLocaleResponse(
     text = text,
     locale = locale,
+    // Not guest
+    id = roles.isNotGuest { id.value },
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<ColumnLocaleEntity>.toResponses(): List<ColumnLocaleResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [ColumnLocaleResponse]
- */
-fun ColumnLocaleEntity.toGuestResponse() = ColumnLocaleResponse(
-    text = text,
-    locale = locale,
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<ColumnLocaleEntity>.toGuestResponses(): List<ColumnLocaleResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<ColumnLocaleEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<ColumnLocaleResponse> {
+    return map { it.toResponse(roles) }
 }

@@ -15,8 +15,10 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.CityResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -69,43 +71,27 @@ class CityEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [CityResponse]
  */
-fun CityEntity.toResponse() = CityResponse(
+fun CityEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = CityResponse(
     id = id.value,
     image = image,
     link = link,
     name = name,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-    country = country.toResponse(),
-    locales = locales.toResponses().toTypedArray().ifEmpty { null },
-    organizers = organizers.toResponses().toTypedArray().ifEmpty { null },
-    uploads = uploads.toResponses().toTypedArray().ifEmpty { null },
+    country = country.toResponse(roles),
+    locales = locales.toResponses(roles).toTypedArray().ifEmpty { null },
+    organizers = organizers.toResponses(roles).toTypedArray().ifEmpty { null },
+    uploads = uploads.toResponses(roles).toTypedArray().ifEmpty { null },
+    // Not guest
+    createAt = roles.isNotGuest { createAt.toUTC() },
+    updateAt = roles.isNotGuest { updateAt.toUTC() }
 )
 
 /**
  * Convert to [List]
  */
-fun Iterable<CityEntity>.toResponses(): List<CityResponse> {
-    return map { it.toResponse() }
-}
-
-/**
- * Convert to [CityResponse]
- */
-fun CityEntity.toGuestResponse() = CityResponse(
-    id = id.value,
-    image = image,
-    link = link,
-    name = name,
-    country = country.toGuestResponse(),
-    locales = locales.toGuestResponses().toTypedArray().ifEmpty { null },
-    organizers = organizers.toGuestResponses().toTypedArray().ifEmpty { null },
-    uploads = uploads.toGuestResponses().toTypedArray().ifEmpty { null },
-)
-
-/**
- * Convert to [List]
- */
-fun Iterable<CityEntity>.toGuestResponses(): List<CityResponse> {
-    return map { it.toGuestResponse() }
+fun Iterable<CityEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<CityResponse> {
+    return map { it.toResponse(roles) }
 }

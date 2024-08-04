@@ -21,7 +21,7 @@ import com.auth0.jwt.algorithms.Algorithm
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserEntity
 import com.keygenqt.mb.shared.db.entities.Users
-import com.keygenqt.mb.shared.db.entities.toGuestResponse
+import com.keygenqt.mb.shared.db.entities.toResponse
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import java.util.*
 
@@ -65,7 +65,7 @@ class SessionService(
      */
     suspend fun findUserById(userId: Int) = db.transaction {
         try {
-            UserEntity.findById(userId)?.toGuestResponse()
+            UserEntity.findById(userId)?.toResponse()
         } catch (ex: ExposedSQLException) {
             null
         }

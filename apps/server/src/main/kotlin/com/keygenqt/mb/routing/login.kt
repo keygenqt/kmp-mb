@@ -18,10 +18,13 @@ package com.keygenqt.mb.routing
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.base.SessionService
 import com.keygenqt.mb.base.SessionUser
+import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.shared.db.entities.toGuestResponse
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.service.UsersService
 import com.keygenqt.mb.shared.responses.StateResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.LoginValidate
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -36,6 +39,8 @@ fun Route.login() {
     val sessionService: SessionService by inject()
 
     post("/login") {
+        // check role
+        call.userRoleNotHasForbidden(UserRole.GUEST)
         // get request
         val request = call.receiveValidate<LoginValidate>()
         // act
@@ -43,19 +48,21 @@ fun Route.login() {
             usersService.findUserByAuth(
                 lname = request.lname,
                 password = request.password
-            )?.toGuestResponse() ?: throw Exceptions.Unauthorized()
+            )?.toResponse(call.getUserRoles()) ?: throw Exceptions.Unauthorized()
         }
         call.sessions.set(
             SessionUser(
                 userId = response.id,
-                role = response.roles?.toList(),
+                roles = response.roles?.toList(),
                 token = sessionService.generateToken(response.id),
             )
         )
         // response
-        call.respond(StateResponse(
-            code = HttpStatusCode.OK.value,
-            message = HttpStatusCode.OK.description
-        ))
+        call.respond(
+            StateResponse(
+                code = HttpStatusCode.OK.value,
+                message = HttpStatusCode.OK.description
+            )
+        )
     }
 }

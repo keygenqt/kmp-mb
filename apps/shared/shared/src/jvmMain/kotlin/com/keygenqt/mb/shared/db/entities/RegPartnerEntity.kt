@@ -15,9 +15,11 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.RegPartnerResponse
 import com.keygenqt.mb.shared.responses.RegPartnerState
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -57,24 +59,30 @@ class RegPartnerEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [RegPartnerResponse]
  */
-fun RegPartnerEntity.toResponse() = RegPartnerResponse(
-    id = id.value,
-    company = company,
-    fname = fname,
-    lname = lname,
-    email = email,
-    telegram = telegram,
-    phone = phone,
-    format = format,
-    note = note,
-    state = state,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-)
+fun RegPartnerEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = roles.isNotGuest {
+    RegPartnerResponse(
+        id = id.value,
+        company = company,
+        fname = fname,
+        lname = lname,
+        email = email,
+        telegram = telegram,
+        phone = phone,
+        format = format,
+        note = note,
+        state = state,
+        createAt = createAt.toUTC(),
+        updateAt = updateAt.toUTC(),
+    )
+}
 
 /**
  * Convert to [List]
  */
-fun Iterable<RegPartnerEntity>.toResponses(): List<RegPartnerResponse> {
-    return map { it.toResponse() }
+fun Iterable<RegPartnerEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<RegPartnerResponse> {
+    return mapNotNull { it.toResponse(roles) }
 }

@@ -16,8 +16,11 @@
 package com.keygenqt.mb.extension
 
 import com.keygenqt.mb.base.Exceptions
+import com.keygenqt.mb.base.SessionUser
+import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.request.*
+import io.ktor.server.sessions.*
 import jakarta.validation.Validation
 
 /**
@@ -68,5 +71,28 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(): T {
         return request
     } else {
         throw Exceptions.UnprocessableEntity(validate)
+    }
+}
+
+/**
+ * Get user roles
+ */
+fun ApplicationCall.getUserRoles(): List<UserRole> = sessions.get<SessionUser>()?.roles ?: listOf(UserRole.GUEST)
+
+/**
+ * Check contains roles has
+ */
+fun ApplicationCall.userRoleHasForbidden(vararg roles: UserRole) {
+    if (getUserRoles().any { roles.contains(it) }) {
+        throw Exceptions.Forbidden()
+    }
+}
+
+/**
+ * Check contains roles not has
+ */
+fun ApplicationCall.userRoleNotHasForbidden(vararg roles: UserRole) {
+    if (getUserRoles().none { roles.contains(it) }) {
+        throw Exceptions.Forbidden()
     }
 }

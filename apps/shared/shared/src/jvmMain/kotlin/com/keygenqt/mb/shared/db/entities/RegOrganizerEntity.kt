@@ -15,9 +15,11 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.RegOrganizerResponse
 import com.keygenqt.mb.shared.responses.RegOrganizerState
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -65,28 +67,34 @@ class RegOrganizerEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [RegOrganizerResponse]
  */
-fun RegOrganizerEntity.toResponse() = RegOrganizerResponse(
-    id = id.value,
-    fname = fname,
-    lname = lname,
-    why = why,
-    experience = experience,
-    activity = activity,
-    email = email,
-    emailNotion = emailNotion,
-    telegram = telegram,
-    city = city,
-    country = country,
-    expectations = expectations,
-    note = note,
-    state = state,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-)
+fun RegOrganizerEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = roles.isNotGuest {
+    RegOrganizerResponse(
+        id = id.value,
+        fname = fname,
+        lname = lname,
+        why = why,
+        experience = experience,
+        activity = activity,
+        email = email,
+        emailNotion = emailNotion,
+        telegram = telegram,
+        city = city,
+        country = country,
+        expectations = expectations,
+        note = note,
+        state = state,
+        createAt = createAt.toUTC(),
+        updateAt = updateAt.toUTC(),
+    )
+}
 
 /**
  * Convert to [List]
  */
-fun Iterable<RegOrganizerEntity>.toResponses(): List<RegOrganizerResponse> {
-    return map { it.toResponse() }
+fun Iterable<RegOrganizerEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<RegOrganizerResponse> {
+    return mapNotNull { it.toResponse(roles) }
 }

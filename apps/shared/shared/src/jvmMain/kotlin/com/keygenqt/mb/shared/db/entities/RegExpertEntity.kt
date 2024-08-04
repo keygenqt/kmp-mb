@@ -15,9 +15,11 @@
  */
 package com.keygenqt.mb.shared.db.entities
 
+import com.keygenqt.mb.shared.extension.isNotGuest
 import com.keygenqt.mb.shared.extension.toUTC
 import com.keygenqt.mb.shared.responses.RegExpertResponse
 import com.keygenqt.mb.shared.responses.RegExpertState
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -69,28 +71,34 @@ class RegExpertEntity(id: EntityID<Int>) : IntEntity(id) {
 /**
  * Convert to [RegExpertResponse]
  */
-fun RegExpertEntity.toResponse() = RegExpertResponse(
-    id = id.value,
-    why = why,
-    fname = fname,
-    lname = lname,
-    email = email,
-    telegram = telegram,
-    cv = cv,
-    location = location,
-    experience = experience,
-    contribution = contribution,
-    note = note,
-    state = state,
-    createAt = createAt.toUTC(),
-    updateAt = updateAt.toUTC(),
-    direction = direction.toResponse(),
-    expert = expert.toResponse(),
-)
+fun RegExpertEntity.toResponse(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+) = roles.isNotGuest {
+    RegExpertResponse(
+        id = id.value,
+        why = why,
+        fname = fname,
+        lname = lname,
+        email = email,
+        telegram = telegram,
+        cv = cv,
+        location = location,
+        experience = experience,
+        contribution = contribution,
+        note = note,
+        state = state,
+        createAt = createAt.toUTC(),
+        updateAt = updateAt.toUTC(),
+        direction = direction.toResponse(roles),
+        expert = expert.toResponse(roles),
+    )
+}
 
 /**
  * Convert to [List]
  */
-fun Iterable<RegExpertEntity>.toResponses(): List<RegExpertResponse> {
-    return map { it.toResponse() }
+fun Iterable<RegExpertEntity>.toResponses(
+    roles: List<UserRole> = listOf(UserRole.GUEST)
+): List<RegExpertResponse> {
+    return mapNotNull { it.toResponse(roles) }
 }
