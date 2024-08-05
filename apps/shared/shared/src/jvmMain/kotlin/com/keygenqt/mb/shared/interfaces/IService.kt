@@ -22,6 +22,7 @@ import org.jetbrains.exposed.sql.transactions.TransactionManager
 @Suppress("UNCHECKED_CAST")
 interface IService<T> {
     val db: DatabaseMysql
+
     suspend fun <R> transaction(query: T.() -> R) = db.transaction {
         query.invoke(this as T)
     }

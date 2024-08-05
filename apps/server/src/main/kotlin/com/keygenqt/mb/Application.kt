@@ -77,6 +77,7 @@ fun Application.module() {
                     single { RegExpertsService(db) }
                     single { RegOrganizersService(db) }
                     single { RegPartnersService(db) }
+                    single { ColumnLocalesService(db) }
                     single { SessionService(db, secretSession) }
                 }
             )

@@ -36,25 +36,27 @@ object Cities : IntIdTable() {
 }
 
 object RelationsCitiesColumnLocales : Table() {
-    private val city = reference("city", Cities)
-    private val locale = reference("locale", ColumnLocales)
+    val city = reference("city", Cities)
+    val locale = reference("locale", ColumnLocales)
     override val primaryKey = PrimaryKey(city, locale, name = "PK_cityLocale_c_l")
 }
 
 object RelationsCitiesOrganizers : Table() {
-    private val city = reference("city", Cities)
+    val city = reference("city", Cities)
     private val user = reference("user", Users)
     override val primaryKey = PrimaryKey(city, user, name = "PK_cityUsers_c_u")
 }
 
 object RelationsCitiesUploads : Table() {
-    private val city = reference("city", Cities)
-    private val upload = reference("upload", Uploads)
+    val city = reference("city", Cities)
+    val upload = reference("upload", Uploads)
     override val primaryKey = PrimaryKey(city, upload, name = "PK_cityUploads_c_u")
 }
 
 class CityEntity(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<CityEntity>(Cities)
+
+    var countryID by Cities.countryID
 
     var image by Cities.image
     var link by Cities.link
