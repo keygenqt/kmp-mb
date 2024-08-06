@@ -15,9 +15,10 @@
  */
 package com.keygenqt.mb.validators.models
 
-import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
-import com.keygenqt.mb.shared.db.entities.ColumnLocales
+import com.keygenqt.mb.shared.db.entities.UserLocaleEntity
+import com.keygenqt.mb.shared.db.entities.UserLocales
 import com.keygenqt.mb.shared.responses.Locale
+import com.keygenqt.mb.validators.custom.NotBlank
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -25,16 +26,32 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.ResultRow
 
 /**
- * Request locale validate
+ * Request user locale validate
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
-data class ColumnLocaleValidate(
+data class UserLocaleValidate(
     val id: Int? = null,
 
     @field:NotNullNotBlank
-    @field:Size(min = 3, max = 1000)
-    val text: String,
+    @field:Size(min = 3, max = 250)
+    val fname: String,
+
+    @field:NotNullNotBlank
+    @field:Size(min = 3, max = 250)
+    val lname: String,
+
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val short: String?,
+
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val about: String?,
+
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val quote: String?,
 
     @field:NotNull(message = "Select locale required")
     val locale: Locale,
@@ -43,14 +60,18 @@ data class ColumnLocaleValidate(
 /**
  * Map validate data to Entity
  */
-fun List<ColumnLocaleValidate>.toEntities(): List<ColumnLocaleEntity> {
+fun List<UserLocaleValidate>.toEntities(): List<UserLocaleEntity> {
     return mapIndexed { index, data ->
-        ColumnLocaleEntity.wrapRow(
+        UserLocaleEntity.wrapRow(
             ResultRow.createAndFillValues(
                 mapOf(
-                    ColumnLocales.id to (data.id ?: -index),
-                    ColumnLocales.text to data.text,
-                    ColumnLocales.locale to data.locale
+                    UserLocales.id to (data.id ?: -index),
+                    UserLocales.fname to data.fname,
+                    UserLocales.lname to data.lname,
+                    UserLocales.short to data.short,
+                    UserLocales.about to data.about,
+                    UserLocales.quote to data.quote,
+                    UserLocales.locale to data.locale
                 )
             )
         )

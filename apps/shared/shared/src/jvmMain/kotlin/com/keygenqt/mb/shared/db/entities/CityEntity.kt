@@ -43,7 +43,7 @@ object RelationsCitiesColumnLocales : Table() {
 
 object RelationsCitiesOrganizers : Table() {
     val city = reference("city", Cities)
-    private val user = reference("user", Users)
+    val user = reference("user", Users)
     override val primaryKey = PrimaryKey(city, user, name = "PK_cityUsers_c_u")
 }
 

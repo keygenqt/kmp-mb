@@ -15,7 +15,6 @@
  */
 package com.keygenqt.mb.validators.models
 
-import com.keygenqt.mb.shared.db.entities.RegExpertEntity
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.Email
 import jakarta.validation.constraints.Min
@@ -25,7 +24,7 @@ import kotlinx.serialization.Serializable
 import org.hibernate.validator.constraints.URL
 
 /**
- * Request insert [RegExpertEntity]
+ * Request registration expert
  * @todo https://github.com/Kotlin/kotlinx.serialization/issues/993#issuecomment-984742051
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")

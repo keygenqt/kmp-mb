@@ -24,26 +24,15 @@ import io.ktor.http.*
 class UploadsService(
     override val db: DatabaseMysql
 ) : IService<UploadsService> {
-
     /**
-     * Delete by [Uploads.fileName]
+     * Find entity by filename.
      */
-    fun deleteByFileName(
+    fun findByFileName(
         fileName: String
-    ) {
-        val upload = UploadEntity
-            .find { (Uploads.fileName eq fileName) }
-            .firstOrNull()
-
-        if (upload != null) {
-            // @todo
-            // CategoryUploads.deleteWhere { CategoryUploads.upload eq upload.id }
-            upload.delete()
-        }
-    }
+    ) = UploadEntity.find { (Uploads.fileName eq fileName) }.firstOrNull()
 
     /**
-     * Create entity
+     * Create entity.
      */
     fun insert(
         fileName: String,
@@ -55,4 +44,9 @@ class UploadsService(
         this.originalFileName = originalFileName
         this.createAt = System.currentTimeMillis()
     }
+
+    /**
+     * Delete entity.
+     */
+    fun UploadEntity.deleteEntity() = this.delete()
 }

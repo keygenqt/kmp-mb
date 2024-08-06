@@ -16,32 +16,49 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
+import com.keygenqt.mb.shared.db.entities.UserLocaleEntity
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.Locale
 import kotlinx.coroutines.runBlocking
 
-class ColumnLocalesService(
+class UserLocalesService(
     override val db: DatabaseMysql
-) : IService<ColumnLocalesService> {
+) : IService<UserLocalesService> {
     /**
      * Create entity.
      */
     private fun insert(
-        text: String,
+        fname: String,
+        lname: String,
+        short: String?,
+        about: String?,
+        quote: String?,
         locale: Locale,
-    ) = ColumnLocaleEntity.new {
-        this.text = text
+    ) = UserLocaleEntity.new {
+        this.fname = fname
+        this.lname = lname
+        this.short = short
+        this.about = about
+        this.quote = quote
         this.locale = locale
     }
 
     /**
      * Create entities.
      */
-    fun List<ColumnLocaleEntity>.inserts(): List<Int> {
+    fun List<UserLocaleEntity>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
         filter { it.id.value <= 0 }.forEach {
-            ids.add(insert(it.text, it.locale).id.value)
+            ids.add(
+                insert(
+                    fname = it.fname,
+                    lname = it.lname,
+                    short = it.short,
+                    about = it.about,
+                    quote = it.quote,
+                    locale = it.locale
+                ).id.value
+            )
         }
         return ids
     }
@@ -51,20 +68,37 @@ class ColumnLocalesService(
      */
     private fun update(
         id: Int,
-        text: String,
-    ) = ColumnLocaleEntity.findByIdAndUpdate(id) {
-        it.text = text
+        fname: String,
+        lname: String,
+        short: String?,
+        about: String?,
+        quote: String?,
+    ) = UserLocaleEntity.findByIdAndUpdate(id) {
+        it.fname = fname
+        it.lname = lname
+        it.short = short
+        it.about = about
+        it.quote = quote
     }
 
     /**
      * Update entities.
      */
-    fun List<ColumnLocaleEntity>.updates(): List<Int> {
+    fun List<UserLocaleEntity>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
         filter { it.id.value > 0 }.forEach {
             runBlocking { // Exposed not update model in loop
                 transactionRaw {
-                    ids.add(update(it.id.value, it.text)?.id?.value)
+                    ids.add(
+                        update(
+                            id = it.id.value,
+                            fname = it.fname,
+                            lname = it.lname,
+                            short = it.short,
+                            about = it.about,
+                            quote = it.quote,
+                        )?.id?.value
+                    )
                 }
             }
         }

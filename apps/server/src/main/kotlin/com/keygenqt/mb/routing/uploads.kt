@@ -18,9 +18,11 @@ package com.keygenqt.mb.routing
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getStringParam
 import com.keygenqt.mb.extension.getUserRoles
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.UploadEntity
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UploadsService
+import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.shared.utils.ConstantsMime.toExtension
 import io.ktor.http.*
 import io.ktor.http.content.*
@@ -48,11 +50,12 @@ fun Route.uploads() {
             call.respondFile(file)
         }
         post {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val uploads = mutableListOf<UploadEntity>()
             // act
             val multipart = call.receiveMultipart()
-
             multipart.forEachPart { part ->
                 if (part is PartData.FileItem) {
 
@@ -82,18 +85,18 @@ fun Route.uploads() {
             call.respond(uploads.toResponses(call.getUserRoles()))
         }
         delete("/{name}") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val name = call.getStringParam()
-            // delete db row
+            // act
             uploadsService.transaction {
-                deleteByFileName(name)
+                findByFileName(name)?.deleteEntity() ?: throw Exceptions.NotFound()
             }
-            // delete file
             val file = File("uploads/$name")
-            if (file.exists()) {
-                file.delete()
-                call.respond(HttpStatusCode.OK)
-            } else throw Exceptions.NotFound()
+            if (file.exists()) file.delete()
+            // response
+            call.respond(HttpStatusCode.OK)
         }
     }
 }

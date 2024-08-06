@@ -16,30 +16,31 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.*
+import com.keygenqt.mb.shared.db.entities.RegPartnerEntity
+import com.keygenqt.mb.shared.db.entities.RegPartners
 import com.keygenqt.mb.shared.interfaces.IService
-import org.jetbrains.exposed.dao.id.EntityID
+import com.keygenqt.mb.shared.responses.RegPartnerState
 import org.jetbrains.exposed.sql.SortOrder
 
 class RegPartnersService(
     override val db: DatabaseMysql
 ) : IService<RegPartnersService> {
     /**
-     * Get all entities
+     * Get all entities.
      */
     fun getAll() = RegPartnerEntity
         .all()
         .orderBy(Pair(RegPartners.updateAt, SortOrder.DESC))
 
     /**
-     * Find entity by id
+     * Find entity by id.
      */
     fun findById(
         id: Int
     ) = RegPartnerEntity.findById(id)
 
     /**
-     * Create entity
+     * Create entity.
      */
     fun insert(
         company: String,
@@ -60,4 +61,21 @@ class RegPartnersService(
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
     }
+
+    /**
+     * Update entity.
+     */
+    fun RegPartnerEntity.update(
+        note: String,
+        state: RegPartnerState,
+    ) = apply {
+        this.note = note
+        this.state = state
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Delete entity.
+     */
+    fun RegPartnerEntity.deleteEntity() = this.delete()
 }

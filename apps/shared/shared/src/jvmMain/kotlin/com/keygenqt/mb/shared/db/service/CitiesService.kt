@@ -30,21 +30,21 @@ class CitiesService(
     override val db: DatabaseMysql
 ) : IService<CitiesService> {
     /**
-     * Get all entities
+     * Get all entities.
      */
     fun getAll() = CityEntity
         .all()
         .orderBy(Pair(Cities.name, SortOrder.ASC))
 
     /**
-     * Find entity by id
+     * Find entity by id.
      */
     fun findById(
         id: Int
     ) = CityEntity.findById(id)
 
     /**
-     * Create entity
+     * Create entity.
      */
     fun insert(
         countryID: Int,
@@ -67,31 +67,31 @@ class CitiesService(
     }
 
     /**
-     * Update entity
+     * Update entity.
      */
     fun CityEntity.update(
-        countryID: Int? = null,
-        image: String? = null,
-        link: String? = null,
-        name: String? = null,
-        locales: List<Int>? = null,
-        organizers: List<Int>? = null,
-        uploads: List<Int>? = null,
+        countryID: Int,
+        image: String,
+        link: String,
+        name: String,
+        locales: List<Int>,
+        organizers: List<Int>,
+        uploads: List<Int>,
     ) = apply {
-        countryID?.let { this.countryID = EntityID(it, Countries) }
-        image?.let { this.image = it }
-        link?.let { this.link = it }
-        name?.let { this.name = it }
-        locales?.let { this.locales = ColumnLocaleEntity.find { (ColumnLocales.id inList it) } }
-        organizers?.let { this.organizers = UserEntity.find { (Users.id inList it) } }
-        uploads?.let { this.uploads = UploadEntity.find { (Uploads.id inList it) } }
+        this.countryID = EntityID(countryID, Countries)
+        this.image = image
+        this.link = link
+        this.name = name
+        this.locales = ColumnLocaleEntity.find { (ColumnLocales.id inList locales) }
+        this.organizers = UserEntity.find { (Users.id inList organizers) }
+        this.uploads = UploadEntity.find { (Uploads.id inList uploads) }
         this.updateAt = System.currentTimeMillis()
     }
 
     /**
-     * Delete entity
+     * Delete entity with relations.
      */
-    fun CityEntity.deleteWithRelations() = apply {
+    fun CityEntity.deleteEntity() = apply {
         // Get relations ids
         val idsLocale = RelationsCitiesColumnLocales
             .select(RelationsCitiesColumnLocales.locale)

@@ -17,31 +17,15 @@ package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.Valid
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
-import org.hibernate.validator.constraints.URL
 
 /**
- * Request city validate
+ * Request country validate
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
-data class CityValidate(
-    @field:NotNull
-    @field:Min(1)
-    val countryID: Int,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val image: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    @field:URL
-    val link: String,
-
+data class CountryValidate(
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
     val name: String,
@@ -51,14 +35,4 @@ data class CityValidate(
      */
     @field:Valid
     val locales: List<ColumnLocaleValidate> = listOf(),
-
-    /**
-     * List ids organizers
-     */
-    val organizers: List<Int> = listOf(),
-
-    /**
-     * List ids uploads
-     */
-    val uploads: List<Int> = listOf()
 )

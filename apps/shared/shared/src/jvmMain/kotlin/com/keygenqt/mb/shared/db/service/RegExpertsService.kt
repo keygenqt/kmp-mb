@@ -16,8 +16,12 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.*
+import com.keygenqt.mb.shared.db.entities.RegExpertEntity
+import com.keygenqt.mb.shared.db.entities.RegExperts
+import com.keygenqt.mb.shared.db.entities.UserDirections
+import com.keygenqt.mb.shared.db.entities.Users
 import com.keygenqt.mb.shared.interfaces.IService
+import com.keygenqt.mb.shared.responses.RegExpertState
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.SortOrder
 
@@ -25,21 +29,21 @@ class RegExpertsService(
     override val db: DatabaseMysql
 ) : IService<RegExpertsService> {
     /**
-     * Get all entities
+     * Get all entities.
      */
     fun getAll() = RegExpertEntity
         .all()
         .orderBy(Pair(RegExperts.updateAt, SortOrder.DESC))
 
     /**
-     * Find entity by id
+     * Find entity by id.
      */
     fun findById(
         id: Int
     ) = RegExpertEntity.findById(id)
 
     /**
-     * Create entity
+     * Create entity.
      */
     fun insert(
         directionID: Int,
@@ -68,4 +72,21 @@ class RegExpertsService(
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
     }
+
+    /**
+     * Update entity.
+     */
+    fun RegExpertEntity.update(
+        note: String,
+        state: RegExpertState,
+    ) = apply {
+        this.note = note
+        this.state = state
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Delete entity.
+     */
+    fun RegExpertEntity.deleteEntity() = this.delete()
 }

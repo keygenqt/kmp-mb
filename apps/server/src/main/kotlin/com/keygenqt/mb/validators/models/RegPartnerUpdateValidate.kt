@@ -15,42 +15,15 @@
  */
 package com.keygenqt.mb.validators.models
 
-import com.keygenqt.mb.validators.custom.NotNullNotBlank
-import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Size
+import com.keygenqt.mb.shared.responses.RegPartnerState
 import kotlinx.serialization.Serializable
-import org.hibernate.validator.constraints.URL
 
 /**
  * Request registration partner
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
-data class RegPartnerValidate(
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val company: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val fname: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val lname: String,
-
-    @field:NotNullNotBlank
-    @field:Email
-    val email: String,
-
-    @field:URL
-    val telegram: String?,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 250)
-    val phone: String,
-
-    @field:NotNullNotBlank
-    @field:Size(min = 3, max = 1000)
-    val format: String,
+data class RegPartnerUpdateValidate(
+    val note: String,
+    val state: RegPartnerState,
 )

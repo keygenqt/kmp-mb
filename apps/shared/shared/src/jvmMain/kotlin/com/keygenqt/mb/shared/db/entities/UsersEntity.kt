@@ -41,26 +41,26 @@ object Users : IntIdTable() {
 }
 
 object RelationsUserDirections : Table() {
-    private val user = reference("user", Users)
-    private val direction = reference("direction", UserDirections)
+    val user = reference("user", Users)
+    val direction = reference("direction", UserDirections)
     override val primaryKey = PrimaryKey(user, direction, name = "PK_userDirections_u_d")
 }
 
 object RelationsUserLocales : Table() {
-    private val user = reference("user", Users)
-    private val locale = reference("locale", UserLocales)
+    val user = reference("user", Users)
+    val locale = reference("locale", UserLocales)
     override val primaryKey = PrimaryKey(user, locale, name = "PK_userLocale_u_l")
 }
 
 object RelationsUserContacts : Table() {
-    private val user = reference("user", Users)
-    private val contacts = reference("contacts", UserContacts)
+    val user = reference("user", Users)
+    val contacts = reference("contacts", UserContacts)
     override val primaryKey = PrimaryKey(user, contacts, name = "PK_userContacts_u_c")
 }
 
 object RelationsUserMedia : Table() {
-    private val user = reference("user", Users)
-    private val media = reference("media", UserMedia)
+    val user = reference("user", Users)
+    val media = reference("media", UserMedia)
     override val primaryKey = PrimaryKey(user, media, name = "PK_userMedia_u_m")
 }
 

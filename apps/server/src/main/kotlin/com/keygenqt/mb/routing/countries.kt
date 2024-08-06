@@ -15,9 +15,19 @@
  */
 package com.keygenqt.mb.routing
 
+import com.keygenqt.mb.base.Exceptions
+import com.keygenqt.mb.extension.getNumberParam
 import com.keygenqt.mb.extension.getUserRoles
+import com.keygenqt.mb.extension.receiveValidate
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
+import com.keygenqt.mb.shared.db.service.ColumnLocalesService
 import com.keygenqt.mb.shared.db.service.CountriesService
+import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.validators.models.CountryValidate
+import com.keygenqt.mb.validators.models.toEntities
+import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -25,6 +35,7 @@ import org.koin.ktor.ext.inject
 
 fun Route.countries() {
     val countriesService: CountriesService by inject()
+    val columnLocalesService: ColumnLocalesService by inject()
 
     route("/countries") {
         get {
@@ -34,6 +45,65 @@ fun Route.countries() {
             }
             // response
             call.respond(response)
+        }
+        get("/{id}") {
+            // get request
+            val id = call.getNumberParam()
+            // act
+            val response = countriesService.transaction {
+                findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+            }
+            // response
+            call.respond(response)
+        }
+        post {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // get request
+            val request = call.receiveValidate<CountryValidate>()
+            // act
+            val idsLocale = columnLocalesService.transaction {
+                request.locales.toEntities().inserts()
+            }
+            val response = countriesService.transaction {
+                insert(
+                    name = request.name,
+                    locales = idsLocale,
+                ).toResponse(call.getUserRoles())
+            }
+            // response
+            call.respond(response)
+        }
+        put("/{id}") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // get request
+            val id = call.getNumberParam()
+            val request = call.receiveValidate<CountryValidate>()
+            // act
+            val idsLocale = columnLocalesService.transaction {
+                request.locales.toEntities().inserts() + request.locales.toEntities().updates()
+            }
+            val response = countriesService.transaction {
+                findById(id)?.update(
+                    name = request.name,
+                    locales = idsLocale,
+                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+            }
+            // response
+            call.respond(response)
+        }
+        delete("/{id}") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // get request
+            val id = call.getNumberParam()
+            // act
+            countriesService.transaction {
+                findById(id)?.deleteEntity() ?: throw Exceptions.NotFound()
+            }
+            // response
+            call.respond(HttpStatusCode.OK)
         }
     }
 }

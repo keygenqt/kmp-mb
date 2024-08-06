@@ -16,18 +16,65 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
+import com.keygenqt.mb.shared.db.entities.RelationsUserDirections
 import com.keygenqt.mb.shared.db.entities.UserDirectionEntity
 import com.keygenqt.mb.shared.db.entities.UserDirections
 import com.keygenqt.mb.shared.interfaces.IService
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.selectAll
 
 class DirectionsService(
     override val db: DatabaseMysql
 ) : IService<DirectionsService> {
     /**
-     * Get all entities
+     * Get all entities.
      */
     fun getAll() = UserDirectionEntity
         .all()
         .orderBy(Pair(UserDirections.name, SortOrder.ASC))
+
+    /**
+     * Find entity by id.
+     */
+    fun findById(
+        id: Int
+    ) = UserDirectionEntity.findById(id)
+
+    /**
+     * Create entity.
+     */
+    fun insert(
+        name: String,
+    ) = UserDirectionEntity.new {
+        this.name = name
+        this.createAt = System.currentTimeMillis()
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Update entity.
+     */
+    fun UserDirectionEntity.update(
+        name: String,
+    ) = apply {
+        this.name = name
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Delete entity with check.
+     */
+    fun UserDirectionEntity.deleteEntity() = apply {
+        // Check relations
+        if (RelationsUserDirections
+                .selectAll()
+                .where { (RelationsUserDirections.direction eq id) }
+                .count()
+                .toInt() != 0
+        ) {
+            throw RuntimeException("There are dependencies on this model in the database.")
+        }
+        // Delete model
+        this.delete()
+    }
 }

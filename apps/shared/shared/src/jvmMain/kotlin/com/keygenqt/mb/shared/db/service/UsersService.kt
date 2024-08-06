@@ -16,38 +16,54 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.UserEntity
-import com.keygenqt.mb.shared.db.entities.Users
+import com.keygenqt.mb.shared.db.entities.*
+import com.keygenqt.mb.shared.extension.toText
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.shared.utils.Password
 import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.selectAll
 
 class UsersService(
     override val db: DatabaseMysql
 ) : IService<UsersService> {
     /**
-     * Get all Experts
+     * Get all entities.
      */
-    fun getAllExperts() = Users
+    fun getAll(
+        role: UserRole? = null
+    ) = Users
         .selectAll()
-        .where { Users.roles like "%${UserRole.EXPERT.name}%" }
+        .apply {
+            if (role != null) {
+                where { Users.roles like "%${role.name}%" }
+            }
+        }
         .orderBy(Pair(Users.lname, SortOrder.ASC))
         .map { UserEntity.wrapRow(it) }
 
     /**
-     * Find Expert by id
+     * Find entity by id.
      */
-    fun findByIdExpert(
+    fun findById(
         id: Int,
+        role: UserRole? = null
     ) = UserEntity
-        .find { (Users.id eq id) and (Users.roles like "%${UserRole.EXPERT.name}%") }
+        .let {
+            if (role != null) {
+                it.find { (Users.id eq id) and (Users.roles like "%${role.name}%") }
+            } else {
+                it.find { (Users.id eq id) }
+            }
+        }
         .firstOrNull()
 
     /**
-     * Get entity with check password for auth
+     * Get entity with check password for auth.
      */
     fun findUserByAuth(
         lname: String?,
@@ -62,4 +78,123 @@ class UsersService(
                 null
             }
         }
+
+    /**
+     * Create entity.
+     */
+    fun insert(
+        image: String,
+        fname: String,
+        lname: String,
+        short: String?,
+        about: String?,
+        quote: String?,
+        roles: List<UserRole>,
+        directions: List<Int>,
+        locales: List<Int>,
+        contacts: List<Int>,
+        media: List<Int>,
+    ) = UserEntity.new {
+        this.image = image
+        this.fname = fname
+        this.lname = lname
+        this.short = short
+        this.about = about
+        this.quote = quote
+        this.roles = roles.toText()
+        this.directions = UserDirectionEntity.find { (UserDirections.id inList directions) }
+        this.locales = UserLocaleEntity.find { (UserLocales.id inList locales) }
+        this.contacts = UserContactEntity.find { (UserContacts.id inList contacts) }
+        this.media = UserMediaEntity.find { (UserMedia.id inList media) }
+        this.createAt = System.currentTimeMillis()
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Update entity.
+     */
+    fun UserEntity.update(
+        image: String,
+        fname: String,
+        lname: String,
+        short: String?,
+        about: String?,
+        quote: String?,
+        roles: List<UserRole>,
+        directions: List<Int>,
+        locales: List<Int>,
+        contacts: List<Int>,
+        media: List<Int>,
+    ) = apply {
+        this.image = image
+        this.fname = fname
+        this.lname = lname
+        this.short = short
+        this.about = about
+        this.quote = quote
+        this.roles = roles.toText()
+        this.directions = UserDirectionEntity.find { (UserDirections.id inList directions) }
+        this.locales = UserLocaleEntity.find { (UserLocales.id inList locales) }
+        this.contacts = UserContactEntity.find { (UserContacts.id inList contacts) }
+        this.media = UserMediaEntity.find { (UserMedia.id inList media) }
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Delete entity with check and relations.
+     */
+    fun UserEntity.deleteEntity() = apply {
+        // Check relations
+        if (RelationsCitiesOrganizers
+                .selectAll()
+                .where { (RelationsCitiesOrganizers.user eq id) }
+                .count()
+                .toInt() != 0
+        ) {
+            throw RuntimeException("There are dependencies on this model in the database.")
+        }
+        // Check latest admin
+        if (roles.contains(UserRole.ADMIN.name)) {
+            if (Users.selectAll()
+                    .where { Users.roles like "%${UserRole.ADMIN.name}%" }
+                    .count()
+                    .toInt() <= 1
+            ) {
+                throw RuntimeException("The last user with the ADMIN role cannot be deleted.")
+            }
+        }
+        // Get relations ids
+        val idsImage = Uploads
+            .select(Uploads.id)
+            .where { Uploads.fileName eq image.substringAfterLast('/') }
+            .map { it[Uploads.id] }
+            .toList()
+        val idsLocale = RelationsUserLocales
+            .select(RelationsUserLocales.locale)
+            .where { RelationsUserLocales.user eq id }
+            .map { it[RelationsUserLocales.locale] }
+            .toList()
+        val idsContact = RelationsUserContacts
+            .select(RelationsUserContacts.contacts)
+            .where { RelationsUserContacts.user eq id }
+            .map { it[RelationsUserContacts.contacts] }
+            .toList()
+        val idsMedia = RelationsUserMedia
+            .select(RelationsUserMedia.media)
+            .where { RelationsUserMedia.user eq id }
+            .map { it[RelationsUserMedia.media] }
+            .toList()
+        // Delete relations
+        RelationsUserDirections.deleteWhere { user eq id }
+        RelationsUserLocales.deleteWhere { user eq id }
+        RelationsUserContacts.deleteWhere { user eq id }
+        RelationsUserMedia.deleteWhere { user eq id }
+        // Delete entities
+        Uploads.deleteWhere { Uploads.id inList idsImage }
+        UserLocales.deleteWhere { ColumnLocales.id inList idsLocale }
+        UserContacts.deleteWhere { ColumnLocales.id inList idsContact }
+        UserMedia.deleteWhere { ColumnLocales.id inList idsMedia }
+        // Delete model
+        this.delete()
+    }
 }

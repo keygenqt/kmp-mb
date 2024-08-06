@@ -71,6 +71,9 @@ fun Application.module() {
                 koinModule {
                     single { DirectionsService(db) }
                     single { UsersService(db) }
+                    single { UserContactsService(db) }
+                    single { UserLocalesService(db) }
+                    single { UserMediaService(db) }
                     single { CitiesService(db) }
                     single { CountriesService(db) }
                     single { UploadsService(db) }
@@ -121,6 +124,7 @@ fun Application.module() {
                 logout()
                 directions()
                 experts()
+                users()
                 countries()
                 cities()
                 uploads()

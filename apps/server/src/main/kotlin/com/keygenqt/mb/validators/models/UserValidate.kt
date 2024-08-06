@@ -15,10 +15,10 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.validators.custom.NotBlank
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.Valid
-import jakarta.validation.constraints.Min
-import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 import org.hibernate.validator.constraints.URL
@@ -28,37 +28,47 @@ import org.hibernate.validator.constraints.URL
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
-data class CityValidate(
-    @field:NotNull
-    @field:Min(1)
-    val countryID: Int,
-
+data class UserValidate(
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
     val image: String,
 
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
-    @field:URL
-    val link: String,
+    val fname: String,
 
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
-    val name: String,
+    val lname: String,
 
-    /**
-     * List locales data
-     */
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val short: String?,
+
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val about: String?,
+
+    @field:NotBlank
+    @field:Size(max = 1000)
+    val quote: String?,
+
     @field:Valid
-    val locales: List<ColumnLocaleValidate> = listOf(),
+    val contacts: List<UserContactValidate> = listOf(),
+
+    @field:Valid
+    val locales: List<UserLocaleValidate> = listOf(),
+
+    @field:Valid
+    val media: List<UserMediaValidate> = listOf(),
 
     /**
-     * List ids organizers
+     * List ids directions
      */
-    val organizers: List<Int> = listOf(),
+    val directions: List<Int> = listOf(),
 
     /**
-     * List ids uploads
+     * List roles user
      */
-    val uploads: List<Int> = listOf()
+    val roles: List<UserRole> = listOf(UserRole.ORGANIZER),
 )

@@ -21,19 +21,20 @@ import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UsersService
+import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
 fun Route.experts() {
-    val expertsService: UsersService by inject()
+    val usersService: UsersService by inject()
 
     route("/experts") {
         get {
             // act
-            val response = expertsService.transaction {
-                getAllExperts().toResponses(call.getUserRoles())
+            val response = usersService.transaction {
+                getAll(UserRole.EXPERT).toResponses(call.getUserRoles())
             }
             // response
             call.respond(response)
@@ -42,8 +43,8 @@ fun Route.experts() {
             // get request
             val id = call.getNumberParam()
             // act
-            val response = expertsService.transaction {
-                findByIdExpert(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+            val response = usersService.transaction {
+                findById(id, UserRole.EXPERT)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

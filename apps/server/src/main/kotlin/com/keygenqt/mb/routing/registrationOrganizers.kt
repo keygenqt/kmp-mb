@@ -25,6 +25,7 @@ import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.RegOrganizersService
 import com.keygenqt.mb.shared.responses.StateResponse
 import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.validators.models.RegOrganizerUpdateValidate
 import com.keygenqt.mb.validators.models.RegOrganizerValidate
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -84,6 +85,34 @@ fun Route.registrationOrganizers() {
                     message = HttpStatusCode.OK.description
                 )
             )
+        }
+        put("/{id}") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // get request
+            val id = call.getNumberParam()
+            val request = call.receiveValidate<RegOrganizerUpdateValidate>()
+            // act
+            val response = regOrganizersService.transaction {
+                findById(id)?.update(
+                    note = request.note,
+                    state = request.state,
+                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+            }
+            // response
+            call.respond(response)
+        }
+        delete("/{id}") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // get request
+            val id = call.getNumberParam()
+            // act
+            regOrganizersService.transaction {
+                findById(id)?.deleteEntity() ?: throw Exceptions.NotFound()
+            }
+            // response
+            call.respond(HttpStatusCode.OK)
         }
     }
 }

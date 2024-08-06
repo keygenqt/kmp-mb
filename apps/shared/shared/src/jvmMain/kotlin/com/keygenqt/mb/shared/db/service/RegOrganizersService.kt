@@ -19,27 +19,28 @@ import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.RegOrganizerEntity
 import com.keygenqt.mb.shared.db.entities.RegOrganizers
 import com.keygenqt.mb.shared.interfaces.IService
+import com.keygenqt.mb.shared.responses.RegOrganizerState
 import org.jetbrains.exposed.sql.SortOrder
 
 class RegOrganizersService(
     override val db: DatabaseMysql
 ) : IService<RegOrganizersService> {
     /**
-     * Get all entities
+     * Get all entities.
      */
     fun getAll() = RegOrganizerEntity
         .all()
         .orderBy(Pair(RegOrganizers.updateAt, SortOrder.DESC))
 
     /**
-     * Find entity by id
+     * Find entity by id.
      */
     fun findById(
         id: Int
     ) = RegOrganizerEntity.findById(id)
 
     /**
-     * Create entity
+     * Create entity.
      */
     fun insert(
         fname: String,
@@ -68,4 +69,21 @@ class RegOrganizersService(
         this.createAt = System.currentTimeMillis()
         this.updateAt = System.currentTimeMillis()
     }
+
+    /**
+     * Update entity.
+     */
+    fun RegOrganizerEntity.update(
+        note: String,
+        state: RegOrganizerState,
+    ) = apply {
+        this.note = note
+        this.state = state
+        this.updateAt = System.currentTimeMillis()
+    }
+
+    /**
+     * Delete entity.
+     */
+    fun RegOrganizerEntity.deleteEntity() = this.delete()
 }

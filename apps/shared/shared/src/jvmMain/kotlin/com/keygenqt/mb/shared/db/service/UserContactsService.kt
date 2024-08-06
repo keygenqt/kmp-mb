@@ -16,32 +16,32 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
-import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
+import com.keygenqt.mb.shared.db.entities.UserContactEntity
 import com.keygenqt.mb.shared.interfaces.IService
-import com.keygenqt.mb.shared.responses.Locale
+import com.keygenqt.mb.shared.responses.ContactTypes
 import kotlinx.coroutines.runBlocking
 
-class ColumnLocalesService(
+class UserContactsService(
     override val db: DatabaseMysql
-) : IService<ColumnLocalesService> {
+) : IService<UserContactsService> {
     /**
      * Create entity.
      */
     private fun insert(
-        text: String,
-        locale: Locale,
-    ) = ColumnLocaleEntity.new {
-        this.text = text
-        this.locale = locale
+        link: String,
+        type: ContactTypes,
+    ) = UserContactEntity.new {
+        this.link = link
+        this.type = type
     }
 
     /**
      * Create entities.
      */
-    fun List<ColumnLocaleEntity>.inserts(): List<Int> {
+    fun List<UserContactEntity>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
         filter { it.id.value <= 0 }.forEach {
-            ids.add(insert(it.text, it.locale).id.value)
+            ids.add(insert(it.link, it.type).id.value)
         }
         return ids
     }
@@ -51,20 +51,20 @@ class ColumnLocalesService(
      */
     private fun update(
         id: Int,
-        text: String,
-    ) = ColumnLocaleEntity.findByIdAndUpdate(id) {
-        it.text = text
+        link: String,
+    ) = UserContactEntity.findByIdAndUpdate(id) {
+        it.link = link
     }
 
     /**
      * Update entities.
      */
-    fun List<ColumnLocaleEntity>.updates(): List<Int> {
+    fun List<UserContactEntity>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
         filter { it.id.value > 0 }.forEach {
             runBlocking { // Exposed not update model in loop
                 transactionRaw {
-                    ids.add(update(it.id.value, it.text)?.id?.value)
+                    ids.add(update(it.id.value, it.link)?.id?.value)
                 }
             }
         }
