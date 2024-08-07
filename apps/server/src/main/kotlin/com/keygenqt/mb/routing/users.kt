@@ -107,35 +107,31 @@ fun Route.users() {
             val model = usersService.transaction {
                 findById(id) ?: throw Exceptions.NotFound()
             }
-            val idsContact = userContactsService.transaction {
-                with(model.contacts) {
-                    request.contacts.toEntities(this).inserts() + request.contacts.toEntities(this).updates()
+            val response = with(model) {
+                val idsContact = userContactsService.transaction {
+                    request.contacts.toEntities(contacts).inserts() + request.contacts.toEntities(contacts).updates()
                 }
-            }
-            val idsLocale = userLocalesService.transaction {
-                with(model.locales) {
-                    request.locales.toEntities(this).inserts() + request.locales.toEntities(this).updates()
+                val idsLocale = userLocalesService.transaction {
+                    request.locales.toEntities(locales).inserts() + request.locales.toEntities(locales).updates()
                 }
-            }
-            val idsMedia = userMediaService.transaction {
-                with(model.media) {
-                    request.media.toEntities(this).inserts() + request.media.toEntities(this).updates()
+                val idsMedia = userMediaService.transaction {
+                    request.media.toEntities(media).inserts() + request.media.toEntities(media).updates()
                 }
-            }
-            val response = usersService.transaction {
-                model.update(
-                    image = request.image,
-                    fname = request.fname,
-                    lname = request.lname,
-                    short = request.short,
-                    about = request.about,
-                    quote = request.quote,
-                    roles = request.roles,
-                    directions = request.directions,
-                    locales = idsLocale,
-                    contacts = idsContact,
-                    media = idsMedia,
-                ).toResponse(call.getUserRoles())
+                usersService.transaction {
+                    update(
+                        image = request.image,
+                        fname = request.fname,
+                        lname = request.lname,
+                        short = request.short,
+                        about = request.about,
+                        quote = request.quote,
+                        roles = request.roles,
+                        directions = request.directions,
+                        locales = idsLocale,
+                        contacts = idsContact,
+                        media = idsMedia,
+                    ).toResponse(call.getUserRoles())
+                }
             }
             // response
             call.respond(response)
