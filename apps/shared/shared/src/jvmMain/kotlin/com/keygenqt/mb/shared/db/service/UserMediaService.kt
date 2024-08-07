@@ -20,7 +20,6 @@ import com.keygenqt.mb.shared.db.entities.UserMediaEntity
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.UserMediaResponse
 import com.keygenqt.mb.shared.responses.UserMediaTypes
-import kotlinx.coroutines.runBlocking
 
 class UserMediaService(
     override val db: DatabaseMysql
