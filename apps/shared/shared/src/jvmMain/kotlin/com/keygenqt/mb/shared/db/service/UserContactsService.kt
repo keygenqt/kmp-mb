@@ -19,7 +19,7 @@ import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserContactEntity
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.ContactTypes
-import kotlinx.coroutines.runBlocking
+import com.keygenqt.mb.shared.responses.UserContactResponse
 
 class UserContactsService(
     override val db: DatabaseMysql
@@ -38,9 +38,9 @@ class UserContactsService(
     /**
      * Create entities.
      */
-    fun List<UserContactEntity>.inserts(): List<Int> {
+    fun List<UserContactResponse>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
-        filter { it.id.value <= 0 }.forEach {
+        filter { it.id == null }.forEach {
             ids.add(insert(it.link, it.type).id.value)
         }
         return ids
@@ -59,14 +59,10 @@ class UserContactsService(
     /**
      * Update entities.
      */
-    fun List<UserContactEntity>.updates(): List<Int> {
+    fun List<UserContactResponse>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
-        filter { it.id.value > 0 }.forEach {
-            runBlocking { // Exposed not update model in loop
-                transactionRaw {
-                    ids.add(update(it.id.value, it.link)?.id?.value)
-                }
-            }
+        filter { it.id != null }.forEach {
+            ids.add(update(it.id!!, it.link)?.id?.value)
         }
         return ids.filterNotNull()
     }

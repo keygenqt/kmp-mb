@@ -15,15 +15,16 @@
  */
 package com.keygenqt.mb.validators.models
 
-import com.keygenqt.mb.shared.db.entities.UserMedia
 import com.keygenqt.mb.shared.db.entities.UserMediaEntity
+import com.keygenqt.mb.shared.responses.UserMediaResponse
 import com.keygenqt.mb.shared.responses.UserMediaTypes
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 import org.hibernate.validator.constraints.URL
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.emptySized
 
 /**
  * Request user media validate
@@ -45,16 +46,23 @@ data class UserMediaValidate(
 /**
  * Map validate data to Entity
  */
-fun List<UserMediaValidate>.toEntities(): List<UserMediaEntity> {
-    return mapIndexed { index, data ->
-        UserMediaEntity.wrapRow(
-            ResultRow.createAndFillValues(
-                mapOf(
-                    UserMedia.id to (data.id ?: -index),
-                    UserMedia.link to data.link,
-                    UserMedia.type to data.type
-                )
-            )
+fun List<UserMediaValidate>.toEntities(
+    media: SizedIterable<UserMediaEntity> = emptySized()
+): List<UserMediaResponse> {
+    if (size != map { it.type }.distinct().size) {
+        throw RuntimeException("There should be no duplicate types.")
+    }
+    if (media.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
+        throw RuntimeException("Media found that do not belong to the entity.")
+    }
+    if (media.any { find -> filter { it.id == null }.map { it.type }.contains(find.type) }) {
+        throw RuntimeException("Duplicate types were found, you need to specify the Id to update them.")
+    }
+    return map {
+        UserMediaResponse(
+            id = it.id,
+            link = it.link,
+            type = it.type
         )
     }
 }

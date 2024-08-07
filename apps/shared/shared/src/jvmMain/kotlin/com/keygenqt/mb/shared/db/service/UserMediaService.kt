@@ -18,6 +18,7 @@ package com.keygenqt.mb.shared.db.service
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserMediaEntity
 import com.keygenqt.mb.shared.interfaces.IService
+import com.keygenqt.mb.shared.responses.UserMediaResponse
 import com.keygenqt.mb.shared.responses.UserMediaTypes
 import kotlinx.coroutines.runBlocking
 
@@ -38,9 +39,9 @@ class UserMediaService(
     /**
      * Create entities.
      */
-    fun List<UserMediaEntity>.inserts(): List<Int> {
+    fun List<UserMediaResponse>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
-        filter { it.id.value <= 0 }.forEach {
+        filter { it.id == null }.forEach {
             ids.add(insert(it.link, it.type).id.value)
         }
         return ids
@@ -59,12 +60,12 @@ class UserMediaService(
     /**
      * Update entities.
      */
-    fun List<UserMediaEntity>.updates(): List<Int> {
+    fun List<UserMediaResponse>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
-        filter { it.id.value > 0 }.forEach {
+        filter { it.id != null }.forEach {
             runBlocking { // Exposed not update model in loop
                 transactionRaw {
-                    ids.add(update(it.id.value, it.link)?.id?.value)
+                    ids.add(update(it.id!!, it.link)?.id?.value)
                 }
             }
         }

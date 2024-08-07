@@ -18,8 +18,8 @@ package com.keygenqt.mb.shared.db.service
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
 import com.keygenqt.mb.shared.interfaces.IService
+import com.keygenqt.mb.shared.responses.ColumnLocaleResponse
 import com.keygenqt.mb.shared.responses.Locale
-import kotlinx.coroutines.runBlocking
 
 class ColumnLocalesService(
     override val db: DatabaseMysql
@@ -38,9 +38,9 @@ class ColumnLocalesService(
     /**
      * Create entities.
      */
-    fun List<ColumnLocaleEntity>.inserts(): List<Int> {
+    fun List<ColumnLocaleResponse>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
-        filter { it.id.value <= 0 }.forEach {
+        filter { it.id == null }.forEach {
             ids.add(insert(it.text, it.locale).id.value)
         }
         return ids
@@ -59,14 +59,10 @@ class ColumnLocalesService(
     /**
      * Update entities.
      */
-    fun List<ColumnLocaleEntity>.updates(): List<Int> {
+    fun List<ColumnLocaleResponse>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
-        filter { it.id.value > 0 }.forEach {
-            runBlocking { // Exposed not update model in loop
-                transactionRaw {
-                    ids.add(update(it.id.value, it.text)?.id?.value)
-                }
-            }
+        filter { it.id != null }.forEach {
+            ids.add(update(it.id!!, it.text)?.id?.value)
         }
         return ids.filterNotNull()
     }

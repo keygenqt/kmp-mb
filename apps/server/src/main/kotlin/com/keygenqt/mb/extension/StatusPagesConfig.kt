@@ -56,6 +56,15 @@ fun StatusPagesConfig.configure() {
                     )
                 )
             }
+            is RuntimeException -> {
+                call.respond(
+                    status = HttpStatusCode.BadRequest,
+                    message = StateResponse(
+                        code = HttpStatusCode.BadRequest.value,
+                        message = cause.message ?: HttpStatusCode.BadRequest.description
+                    )
+                )
+            }
             else -> {
                 call.respond(
                     status = HttpStatusCode.InternalServerError,

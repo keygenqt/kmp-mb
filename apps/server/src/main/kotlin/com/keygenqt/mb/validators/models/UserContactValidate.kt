@@ -16,14 +16,15 @@
 package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.shared.db.entities.UserContactEntity
-import com.keygenqt.mb.shared.db.entities.UserContacts
 import com.keygenqt.mb.shared.responses.ContactTypes
+import com.keygenqt.mb.shared.responses.UserContactResponse
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 import org.hibernate.validator.constraints.URL
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.emptySized
 
 /**
  * Request user contact validate
@@ -45,16 +46,23 @@ data class UserContactValidate(
 /**
  * Map validate data to Entity
  */
-fun List<UserContactValidate>.toEntities(): List<UserContactEntity> {
-    return mapIndexed { index, data ->
-        UserContactEntity.wrapRow(
-            ResultRow.createAndFillValues(
-                mapOf(
-                    UserContacts.id to (data.id ?: -index),
-                    UserContacts.link to data.link,
-                    UserContacts.type to data.type
-                )
-            )
+fun List<UserContactValidate>.toEntities(
+    contacts: SizedIterable<UserContactEntity> = emptySized()
+): List<UserContactResponse> {
+    if (size != map { it.type }.distinct().size) {
+        throw RuntimeException("There should be no duplicate types.")
+    }
+    if (contacts.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
+        throw RuntimeException("Contacts found that do not belong to the entity.")
+    }
+    if (contacts.any { find -> filter { it.id == null }.map { it.type }.contains(find.type) }) {
+        throw RuntimeException("Duplicate types were found, you need to specify the Id to update them.")
+    }
+    return map {
+        UserContactResponse(
+            id = it.id,
+            link = it.link,
+            type = it.type
         )
     }
 }

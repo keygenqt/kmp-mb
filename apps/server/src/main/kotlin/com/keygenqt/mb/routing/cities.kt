@@ -86,11 +86,16 @@ fun Route.cities() {
             val id = call.getNumberParam()
             val request = call.receiveValidate<CityValidate>()
             // act
+            val model = citiesService.transaction {
+                findById(id) ?: throw Exceptions.NotFound()
+            }
             val idsLocale = columnLocalesService.transaction {
-                request.locales.toEntities().inserts() + request.locales.toEntities().updates()
+                with(model.locales) {
+                    request.locales.toEntities(this).inserts() + request.locales.toEntities(this).updates()
+                }
             }
             val response = citiesService.transaction {
-                findById(id)?.update(
+                model.update(
                     countryID = request.countryID,
                     image = request.image,
                     link = request.link,
@@ -98,7 +103,7 @@ fun Route.cities() {
                     locales = idsLocale,
                     organizers = request.organizers,
                     uploads = request.uploads,
-                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+                ).toResponse(call.getUserRoles())
             }
             // response
             call.respond(response)

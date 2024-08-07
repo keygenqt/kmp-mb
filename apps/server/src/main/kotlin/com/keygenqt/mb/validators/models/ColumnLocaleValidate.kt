@@ -16,13 +16,14 @@
 package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
-import com.keygenqt.mb.shared.db.entities.ColumnLocales
+import com.keygenqt.mb.shared.responses.ColumnLocaleResponse
 import com.keygenqt.mb.shared.responses.Locale
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.emptySized
 
 /**
  * Request locale validate
@@ -43,16 +44,23 @@ data class ColumnLocaleValidate(
 /**
  * Map validate data to Entity
  */
-fun List<ColumnLocaleValidate>.toEntities(): List<ColumnLocaleEntity> {
-    return mapIndexed { index, data ->
-        ColumnLocaleEntity.wrapRow(
-            ResultRow.createAndFillValues(
-                mapOf(
-                    ColumnLocales.id to (data.id ?: -index),
-                    ColumnLocales.text to data.text,
-                    ColumnLocales.locale to data.locale
-                )
-            )
+fun List<ColumnLocaleValidate>.toEntities(
+    locales: SizedIterable<ColumnLocaleEntity> = emptySized()
+): List<ColumnLocaleResponse> {
+    if (size != map { it.locale }.distinct().size) {
+        throw RuntimeException("There should be no duplicate locales.")
+    }
+    if (locales.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
+        throw RuntimeException("Locales found that do not belong to the entity.")
+    }
+    if (locales.any { find -> filter { it.id == null }.map { it.locale }.contains(find.locale) }) {
+        throw RuntimeException("Duplicate locales were found, you need to specify the Id to update them.")
+    }
+    return map {
+        ColumnLocaleResponse(
+            id = it.id,
+            text = it.text,
+            locale = it.locale
         )
     }
 }

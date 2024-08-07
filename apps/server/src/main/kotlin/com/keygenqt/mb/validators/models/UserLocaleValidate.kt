@@ -16,14 +16,15 @@
 package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.shared.db.entities.UserLocaleEntity
-import com.keygenqt.mb.shared.db.entities.UserLocales
 import com.keygenqt.mb.shared.responses.Locale
+import com.keygenqt.mb.shared.responses.UserLocaleResponse
 import com.keygenqt.mb.validators.custom.NotBlank
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
-import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SizedIterable
+import org.jetbrains.exposed.sql.emptySized
 
 /**
  * Request user locale validate
@@ -60,20 +61,27 @@ data class UserLocaleValidate(
 /**
  * Map validate data to Entity
  */
-fun List<UserLocaleValidate>.toEntities(): List<UserLocaleEntity> {
-    return mapIndexed { index, data ->
-        UserLocaleEntity.wrapRow(
-            ResultRow.createAndFillValues(
-                mapOf(
-                    UserLocales.id to (data.id ?: -index),
-                    UserLocales.fname to data.fname,
-                    UserLocales.lname to data.lname,
-                    UserLocales.short to data.short,
-                    UserLocales.about to data.about,
-                    UserLocales.quote to data.quote,
-                    UserLocales.locale to data.locale
-                )
-            )
+fun List<UserLocaleValidate>.toEntities(
+    locales: SizedIterable<UserLocaleEntity> = emptySized()
+): List<UserLocaleResponse> {
+    if (size != map { it.locale }.distinct().size) {
+        throw RuntimeException("There should be no duplicate locales.")
+    }
+    if (locales.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
+        throw RuntimeException("Locales found that do not belong to the entity.")
+    }
+    if (locales.any { find -> filter { it.id == null }.map { it.locale }.contains(find.locale) }) {
+        throw RuntimeException("Duplicate locales were found, you need to specify the Id to update them.")
+    }
+    return map {
+        UserLocaleResponse(
+            id = it.id,
+            fname = it.fname,
+            lname = it.lname,
+            short = it.short,
+            about = it.about,
+            quote = it.quote,
+            locale = it.locale
         )
     }
 }

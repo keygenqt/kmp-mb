@@ -19,7 +19,7 @@ import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserLocaleEntity
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.Locale
-import kotlinx.coroutines.runBlocking
+import com.keygenqt.mb.shared.responses.UserLocaleResponse
 
 class UserLocalesService(
     override val db: DatabaseMysql
@@ -46,9 +46,9 @@ class UserLocalesService(
     /**
      * Create entities.
      */
-    fun List<UserLocaleEntity>.inserts(): List<Int> {
+    fun List<UserLocaleResponse>.inserts(): List<Int> {
         val ids: MutableList<Int> = mutableListOf()
-        filter { it.id.value <= 0 }.forEach {
+        filter { it.id == null }.forEach {
             ids.add(
                 insert(
                     fname = it.fname,
@@ -84,23 +84,19 @@ class UserLocalesService(
     /**
      * Update entities.
      */
-    fun List<UserLocaleEntity>.updates(): List<Int> {
+    fun List<UserLocaleResponse>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
-        filter { it.id.value > 0 }.forEach {
-            runBlocking { // Exposed not update model in loop
-                transactionRaw {
-                    ids.add(
-                        update(
-                            id = it.id.value,
-                            fname = it.fname,
-                            lname = it.lname,
-                            short = it.short,
-                            about = it.about,
-                            quote = it.quote,
-                        )?.id?.value
-                    )
-                }
-            }
+        filter { it.id != null }.forEach {
+            ids.add(
+                update(
+                    id = it.id!!,
+                    fname = it.fname,
+                    lname = it.lname,
+                    short = it.short,
+                    about = it.about,
+                    quote = it.quote,
+                )?.id?.value
+            )
         }
         return ids.filterNotNull()
     }

@@ -104,17 +104,26 @@ fun Route.users() {
             val id = call.getNumberParam()
             val request = call.receiveValidate<UserValidate>()
             // act
+            val model = usersService.transaction {
+                findById(id) ?: throw Exceptions.NotFound()
+            }
             val idsContact = userContactsService.transaction {
-                request.contacts.toEntities().inserts() + request.contacts.toEntities().updates()
+                with(model.contacts) {
+                    request.contacts.toEntities(this).inserts() + request.contacts.toEntities(this).updates()
+                }
             }
             val idsLocale = userLocalesService.transaction {
-                request.locales.toEntities().inserts() + request.locales.toEntities().updates()
+                with(model.locales) {
+                    request.locales.toEntities(this).inserts() + request.locales.toEntities(this).updates()
+                }
             }
             val idsMedia = userMediaService.transaction {
-                request.media.toEntities().inserts() + request.media.toEntities().updates()
+                with(model.media) {
+                    request.media.toEntities(this).inserts() + request.media.toEntities(this).updates()
+                }
             }
             val response = usersService.transaction {
-                findById(id)?.update(
+                model.update(
                     image = request.image,
                     fname = request.fname,
                     lname = request.lname,
@@ -126,7 +135,7 @@ fun Route.users() {
                     locales = idsLocale,
                     contacts = idsContact,
                     media = idsMedia,
-                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+                ).toResponse(call.getUserRoles())
             }
             // response
             call.respond(response)

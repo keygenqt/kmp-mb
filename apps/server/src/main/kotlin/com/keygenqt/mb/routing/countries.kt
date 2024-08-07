@@ -81,14 +81,19 @@ fun Route.countries() {
             val id = call.getNumberParam()
             val request = call.receiveValidate<CountryValidate>()
             // act
+            val model = countriesService.transaction {
+                findById(id) ?: throw Exceptions.NotFound()
+            }
             val idsLocale = columnLocalesService.transaction {
-                request.locales.toEntities().inserts() + request.locales.toEntities().updates()
+                with(model.locales) {
+                    request.locales.toEntities(this).inserts() + request.locales.toEntities(this).updates()
+                }
             }
             val response = countriesService.transaction {
-                findById(id)?.update(
+                model.update(
                     name = request.name,
                     locales = idsLocale,
-                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+                ).toResponse(call.getUserRoles())
             }
             // response
             call.respond(response)
