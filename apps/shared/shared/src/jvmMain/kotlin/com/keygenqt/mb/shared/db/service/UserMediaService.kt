@@ -63,11 +63,7 @@ class UserMediaService(
     fun List<UserMediaResponse>.updates(): List<Int> {
         val ids: MutableList<Int?> = mutableListOf()
         filter { it.id != null }.forEach {
-            runBlocking { // Exposed not update model in loop
-                transactionRaw {
-                    ids.add(update(it.id!!, it.link)?.id?.value)
-                }
-            }
+            ids.add(update(it.id!!, it.link)?.id?.value)
         }
         return ids.filterNotNull()
     }
