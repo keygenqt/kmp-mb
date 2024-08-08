@@ -14,16 +14,31 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
-
-export default reportWebVitals;
+/**
+ * Colors MUI
+ * @link https://mui.com/material-ui/customization/palette/
+ */
+export const palette = {
+    mode: 'dark',
+    primary: {
+        main: '#CB8FF7',
+    },
+    inherit: {
+        main: '#e7e7e7',
+    },
+    background: {
+        default: '#313131',
+    },
+    text: {
+        primary: '#e7e7e7'
+    },
+    success: {
+        main: '#074f07',
+    },
+    error: {
+        main: '#d32f2f',
+    },
+    white: {
+        main: '#ffffff',
+    },
+}

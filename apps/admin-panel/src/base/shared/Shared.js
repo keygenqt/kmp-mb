@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -14,16 +15,17 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+import shared from "shared";
+import {AppConf} from "../../conf/AppConf";
+import {locale} from "./elements/locale"
+import {queries} from "./elements/queries"
 
-export default reportWebVitals;
+const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
+const Requests = shared.com.keygenqt.mb.shared.requests
+
+export const Shared = {
+    locale: locale,
+    queries: queries,
+    httpClient: HttpClient,
+    requests: Requests,
+}

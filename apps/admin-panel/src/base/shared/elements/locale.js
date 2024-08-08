@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -14,16 +15,12 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+import shared from "shared";
 
-export default reportWebVitals;
+const LocaleShared = shared.com.keygenqt.mb.shared.responses.Locale
+
+export const locale = {
+    'ru-RU': 'ru',
+    'by-BY': LocaleShared.BY.name.toLowerCase(),
+    'en-EN': LocaleShared.EN.name.toLowerCase()
+}

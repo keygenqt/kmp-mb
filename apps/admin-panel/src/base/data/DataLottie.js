@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+import error_404 from "../../assets/lottie/error_404.json";
+import error_500 from "../../assets/lottie/error_500.json";
+import coming_soon from "../../assets/lottie/coming_soon.json";
+import laptop from "../../assets/lottie/laptop.json";
+import not_found from "../../assets/lottie/not_found.json";
+import loader from "../../assets/lottie/loader.json";
 
-export default reportWebVitals;
+export const DataLottie = {
+    error_500: error_500,
+    error_404: error_404,
+    coming_soon: coming_soon,
+    laptop: laptop,
+    not_found: not_found,
+    loader: loader,
+};

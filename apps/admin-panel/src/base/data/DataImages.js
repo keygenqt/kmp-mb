@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+// Common
+import common_logo from '../../assets/images/common/logo.svg';
 
-export default reportWebVitals;
+export const DataImages = {
+    common: {
+        logo: common_logo,
+    },
+};

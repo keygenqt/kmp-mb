@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+import {createTheme} from '@mui/material/styles';
+import {palette} from "./elements/light/palette";
+import {typography} from "./elements/common/typography";
+import {components} from "./elements/common/components";
 
-export default reportWebVitals;
+export const ThemeLight = createTheme({
+    palette: palette,
+    typography: typography,
+    components: components,
+});

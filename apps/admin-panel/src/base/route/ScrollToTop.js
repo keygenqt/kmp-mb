@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-const reportWebVitals = onPerfEntry => {
-  if (onPerfEntry && onPerfEntry instanceof Function) {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(onPerfEntry);
-      getFID(onPerfEntry);
-      getFCP(onPerfEntry);
-      getLCP(onPerfEntry);
-      getTTFB(onPerfEntry);
-    });
-  }
-};
+import {useEffect} from "react";
+import {useLocation} from "react-router-dom";
 
-export default reportWebVitals;
+/**
+ * Component for scroll to top if change location
+ */
+export function ScrollToTop() {
+    const {pathname} = useLocation();
+
+    useEffect(() => {
+        const el = document.getElementById("root")
+        el.scrollTo(0, 0);
+    }, [pathname]);
+
+    return null;
+}
