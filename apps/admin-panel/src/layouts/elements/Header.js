@@ -15,7 +15,11 @@
  */
 
 import * as React from 'react';
-import {Brightness5Outlined, Brightness4Outlined, Menu} from '@mui/icons-material';
+import {
+    Brightness5Outlined,
+    Brightness4Outlined,
+    Menu
+} from '@mui/icons-material';
 import {
     CacheStorage,
     CacheKeys,

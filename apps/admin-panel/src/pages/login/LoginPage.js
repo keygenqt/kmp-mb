@@ -14,6 +14,20 @@
  * limitations under the License.
  */
 
-export * from './dashboard/DashboardPage';
-export * from './error/ErrorPage';
-export * from './login/LoginPage';
+import * as React from 'react';
+import {
+    Stack,
+    Typography,
+} from '@mui/material';
+
+export function LoginPage(props) {
+    return (
+        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
+            <Typography variant="h4" color={'text.primary'}>
+                Login
+            </Typography>
+        </Stack>
+    );
+}
+
+LoginPage.propTypes = {};

@@ -16,8 +16,9 @@
 
 import {Route} from 'react-router-dom';
 import {BaseLayout} from '../../layouts/BaseLayout';
-import {RouteTypes} from './RouteTypes'
+import {EmptyLayout} from '../../layouts/EmptyLayout';
 import {
+    LoginPage,
     ErrorPage,
     DashboardPage,
 } from "../../pages";
@@ -27,9 +28,6 @@ export const RouteConf = {
     routes: {
         dashboard: {
             path: '/',
-            match: {
-                id: RouteTypes.integer,
-            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -39,6 +37,21 @@ export const RouteConf = {
                         <BaseLayout isCenter={true} className={'DashboardPage'}>
                             <DashboardPage/>
                         </BaseLayout>
+                    }
+                />
+            }
+        },
+        login: {
+            path: '/login',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <EmptyLayout isCenter={true} className={'LoginPage'}>
+                            <LoginPage/>
+                        </EmptyLayout>
                     }
                 />
             }

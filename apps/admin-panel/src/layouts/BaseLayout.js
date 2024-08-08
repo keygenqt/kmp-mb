@@ -75,7 +75,7 @@ export function BaseLayout(props) {
                             alignItems="center"
                             spacing={2}
                             sx={{
-                                background: '#802aea17',
+                                background: '#802aea14',
                                 borderRadius: 3,
                                 transitionDuration: '200ms',
                             }}
