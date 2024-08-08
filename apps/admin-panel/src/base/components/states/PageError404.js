@@ -17,16 +17,13 @@
 import * as React from 'react';
 import Lottie from "lottie-react";
 import {DataLottie} from '../../data/DataLottie';
-import {RouteContext} from '../..';
 import {
     Box,
     Stack,
     Typography,
-    Button
 } from '@mui/material';
 
 export function PageError404(props) {
-    const {route, routes} = React.useContext(RouteContext)
     return (
         <Stack
             sx={{height: '100%'}}
@@ -49,7 +46,7 @@ export function PageError404(props) {
                     <Stack spacing={4}>
 
                         <Typography variant='h2' color={'text.primary'}>
-                            {'components.error.t_title'}
+                            Page not found.
                         </Typography>
 
                         <Box>
@@ -61,20 +58,8 @@ export function PageError404(props) {
                         </Box>
 
                         <Typography variant='text1' color={'text.primary'}>
-                            {'components.error.t_text'}
+                            The Page you are looking for doesn't exist.
                         </Typography>
-
-                        <Box>
-                            <Button
-                                variant='contained'
-                                onClick={() => {
-                                    route.toLocation(routes.home)
-                                }}
-                            >
-                                {'components.error.t_btn'}
-                            </Button>
-                        </Box>
-
                     </Stack>
                 </Box>
             </Box>

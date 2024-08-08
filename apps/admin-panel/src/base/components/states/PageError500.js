@@ -49,7 +49,7 @@ export function PageError500(props) {
                         animationData={DataLottie.error_500}
                     />
                     <Typography variant='text1' color={'text.primary'}>
-                        {'common.t_error_500'}
+                        An error occurred, please try again later.
                     </Typography>
                 </Stack>
             </Box>

@@ -18,7 +18,6 @@
 export * from './components/states/PageLoader';
 export * from './components/states/PageError500';
 export * from './components/states/PageError404';
-export * from './components/states/ComingSoon';
 export * from './components/alerts/AlertError';
 export * from './components/alerts/AlertSuccess';
 // data

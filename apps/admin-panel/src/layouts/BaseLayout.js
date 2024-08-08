@@ -23,9 +23,9 @@ import {
 import {
     Box,
     Stack,
-    Typography,
 } from '@mui/material';
 
+import {Menu} from './elements/Menu';
 import {Header} from './elements/Header';
 import {Footer} from './elements/Footer';
 
@@ -53,23 +53,20 @@ export function BaseLayout(props) {
                         }}
                     >
                         <Stack
-                            width={330}
+                            width={300}
                             direction="column"
-                            justifyContent="center"
-                            alignItems="center"
                             spacing={2}
                             sx={{
                                 p: 2,
-                                marginLeft: showMenu ? '0' : '-360px !important',
+                                paddingRight: 0,
+                                marginLeft: showMenu ? '0' : '-315px !important',
                                 transitionDuration: '200ms',
                             }}
                         >
-                            <Typography variant="h5" color={'text.primary'}>
-                                Menu
-                            </Typography>
+                            <Menu/>
                         </Stack>
                         <Stack
-                            width={showMenu ? 'calc(100% - 395px)' : 'calc(100% - 36px)'}
+                            width={showMenu ? 'calc(100% - 350px)' : 'calc(100% - 35px)'}
                             direction="column"
                             justifyContent="center"
                             alignItems="center"
