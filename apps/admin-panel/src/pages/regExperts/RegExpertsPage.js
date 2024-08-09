@@ -16,16 +16,18 @@
 
 import * as React from 'react';
 import {
+    Box,
     Stack,
     Typography,
 } from '@mui/material';
 
 export function RegExpertsPage(props) {
     return (
-        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
+        <Stack spacing={2} direction="row" sx={{width: 1}}>
             <Typography variant="h4" color={'text.primary'}>
-                Reg Experts
+                Registration Experts
             </Typography>
+            <Box sx={{ flexGrow: 1 }}/>
         </Stack>
     );
 }

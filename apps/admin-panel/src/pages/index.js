@@ -15,12 +15,19 @@
  */
 
 export * from './cities/CitiesPage';
+export * from './city/CityPage';
 export * from './countries/CountriesPage';
+export * from './country/CountryPage';
 export * from './dashboard/DashboardPage';
+export * from './direction/DirectionPage';
 export * from './directions/DirectionsPage';
 export * from './error/ErrorPage';
 export * from './login/LoginPage';
+export * from './regExpert/RegExpertPage';
 export * from './regExperts/RegExpertsPage';
+export * from './regOrganizer/RegOrganizerPage';
 export * from './regOrganizers/RegOrganizersPage';
+export * from './regPartner/RegPartnerPage';
 export * from './regPartners/RegPartnersPage';
+export * from './user/UserPage';
 export * from './users/UsersPage';

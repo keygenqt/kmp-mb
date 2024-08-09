@@ -19,14 +19,21 @@ import {BaseLayout} from '../../layouts/BaseLayout';
 import {EmptyLayout} from '../../layouts/EmptyLayout';
 import {
     CitiesPage,
+    CityPage,
     CountriesPage,
+    CountryPage,
     DashboardPage,
+    DirectionPage,
     DirectionsPage,
     ErrorPage,
     LoginPage,
+    RegExpertPage,
     RegExpertsPage,
+    RegOrganizerPage,
     RegOrganizersPage,
+    RegPartnerPage,
     RegPartnersPage,
+    UserPage,
     UsersPage,
 } from "../../pages";
 
@@ -41,8 +48,23 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CitiesPage'}>
+                        <BaseLayout isCenter={false} className={'CitiesPage'}>
                             <CitiesPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        city: {
+            path: '/city',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'CityPage'}>
+                            <CityPage/>
                         </BaseLayout>
                     }
                 />
@@ -56,8 +78,23 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CountriesPage'}>
+                        <BaseLayout isCenter={false} className={'CountriesPage'}>
                             <CountriesPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        country: {
+            path: '/country',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'CountryPage'}>
+                            <CountryPage/>
                         </BaseLayout>
                     }
                 />
@@ -78,6 +115,21 @@ export const RouteConf = {
                 />
             }
         },
+        direction: {
+            path: '/direction',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'DirectionPage'}>
+                            <DirectionPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
         directions: {
             path: '/directions',
             render: function (key, path) {
@@ -86,7 +138,7 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'DirectionsPage'}>
+                        <BaseLayout isCenter={false} className={'DirectionsPage'}>
                             <DirectionsPage/>
                         </BaseLayout>
                     }
@@ -123,6 +175,21 @@ export const RouteConf = {
                 />
             }
         },
+        regExpert: {
+            path: '/reg-expert',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'RegExpertPage'}>
+                            <RegExpertPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
         regExperts: {
             path: '/reg-experts',
             render: function (key, path) {
@@ -131,8 +198,23 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'RegExpertsPage'}>
+                        <BaseLayout isCenter={false} className={'RegExpertsPage'}>
                             <RegExpertsPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        regOrganizer: {
+            path: '/reg-organizer',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'RegOrganizerPage'}>
+                            <RegOrganizerPage/>
                         </BaseLayout>
                     }
                 />
@@ -146,8 +228,23 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'RegOrganizersPage'}>
+                        <BaseLayout isCenter={false} className={'RegOrganizersPage'}>
                             <RegOrganizersPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        regPartner: {
+            path: '/reg-partner',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'RegPartnerPage'}>
+                            <RegPartnerPage/>
                         </BaseLayout>
                     }
                 />
@@ -161,8 +258,23 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'RegPartnersPage'}>
+                        <BaseLayout isCenter={false} className={'RegPartnersPage'}>
                             <RegPartnersPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        user: {
+            path: '/user',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'UserPage'}>
+                            <UserPage/>
                         </BaseLayout>
                     }
                 />
@@ -176,7 +288,7 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'UsersPage'}>
+                        <BaseLayout isCenter={false} className={'UsersPage'}>
                             <UsersPage/>
                         </BaseLayout>
                     }

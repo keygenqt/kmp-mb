@@ -39,7 +39,6 @@ import {
 
 export function Menu(props) {
     const {route, routes} = React.useContext(RouteContext)
-
     return (
         <Stack
             spacing={2}
@@ -90,10 +89,12 @@ export function Menu(props) {
                 </Stack>
 
                 <MenuItem
-                    selected={route.isPage(routes.countries)}
+                    selected={route.isPage(routes.countries) || route.isPage(routes.country)}
                     onClick={() => {
                         if (route.isPage(routes.countries)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.country)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.countries)
                         }
@@ -107,10 +108,12 @@ export function Menu(props) {
                     </Typography>
                 </MenuItem>
                 <MenuItem
-                    selected={route.isPage(routes.cities)}
+                    selected={route.isPage(routes.cities) || route.isPage(routes.city)}
                     onClick={() => {
                         if (route.isPage(routes.cities)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.city)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.cities)
                         }
@@ -136,10 +139,12 @@ export function Menu(props) {
                 </Stack>
 
                 <MenuItem
-                    selected={route.isPage(routes.directions)}
+                    selected={route.isPage(routes.directions) || route.isPage(routes.direction)}
                     onClick={() => {
                         if (route.isPage(routes.directions)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.direction)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.directions)
                         }
@@ -153,10 +158,12 @@ export function Menu(props) {
                     </Typography>
                 </MenuItem>
                 <MenuItem
-                    selected={route.isPage(routes.users)}
+                    selected={route.isPage(routes.users) || route.isPage(routes.user)}
                     onClick={() => {
                         if (route.isPage(routes.users)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.user)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.users)
                         }
@@ -182,10 +189,12 @@ export function Menu(props) {
                 </Stack>
 
                 <MenuItem
-                    selected={route.isPage(routes.regExperts)}
+                    selected={route.isPage(routes.regExperts) || route.isPage(routes.regExpert)}
                     onClick={() => {
                         if (route.isPage(routes.regExperts)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.regExpert)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.regExperts)
                         }
@@ -199,10 +208,12 @@ export function Menu(props) {
                     </Typography>
                 </MenuItem>
                 <MenuItem
-                    selected={route.isPage(routes.regOrganizers)}
+                    selected={route.isPage(routes.regOrganizers) || route.isPage(routes.regOrganizer)}
                     onClick={() => {
                         if (route.isPage(routes.regOrganizers)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.regOrganizer)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.regOrganizers)
                         }
@@ -216,10 +227,12 @@ export function Menu(props) {
                     </Typography>
                 </MenuItem>
                 <MenuItem
-                    selected={route.isPage(routes.regPartners)}
+                    selected={route.isPage(routes.regPartners) || route.isPage(routes.regPartner)}
                     onClick={() => {
                         if (route.isPage(routes.regPartners)) {
                             route.refreshPage()
+                        } else if (route.isPage(routes.regPartner)) {
+                            route.toBack()
                         } else {
                             route.toLocation(routes.regPartners)
                         }
@@ -242,7 +255,7 @@ export function Menu(props) {
                 >
                     <ListItemText>
                         <Typography noWrap variant="inherit" color={'text.primary'}>
-                        To Website
+                            To Website
                         </Typography>
                     </ListItemText>
                 </MenuItem>

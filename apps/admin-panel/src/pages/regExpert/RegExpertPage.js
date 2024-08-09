@@ -14,31 +14,20 @@
  * limitations under the License.
  */
 
-/**
- * Colors MUI
- * @link https://mui.com/material-ui/customization/palette/
- */
-export const palette = {
-    mode: 'dark',
-    primary: {
-        main: '#CB8FF7',
-    },
-    inherit: {
-        main: '#e7e7e7',
-    },
-    background: {
-        default: '#313131',
-    },
-    text: {
-        primary: '#e7e7e7'
-    },
-    success: {
-        main: '#074f07',
-    },
-    error: {
-        main: '#d32f2f',
-    },
-    white: {
-        main: '#e7e7e7',
-    },
+import * as React from 'react';
+import {
+    Stack,
+    Typography,
+} from '@mui/material';
+
+export function RegExpertPage(props) {
+    return (
+        <Stack spacing={2} direction="row">
+            <Typography variant="h4" color={'text.primary'}>
+                Reg Expert
+            </Typography>
+        </Stack>
+    );
 }
+
+RegExpertPage.propTypes = {};

@@ -68,10 +68,12 @@ export function BaseLayout(props) {
                         <Stack
                             width={showMenu ? 'calc(100% - 350px)' : 'calc(100% - 35px)'}
                             direction="column"
-                            justifyContent="center"
-                            alignItems="center"
+                            justifyContent={props.isCenter === true ? 'center' : 'flex-start'}
+                            alignItems={props.isCenter === true ? 'center' : 'flex-start'}
                             spacing={2}
                             sx={{
+                                p: 3,
+                                boxSizing: 'border-box',
                                 background: '#802aea14',
                                 borderRadius: 3,
                                 transitionDuration: '200ms',

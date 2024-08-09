@@ -16,16 +16,36 @@
 
 import * as React from 'react';
 import {
+    Box,
     Stack,
+    Button,
     Typography,
 } from '@mui/material';
+import {
+    Add,
+} from '@mui/icons-material';
+import {
+    RouteContext,
+} from '../../base';
 
 export function UsersPage(props) {
+    const {route, routes} = React.useContext(RouteContext)
     return (
-        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
+        <Stack spacing={2} direction="row" sx={{width: 1}}>
             <Typography variant="h4" color={'text.primary'}>
                 Users
             </Typography>
+            <Box sx={{ flexGrow: 1 }}/>
+            <Button
+                variant="contained"
+                color='white'
+                endIcon={<Add color='text.primary' />}
+                onClick={() => {
+                    route.toLocation(routes.user)
+                }}
+            >
+                Add
+            </Button>
         </Stack>
     );
 }
