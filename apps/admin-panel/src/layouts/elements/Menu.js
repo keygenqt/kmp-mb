@@ -60,7 +60,16 @@ export function Menu(props) {
         >
             <MenuList>
 
-                <MenuItem selected={route.isPage(routes.dashboard)}>
+                <MenuItem
+                    selected={route.isPage(routes.dashboard)}
+                    onClick={() => {
+                        if (route.isPage(routes.dashboard)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.dashboard)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <PieChart fontSize="small" />
                     </ListItemIcon>
@@ -80,7 +89,16 @@ export function Menu(props) {
                     </Typography>
                 </Stack>
 
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.countries)}
+                    onClick={() => {
+                        if (route.isPage(routes.countries)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.countries)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <Public fontSize="small" />
                     </ListItemIcon>
@@ -88,7 +106,16 @@ export function Menu(props) {
                         Countries
                     </Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.cities)}
+                    onClick={() => {
+                        if (route.isPage(routes.cities)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.cities)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <Apartment fontSize="small" />
                     </ListItemIcon>
@@ -108,7 +135,16 @@ export function Menu(props) {
                     </Typography>
                 </Stack>
 
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.directions)}
+                    onClick={() => {
+                        if (route.isPage(routes.directions)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.directions)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <Mediation fontSize="small" />
                     </ListItemIcon>
@@ -116,7 +152,16 @@ export function Menu(props) {
                         Directions
                     </Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.users)}
+                    onClick={() => {
+                        if (route.isPage(routes.users)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.users)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <PeopleAlt fontSize="small" />
                     </ListItemIcon>
@@ -136,7 +181,16 @@ export function Menu(props) {
                     </Typography>
                 </Stack>
 
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.regExperts)}
+                    onClick={() => {
+                        if (route.isPage(routes.regExperts)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.regExperts)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <AppRegistration fontSize="small" />
                     </ListItemIcon>
@@ -144,7 +198,16 @@ export function Menu(props) {
                         Experts
                     </Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.regOrganizers)}
+                    onClick={() => {
+                        if (route.isPage(routes.regOrganizers)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.regOrganizers)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <AppRegistration fontSize="small" />
                     </ListItemIcon>
@@ -152,7 +215,16 @@ export function Menu(props) {
                         Organizers
                     </Typography>
                 </MenuItem>
-                <MenuItem>
+                <MenuItem
+                    selected={route.isPage(routes.regPartners)}
+                    onClick={() => {
+                        if (route.isPage(routes.regPartners)) {
+                            route.refreshPage()
+                        } else {
+                            route.toLocation(routes.regPartners)
+                        }
+                    }}
+                >
                     <ListItemIcon>
                         <AppRegistration fontSize="small" />
                     </ListItemIcon>
@@ -163,7 +235,11 @@ export function Menu(props) {
 
                 <Divider />
 
-                <MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        route.openUrlNewTab("https://mb.keygenqt.com/")
+                    }}
+                >
                     <ListItemText>
                         <Typography noWrap variant="inherit" color={'text.primary'}>
                         To Website

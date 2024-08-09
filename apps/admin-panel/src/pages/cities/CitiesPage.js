@@ -14,13 +14,20 @@
  * limitations under the License.
  */
 
-export * from './cities/CitiesPage';
-export * from './countries/CountriesPage';
-export * from './dashboard/DashboardPage';
-export * from './directions/DirectionsPage';
-export * from './error/ErrorPage';
-export * from './login/LoginPage';
-export * from './regExperts/RegExpertsPage';
-export * from './regOrganizers/RegOrganizersPage';
-export * from './regPartners/RegPartnersPage';
-export * from './users/UsersPage';
+import * as React from 'react';
+import {
+    Stack,
+    Typography,
+} from '@mui/material';
+
+export function CitiesPage(props) {
+    return (
+        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
+            <Typography variant="h4" color={'text.primary'}>
+                Cities
+            </Typography>
+        </Stack>
+    );
+}
+
+CitiesPage.propTypes = {};
