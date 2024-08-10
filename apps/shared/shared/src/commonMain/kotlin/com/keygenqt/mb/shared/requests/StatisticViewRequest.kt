@@ -27,6 +27,7 @@ enum class StatisticViewPage {
 @JsExport
 @Serializable
 data class StatisticViewRequest(
+    val uniqueId: String,
     val pageKey: StatisticViewPage,
     val id: String? = null,
 )

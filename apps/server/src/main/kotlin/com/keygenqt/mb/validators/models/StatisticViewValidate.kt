@@ -25,6 +25,8 @@ import kotlinx.serialization.Serializable
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class StatisticViewValidate(
+    val uniqueId: String,
+
     @field:NotNullNotBlank
     val pageKey: StatisticViewPage,
 

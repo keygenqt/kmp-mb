@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export const CacheVersion = 1
+export const CacheVersion = 3

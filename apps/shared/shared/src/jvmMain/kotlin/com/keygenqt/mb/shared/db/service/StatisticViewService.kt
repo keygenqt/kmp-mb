@@ -36,11 +36,11 @@ class StatisticViewService(
      */
     fun addIfNotExist(
         pageKey: StatisticViewPage,
-        remoteAddress: String?,
+        uniqueId: String?,
         id: String?
     ) {
         // unique key hash
-        val pageHash = "$pageKey-$remoteAddress-$id".toMD5()
+        val pageHash = "$pageKey-$uniqueId-$id".toMD5()
         if (!isHasView(pageHash)) {
             StatisticViewEntity.new {
                 this.pageHash = EntityID(pageHash, StatisticView)

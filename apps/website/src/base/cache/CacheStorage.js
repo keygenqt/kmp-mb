@@ -16,8 +16,10 @@
 
 import {MD5} from 'crypto-js';
 import LZString from "lz-string"
+import {CacheVersion} from './CacheVersion'
+import { v4 as uuidv4 } from 'uuid';
 
-// @todo expired delay
+
 export const CacheStorage = {
     set: function (key, value, isCrypto = true, quiet = false) {
         if (typeof value == 'object') {
@@ -61,6 +63,28 @@ export const CacheStorage = {
         localStorage.clear()
         if (!quiet) {
             CacheStorage._updateHash()
+        }
+    },
+
+    // The uniqueness of the PC is a complex issue, this is a simple version of its implementation.
+    // Not essential for viewing statistics.
+    getUniqueId: function () {
+        const uniqueId = CacheStorage.get("uniqueId")
+        if (uniqueId === null || uniqueId === undefined) {
+            const genUniqueId = uuidv4()
+            CacheStorage.set("uniqueId", genUniqueId)
+            return genUniqueId;
+        }
+        return uniqueId;
+    },
+
+    clearByVersion: function () {
+        const uniqueId = CacheStorage.getUniqueId()
+        const cacheVersion = CacheStorage.get("cacheVersion")
+        if (cacheVersion !== CacheVersion) {
+            localStorage.clear()
+            CacheStorage.set("uniqueId", uniqueId)
+            CacheStorage.set("cacheVersion", CacheVersion)
         }
     },
 

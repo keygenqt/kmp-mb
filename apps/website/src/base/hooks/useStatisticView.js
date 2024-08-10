@@ -15,9 +15,8 @@
  */
 
 import * as React from 'react';
-import {
-    Shared,
-} from '../shared/Shared';
+import {Shared} from '../shared/Shared';
+import {CacheStorage} from '../cache/CacheStorage';
 
 
 export function useStatisticView(pageKey, id = null) {
@@ -27,6 +26,7 @@ export function useStatisticView(pageKey, id = null) {
         wasCalled.current = true;
         try {
             Shared.httpClient.post.sendStatisticView(new Shared.requests.StatisticViewRequest(
+                CacheStorage.getUniqueId(),
                 pageKey,
                 id,
             )).catch(async (e) => {

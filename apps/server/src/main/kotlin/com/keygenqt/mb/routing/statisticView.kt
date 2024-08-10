@@ -38,7 +38,7 @@ fun Route.statisticView() {
                 addIfNotExist(
                     id = request.id,
                     pageKey = request.pageKey,
-                    remoteAddress = call.request.origin.remoteAddress,
+                    uniqueId = request.uniqueId,
                 )
             }
             // response

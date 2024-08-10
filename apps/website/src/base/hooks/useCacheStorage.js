@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-import {useCallback, useLayoutEffect, useState} from "react";
-import {CacheStorage} from "../cache/CacheStorage";
+import * as React from 'react';
+import {CacheStorage} from '../cache/CacheStorage';
 
 export function useCacheStorage(key, defaultValue = undefined) {
-    const getValueType = useCallback(
+
+    // Clear old cache
+    const wasCalled = React.useRef(false)
+    React.useEffect(() => {
+        if(wasCalled.current) return;
+        wasCalled.current = true;
+        CacheStorage.clearByVersion()
+    }, [])
+
+    const getValueType = React.useCallback(
         () => {
             const value = CacheStorage.get(key)
             if (value !== null && value !== undefined) {
@@ -27,11 +36,10 @@ export function useCacheStorage(key, defaultValue = undefined) {
             return defaultValue
         }, [defaultValue, key]);
 
-    const [value, setValue] = useState(getValueType());
+    const [value, setValue] = React.useState(getValueType());
 
-    useLayoutEffect(() => {
+    React.useLayoutEffect(() => {
         const element = document.querySelector('#root');
-
         const observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 if (mutation.type === "attributes") {
@@ -39,11 +47,9 @@ export function useCacheStorage(key, defaultValue = undefined) {
                 }
             });
         });
-
         observer.observe(element, {
             attributes: true
         });
-
         return () => {
             observer.disconnect()
         };
