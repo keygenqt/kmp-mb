@@ -31,9 +31,8 @@ class RawService(
             while (rs.next()) {
                 return@exec rs.getInt("count")
             }
-            return@exec 0
         }
-        return@run DataValueResponse(value = (count ?: 0).toString())
+        return DataValueResponse(value = (count ?: 0).toString())
     }
 
     /**
@@ -56,9 +55,8 @@ class RawService(
             while (rs.next()) {
                 return@exec rs.getInt("count")
             }
-            return@exec 0
         }
-        return@run DataValueResponse(value = (count ?: 0).toString())
+        return DataValueResponse(value = (count ?: 0).toString())
     }
 
     /**
@@ -81,12 +79,12 @@ class RawService(
         ) { rs ->
             while (rs.next()) {
                 values.add(DataKeyValueResponse(
-                    key = rs.getInt("pageID").toString(),
-                    value = rs.getInt("count").toString(),
+                    key = rs.getString("pageID"),
+                    value = rs.getString("count"),
                 ))
             }
         }
-        return@run DataKeyValuesResponse(
+        return DataKeyValuesResponse(
             values = values.toTypedArray()
         )
     }
