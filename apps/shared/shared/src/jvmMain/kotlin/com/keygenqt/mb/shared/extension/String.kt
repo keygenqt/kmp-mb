@@ -18,6 +18,8 @@ package com.keygenqt.mb.shared.extension
 import com.keygenqt.mb.shared.db.entities.UploadEntity
 import com.keygenqt.mb.shared.utils.ConstantsMime.toMime
 import java.io.File
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.*
 
 /**
@@ -36,3 +38,10 @@ fun String.createFileUpload(): UploadEntity? {
         upload
     } else null
 }
+
+/**
+ * Create md5 string
+ */
+fun String.toMD5() = this.toByteArray(Charsets.UTF_8)
+    .let { MessageDigest.getInstance("MD5").digest(it) }
+    .let { String.format("%032x", BigInteger(1, it)) }

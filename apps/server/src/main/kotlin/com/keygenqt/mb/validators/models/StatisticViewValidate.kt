@@ -1,5 +1,4 @@
-
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.validators.models
 
-import shared from "shared";
-import {AppConf} from "../../conf/AppConf";
-import {locale} from "./elements/locale"
-import {queries} from "./elements/queries"
+import com.keygenqt.mb.shared.requests.StatisticViewPage
+import com.keygenqt.mb.validators.custom.NotNullNotBlank
+import kotlinx.serialization.Serializable
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
-const Requests = shared.com.keygenqt.mb.shared.requests
-const StatisticViewPage = shared.com.keygenqt.mb.shared.requests.StatisticViewPage
+/**
+ * Request statistic view validate
+ */
+@Suppress("PROVIDED_RUNTIME_TOO_LOW")
+@Serializable
+data class StatisticViewValidate(
+    @field:NotNullNotBlank
+    val pageKey: StatisticViewPage,
 
-export const Shared = {
-    locale: locale,
-    queries: queries,
-    httpClient: HttpClient,
-    requests: Requests,
-    pageKey: StatisticViewPage
-}
+    val id: String? = null,
+)

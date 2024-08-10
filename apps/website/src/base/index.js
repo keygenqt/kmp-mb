@@ -57,3 +57,4 @@ export * from './utils/Helper';
 export * from './hooks/useHttpQuery';
 export * from './hooks/useWindowScroll';
 export * from './hooks/useCacheStorage';
+export * from './hooks/useStatisticView';

@@ -19,6 +19,7 @@ import {
     LocalizationContext,
     RouteContext,
     useHttpQuery,
+    useStatisticView,
     Shared,
     PageError500,
     PageLoader,
@@ -44,6 +45,9 @@ export function CommunityPage(props) {
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
+
+    // Send view
+    useStatisticView(Shared.pageKey.COMMUNITY)
 
     // Get data
     const cities = useHttpQuery(Shared.queries.cities)

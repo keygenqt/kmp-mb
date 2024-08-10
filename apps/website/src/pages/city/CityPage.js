@@ -19,6 +19,7 @@ import {useParams} from "react-router";
 import {
     Shared,
     useHttpQuery,
+    useStatisticView,
     PageError404,
     PageLoader,
 } from '../../base';
@@ -40,6 +41,9 @@ export function CityPage(props) {
 
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
+
+    // Send view
+    useStatisticView(Shared.pageKey.CITY, id)
 
     // Error get data
     if (data === null) {

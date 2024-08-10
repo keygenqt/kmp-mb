@@ -20,16 +20,20 @@ import {BlockAbout} from './elements/BlockAbout';
 import {BlockCards} from './elements/BlockCards';
 import {BlockCarousel} from './elements/BlockCarousel';
 import {BlockPartners} from './elements/BlockPartners';
+import {useStatisticView, Shared} from '../../base';
 
 export function HomePage(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
 
+    // Send view
+    useStatisticView(Shared.pageKey.HOME)
+
     return (
         <Stack
-            spacing={isMD ? 4 : 6}
-            className={'ContentPage'}
-            alignItems="center"
+        spacing={isMD ? 4 : 6}
+        className={'ContentPage'}
+        alignItems="center"
         >
             <Container maxWidth='xl'>
                 <BlockAbout/>

@@ -20,6 +20,7 @@ import {
     LocalizationContext,
     PageHeader,
     useHttpQuery,
+    useStatisticView,
     Shared,
 } from '../../base';
 import {
@@ -43,6 +44,9 @@ export function RegistrationExpertPage(props) {
     // Get data
     const experts = useHttpQuery(Shared.queries.experts)
     const directions = useHttpQuery(Shared.queries.directions)
+
+    // Send view
+    useStatisticView(Shared.pageKey.REG_EXPERT)
 
     return (
         <Stack

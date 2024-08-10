@@ -1,5 +1,4 @@
-
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.db.migration
 
-import shared from "shared";
-import {AppConf} from "../../conf/AppConf";
-import {locale} from "./elements/locale"
-import {queries} from "./elements/queries"
+import com.keygenqt.mb.shared.db.entities.StatisticView
+import org.flywaydb.core.api.migration.BaseJavaMigration
+import org.flywaydb.core.api.migration.Context
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.transactions.transaction
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
-const Requests = shared.com.keygenqt.mb.shared.requests
-const StatisticViewPage = shared.com.keygenqt.mb.shared.requests.StatisticViewPage
-
-export const Shared = {
-    locale: locale,
-    queries: queries,
-    httpClient: HttpClient,
-    requests: Requests,
-    pageKey: StatisticViewPage
+@Suppress("unused", "ClassName")
+class V0013__Create_StatisticView : BaseJavaMigration() {
+    override fun migrate(context: Context?) {
+        transaction {
+            SchemaUtils.create(StatisticView)
+        }
+    }
 }

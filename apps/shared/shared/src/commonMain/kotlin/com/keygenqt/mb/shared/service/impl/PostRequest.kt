@@ -18,6 +18,7 @@ package com.keygenqt.mb.shared.service.impl
 import com.keygenqt.mb.shared.requests.RegExpertRequest
 import com.keygenqt.mb.shared.requests.RegOrganizerRequest
 import com.keygenqt.mb.shared.requests.RegPartnerRequest
+import com.keygenqt.mb.shared.requests.StatisticViewRequest
 import com.keygenqt.mb.shared.responses.StateResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -52,5 +53,15 @@ class PostRequest(private val client: HttpClient) {
         request: RegPartnerRequest
     ): StateResponse {
         return client.post("api/registration-partners") { setBody(request) }.body()
+    }
+
+    /**
+     * Send statistic about view page website
+     */
+    @Throws(Exception::class)
+    suspend fun sendStatisticView(
+        request: StatisticViewRequest
+    ): StateResponse {
+        return client.post("api/statistic-view") { setBody(request) }.body()
     }
 }

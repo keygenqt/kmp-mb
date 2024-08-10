@@ -19,6 +19,7 @@ import com.keygenqt.mb.shared.extensions.promise
 import com.keygenqt.mb.shared.requests.RegExpertRequest
 import com.keygenqt.mb.shared.requests.RegOrganizerRequest
 import com.keygenqt.mb.shared.requests.RegPartnerRequest
+import com.keygenqt.mb.shared.requests.StatisticViewRequest
 import com.keygenqt.mb.shared.service.ServiceRequest
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -43,4 +44,9 @@ class PostRequestJS(
     fun registrationPartner(
         request: RegPartnerRequest
     ) = GlobalScope.promise { client.post.registrationPartner(request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun sendStatisticView(
+        request: StatisticViewRequest
+    ) = GlobalScope.promise { client.post.sendStatisticView(request) }
 }

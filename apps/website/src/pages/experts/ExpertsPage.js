@@ -20,6 +20,7 @@ import {
     RouteContext,
     Shared,
     useHttpQuery,
+    useStatisticView,
     PageLoader,
     PageError500,
     PageHeader,
@@ -44,6 +45,9 @@ export function ExpertsPage(props) {
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
+
+    // Send view
+    useStatisticView(Shared.pageKey.EXPERTS)
 
     // Get data
     const experts = useHttpQuery(Shared.queries.experts)

@@ -20,6 +20,7 @@ import {
     LocalizationContext,
     Shared,
     useHttpQuery,
+    useStatisticView,
     PageError404,
     PageLoader,
     Helper
@@ -44,6 +45,9 @@ export function ExpertPage(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const {language} = React.useContext(LocalizationContext)
+
+    // Send view
+    useStatisticView(Shared.pageKey.EXPERT, id)
 
     // Error get data
     if (data === null) {

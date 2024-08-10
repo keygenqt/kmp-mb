@@ -1,4 +1,3 @@
-
 /**
  * Copyright 2024 Vitaliy Zarubin
  *
@@ -15,19 +14,26 @@
  * limitations under the License.
  */
 
-import shared from "shared";
-import {AppConf} from "../../conf/AppConf";
-import {locale} from "./elements/locale"
-import {queries} from "./elements/queries"
+import * as React from 'react';
+import {
+    Shared,
+} from '../shared/Shared';
 
-const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
-const Requests = shared.com.keygenqt.mb.shared.requests
-const StatisticViewPage = shared.com.keygenqt.mb.shared.requests.StatisticViewPage
 
-export const Shared = {
-    locale: locale,
-    queries: queries,
-    httpClient: HttpClient,
-    requests: Requests,
-    pageKey: StatisticViewPage
+export function useStatisticView(pageKey, id = null) {
+    const wasCalled = React.useRef(false)
+    React.useEffect(() => {
+        if(wasCalled.current) return;
+        wasCalled.current = true;
+        try {
+            Shared.httpClient.post.sendStatisticView(new Shared.requests.StatisticViewRequest(
+                pageKey,
+                id,
+            )).catch(async (e) => {
+                console.error(e)
+            });
+        } catch (e) {
+            console.error(e)
+        }
+    }, [id, pageKey])
 }

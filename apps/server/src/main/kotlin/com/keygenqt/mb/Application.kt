@@ -81,6 +81,7 @@ fun Application.module() {
                     single { RegOrganizersService(db) }
                     single { RegPartnersService(db) }
                     single { ColumnLocalesService(db) }
+                    single { StatisticViewService(db) }
                     single { SessionService(db, secretSession) }
                 }
             )
@@ -131,6 +132,7 @@ fun Application.module() {
                 registrationExperts()
                 registrationOrganizers()
                 registrationPartners()
+                statisticView()
             }
         }
     }

@@ -19,6 +19,8 @@ import {FormPartner} from './elements/FormPartner';
 import {
     LocalizationContext,
     PageHeader,
+    Shared,
+    useStatisticView,
 } from '../../base';
 import {
     useTheme,
@@ -37,6 +39,9 @@ export function RegistrationPartnerPage(props) {
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {t} = React.useContext(LocalizationContext)
+
+    // Send view
+    useStatisticView(Shared.pageKey.REG_PARTNER)
 
     return (
         <Stack
