@@ -15,27 +15,42 @@
  */
 package com.keygenqt.mb.shared.responses
 
+import io.ktor.http.*
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Country response
+ * Int response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class DataValueResponse(
+    val code: Int = HttpStatusCode.OK.value,
+    val value: String,
+)
+
+/**
+ * Key-Value response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class DataKeyValueResponse(
+    val code: Int = HttpStatusCode.OK.value,
+    val key: String,
+    val value: String,
+)
+
+/**
+ * Key-Value array response
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
 @Suppress("ArrayInDataClass")
-data class CityResponse(
-    val id: Int,
-    val image: String,
-    val link: String,
-    val name: String,
-    val createAt: String? = null,
-    val updateAt: String? = null,
-    val country: CountryResponse,
-    val locales: Array<ColumnLocaleResponse>? = null,
-    val organizers: Array<UserResponse>? = null,
-    val uploads: Array<UploadResponse>? = null,
-    val viewCount: Int? = null,
+data class DataKeyValuesResponse(
+    val code: Int = HttpStatusCode.OK.value,
+    val values: Array<DataKeyValueResponse>,
 )

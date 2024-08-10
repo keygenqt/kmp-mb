@@ -44,6 +44,17 @@ class CitiesService(
     ) = CityEntity.findById(id)
 
     /**
+     * Get list entity by array ids
+     */
+    fun getByIds(
+        ids: List<Int>
+    ) = CityEntity
+        .find { (Cities.id inList ids) }
+        // order by ids
+        .associateBy { it.id.value }
+        .let { entities -> ids.mapNotNull { entities[it] } }
+
+    /**
      * Create entity.
      */
     fun insert(

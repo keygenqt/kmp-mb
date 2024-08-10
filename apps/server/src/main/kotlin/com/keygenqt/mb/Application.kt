@@ -82,6 +82,7 @@ fun Application.module() {
                     single { RegPartnersService(db) }
                     single { ColumnLocalesService(db) }
                     single { StatisticViewService(db) }
+                    single { RawService(db) }
                     single { SessionService(db, secretSession) }
                 }
             )
@@ -123,6 +124,7 @@ fun Application.module() {
             route("/api") {
                 login()
                 logout()
+                dashboard()
                 directions()
                 experts()
                 users()

@@ -27,7 +27,7 @@ interface IService<T> {
         query.invoke(this as T)
     }
 
-    suspend fun <R> transactionRaw(query: Transaction.() -> R) = db.transaction {
-        query.invoke(TransactionManager.current())
+    suspend fun <R> transactionRaw(query: T.(Transaction) -> R) = db.transaction {
+        query.invoke(this as T, TransactionManager.current())
     }
 }

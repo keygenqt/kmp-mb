@@ -68,6 +68,8 @@ class CityEntity(id: EntityID<Int>) : IntEntity(id) {
     var locales by ColumnLocaleEntity via RelationsCitiesColumnLocales
     var organizers by UserEntity via RelationsCitiesOrganizers
     var uploads by UploadEntity via RelationsCitiesUploads
+
+    var viewCount: Int? = null
 }
 
 /**
@@ -86,7 +88,8 @@ fun CityEntity.toResponse(
     uploads = uploads.toResponses(roles).toTypedArray().ifEmpty { null },
     // Not guest
     createAt = roles.isNotGuest { createAt.toUTC() },
-    updateAt = roles.isNotGuest { updateAt.toUTC() }
+    updateAt = roles.isNotGuest { updateAt.toUTC() },
+    viewCount = roles.isNotGuest { viewCount }
 )
 
 /**
