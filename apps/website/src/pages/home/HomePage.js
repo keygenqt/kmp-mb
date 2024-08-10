@@ -31,9 +31,9 @@ export function HomePage(props) {
 
     return (
         <Stack
-        spacing={isMD ? 4 : 6}
-        className={'ContentPage'}
-        alignItems="center"
+            spacing={isMD ? 4 : 6}
+            className={'ContentPage'}
+            alignItems="center"
         >
             <Container maxWidth='xl'>
                 <BlockAbout/>
