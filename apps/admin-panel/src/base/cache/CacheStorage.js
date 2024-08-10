@@ -16,10 +16,15 @@
 
 import {MD5} from 'crypto-js';
 import LZString from "lz-string"
+import { v4 as uuidv4 } from 'uuid';
 
-// @todo expired delay
+
 export const CacheStorage = {
+    // Version up for clear old cache
+    version: 2,
+
     set: function (key, value, isCrypto = true, quiet = false) {
+        key = `${key}-${CacheStorage.version}`
         if (typeof value == 'object') {
             CacheStorage._setItem(key, JSON.stringify(value), isCrypto, quiet)
         } else {
@@ -28,6 +33,10 @@ export const CacheStorage = {
     },
 
     get: function(key, isCrypto = true) {
+        key = `${key}-${CacheStorage.version}`
+        // Check version cache
+        CacheStorage.clearByVersion()
+        // Get value
         const data = CacheStorage._getItem(key, isCrypto)
         // Is empty
         if (data === null || data === undefined) {
@@ -61,6 +70,26 @@ export const CacheStorage = {
         localStorage.clear()
         if (!quiet) {
             CacheStorage._updateHash()
+        }
+    },
+
+    getUniqueId: function () {
+        const data = CacheStorage._getItem("uniqueId", true)
+        if (data === null || data === undefined) {
+            const genUniqueId = uuidv4()
+            CacheStorage._setItem("uniqueId", genUniqueId, true, true)
+            return genUniqueId;
+        }
+        return data;
+    },
+
+    clearByVersion: function () {
+        const uniqueId = CacheStorage.getUniqueId()
+        const data = CacheStorage._getItem("version", true)
+        if (data !== `${CacheStorage.version}`) {
+            localStorage.clear()
+            CacheStorage._setItem("uniqueId", `${uniqueId}`, true, true)
+            CacheStorage._setItem("version", `${CacheStorage.version}`, true, true)
         }
     },
 

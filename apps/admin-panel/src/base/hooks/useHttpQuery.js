@@ -17,12 +17,11 @@
 import * as React from 'react';
 import {Shared} from "../shared/Shared";
 import {CacheStorage} from "../cache/CacheStorage"
-import {CacheVersion} from "../cache/CacheVersion"
 
 
 export function useHttpQuery(method, ...arg) {
 
-    const cacheKey = `${method}${arg.length ? arg : ''}-${CacheVersion}`
+    const cacheKey = `${method}${arg.length ? arg : ''}-${CacheStorage.version}`
     const cacheData = CacheStorage.get(cacheKey)
 
     const [value, setValue] = React.useState(cacheData)

@@ -50,7 +50,6 @@ export * from './route/ScrollRecovery';
 // cache
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
-export * from './cache/CacheVersion';
 // utils
 export * from './utils/Helper';
 // hooks

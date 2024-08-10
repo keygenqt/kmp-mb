@@ -18,15 +18,6 @@ import * as React from 'react';
 import {CacheStorage} from '../cache/CacheStorage';
 
 export function useCacheStorage(key, defaultValue = undefined) {
-
-    // Clear old cache
-    const wasCalled = React.useRef(false)
-    React.useEffect(() => {
-        if(wasCalled.current) return;
-        wasCalled.current = true;
-        CacheStorage.clearByVersion()
-    }, [])
-
     const getValueType = React.useCallback(
         () => {
             const value = CacheStorage.get(key)

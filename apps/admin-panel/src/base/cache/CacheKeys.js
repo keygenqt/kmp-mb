@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import {CacheVersion} from './CacheVersion'
-
 export const CacheKeys = {
-    darkMode: `darkMode-${CacheVersion}`,
-    showMenu: `showMenu-${CacheVersion}`,
+    darkMode: 'darkMode',
+    showMenu: 'showMenu',
 };

@@ -29,7 +29,6 @@ export * from './route/ScrollRecovery';
 // cache
 export * from './cache/CacheKeys';
 export * from './cache/CacheStorage';
-export * from './cache/CacheVersion';
 // hooks
 export * from './hooks/useHttpQuery';
 export * from './hooks/useWindowScroll';

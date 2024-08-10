@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {CacheVersion} from './CacheVersion'
 
 export const CacheKeys = {
-    darkMode: `darkMode-${CacheVersion}`,
-    experts: `experts-${CacheVersion}`,
-    expertFilterSearch: `expertFilterSearch-${CacheVersion}`,
-    expertFilterDirection: `expertFilterDirection-${CacheVersion}`,
-    communityFilterSearch: `communityFilterSearch-${CacheVersion}`,
-    communityFilterCountry: `communityFilterCountry-${CacheVersion}`,
+    darkMode: 'darkMode',
+    experts: 'experts',
+    expertFilterSearch: 'expertFilterSearch',
+    expertFilterDirection: 'expertFilterDirection',
+    communityFilterSearch: 'communityFilterSearch',
+    communityFilterCountry: 'communityFilterCountry',
 };
