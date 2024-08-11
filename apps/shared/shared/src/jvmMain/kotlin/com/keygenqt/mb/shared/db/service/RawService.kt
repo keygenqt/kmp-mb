@@ -3,9 +3,10 @@ package com.keygenqt.mb.shared.db.service
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.requests.StatisticViewPage
-import com.keygenqt.mb.shared.responses.DataValueResponse
 import com.keygenqt.mb.shared.responses.DataKeyValueResponse
 import com.keygenqt.mb.shared.responses.DataKeyValuesResponse
+import com.keygenqt.mb.shared.responses.DataValueResponse
+import kotlinx.datetime.Month
 import org.jetbrains.exposed.sql.Transaction
 
 
@@ -32,7 +33,7 @@ class RawService(
                 return@exec rs.getInt("count")
             }
         }
-        return DataValueResponse(value = (count ?: 0).toString())
+        return DataValueResponse(value = count?.toString()?.toIntOrNull() ?: 0)
     }
 
     /**
@@ -56,7 +57,7 @@ class RawService(
                 return@exec rs.getInt("count")
             }
         }
-        return DataValueResponse(value = (count ?: 0).toString())
+        return DataValueResponse(value = count?.toString()?.toIntOrNull() ?: 0)
     }
 
     /**
@@ -78,10 +79,53 @@ class RawService(
             """.trimIndent()
         ) { rs ->
             while (rs.next()) {
-                values.add(DataKeyValueResponse(
-                    key = rs.getString("pageID"),
-                    value = rs.getString("count"),
-                ))
+                values.add(
+                    DataKeyValueResponse(
+                        key = rs.getString("pageID"),
+                        value = rs.getInt("count"),
+                    )
+                )
+            }
+        }
+        return DataKeyValuesResponse(
+            values = values.toTypedArray()
+        )
+    }
+
+    /**
+     * Get view pages by months
+     */
+    fun Transaction.getActivityByMonths(): DataKeyValuesResponse = run {
+        val values = mutableListOf<DataKeyValueResponse>()
+        val result = mutableListOf<DataKeyValueResponse>()
+        exec(
+            """
+                SELECT COUNT(StatisticView.pageHash) as `count`, MONTH(FROM_UNIXTIME(StatisticView.createAt/1000)) as `month`
+                FROM StatisticView
+                GROUP BY `month`
+                ORDER BY `month` ;
+                """.trimIndent()
+        ) { rs ->
+            while (rs.next()) {
+                result.add(
+                    DataKeyValueResponse(
+                        key = Month.of(rs.getInt("month")).name,
+                        value = rs.getInt("count"),
+                    )
+                )
+            }
+        }
+        for (month in Month.entries) {
+            val data = result.firstOrNull { it.key == month.name }
+            if (data != null) {
+                values.add(data)
+            } else {
+                values.add(
+                    DataKeyValueResponse(
+                        key = month.name,
+                        value = 0,
+                    )
+                )
             }
         }
         return DataKeyValuesResponse(

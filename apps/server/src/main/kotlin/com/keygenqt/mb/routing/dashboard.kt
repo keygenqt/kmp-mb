@@ -33,7 +33,7 @@ fun Route.dashboard() {
     val citiesService: CitiesService by inject()
 
     route("/dashboard") {
-        get("stat-view-home") {
+        get("view-home") {
             // check role
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
@@ -43,7 +43,7 @@ fun Route.dashboard() {
             // response
             call.respond(response)
         }
-        get("stat-view-community") {
+        get("view-community") {
             // check role
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
@@ -53,7 +53,7 @@ fun Route.dashboard() {
             // response
             call.respond(response)
         }
-        get("stat-view-experts") {
+        get("view-experts") {
             // check role
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
@@ -63,7 +63,7 @@ fun Route.dashboard() {
             // response
             call.respond(response)
         }
-        get("stat-view-regs") {
+        get("view-regs") {
             // check role
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
@@ -73,7 +73,7 @@ fun Route.dashboard() {
             // response
             call.respond(response)
         }
-        get("stat-top-community") {
+        get("top-community") {
             // check role
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
@@ -83,11 +83,21 @@ fun Route.dashboard() {
             val response = citiesService.transaction {
                 getByIds(data.values.mapNotNull { it.key.toIntOrNull() })
                     .map { entity ->
-                        val count = data.values.firstOrNull { it.key.toInt() == entity.id.value }?.value?.toIntOrNull()
+                        val count = data.values.firstOrNull { it.key.toInt() == entity.id.value }?.value
                         entity.viewCount = count
                         entity
                     }
                     .toResponses(call.getUserRoles())
+            }
+            // response
+            call.respond(response)
+        }
+        get("view-activity") {
+            // check role
+            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            // act
+            val response = rawService.transactionRaw {
+                it.getActivityByMonths()
             }
             // response
             call.respond(response)

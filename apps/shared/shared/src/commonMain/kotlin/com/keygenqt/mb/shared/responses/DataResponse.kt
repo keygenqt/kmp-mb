@@ -28,7 +28,7 @@ import kotlin.js.JsExport
 @Serializable
 data class DataValueResponse(
     val code: Int = HttpStatusCode.OK.value,
-    val value: String,
+    val value: Int,
 )
 
 /**
@@ -40,7 +40,7 @@ data class DataValueResponse(
 data class DataKeyValueResponse(
     val code: Int = HttpStatusCode.OK.value,
     val key: String,
-    val value: String,
+    val value: Int,
 )
 
 /**

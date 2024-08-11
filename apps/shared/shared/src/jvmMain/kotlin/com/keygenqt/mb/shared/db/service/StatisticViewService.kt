@@ -21,7 +21,6 @@ import com.keygenqt.mb.shared.db.entities.StatisticViewEntity
 import com.keygenqt.mb.shared.extension.toMD5
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.requests.StatisticViewPage
-import org.jetbrains.exposed.dao.id.EntityID
 
 class StatisticViewService(
     override val db: DatabaseMysql
@@ -29,7 +28,7 @@ class StatisticViewService(
 
     private fun isHasView(
         pageHash: String,
-    ) = StatisticViewEntity.find { StatisticView.id eq pageHash }.count().toInt() != 0
+    ) = StatisticViewEntity.find { StatisticView.pageHash eq pageHash }.count().toInt() != 0
 
     /**
      * Create entity.
@@ -43,7 +42,7 @@ class StatisticViewService(
         val pageHash = "$pageKey-$uniqueId-$id".toMD5()
         if (!isHasView(pageHash)) {
             StatisticViewEntity.new {
-                this.pageHash = EntityID(pageHash, StatisticView)
+                this.pageHash = pageHash
                 this.pageID = id
                 this.pageKey = pageKey
                 this.createAt = System.currentTimeMillis()

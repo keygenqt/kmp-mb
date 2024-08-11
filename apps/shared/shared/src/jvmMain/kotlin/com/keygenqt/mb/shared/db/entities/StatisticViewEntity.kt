@@ -16,25 +16,23 @@
 package com.keygenqt.mb.shared.db.entities
 
 import com.keygenqt.mb.shared.requests.StatisticViewPage
-import org.jetbrains.exposed.dao.Entity
-import org.jetbrains.exposed.dao.EntityClass
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.Column
+import org.jetbrains.exposed.dao.id.IntIdTable
 
 
-object StatisticView : IdTable<String>() {
-    override val id: Column<EntityID<String>> = varchar("pageHash", 32).entityId()
-
+object StatisticView : IntIdTable() {
+    val pageHash = varchar("pageHash", 255).uniqueIndex()
     val pageID = varchar("pageID", 255).nullable()
     val pageKey = enumeration("pageKey", StatisticViewPage::class).default(StatisticViewPage.HOME)
     val createAt = long("createAt")
 }
 
-class StatisticViewEntity(id: EntityID<String>) : Entity<String>(id) {
-    companion object : EntityClass<String, StatisticViewEntity>(StatisticView)
+class StatisticViewEntity(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<StatisticViewEntity>(StatisticView)
 
-    var pageHash by StatisticView.id
+    var pageHash by StatisticView.pageHash
     var pageID by StatisticView.pageID
     var pageKey by StatisticView.pageKey
     var createAt by StatisticView.createAt

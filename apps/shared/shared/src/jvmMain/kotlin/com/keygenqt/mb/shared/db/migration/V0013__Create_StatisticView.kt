@@ -16,16 +16,34 @@
 package com.keygenqt.mb.shared.db.migration
 
 import com.keygenqt.mb.shared.db.entities.StatisticView
+import com.keygenqt.mb.shared.db.entities.StatisticViewEntity
+import com.keygenqt.mb.shared.extension.getFirstDayTimeMillis
+import com.keygenqt.mb.shared.requests.StatisticViewPage
+import kotlinx.datetime.Month
 import org.flywaydb.core.api.migration.BaseJavaMigration
 import org.flywaydb.core.api.migration.Context
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.*
 
 @Suppress("unused", "ClassName")
 class V0013__Create_StatisticView : BaseJavaMigration() {
     override fun migrate(context: Context?) {
         transaction {
             SchemaUtils.create(StatisticView)
+            initDemo()
+        }
+    }
+}
+
+fun initDemo() {
+    for (month in Month.entries) {
+        (1..if (month.ordinal % 2 == 0) 1 else 2).forEach { _ ->
+            StatisticViewEntity.new {
+                this.pageHash = UUID.randomUUID().toString()
+                this.pageKey = StatisticViewPage.HOME
+                this.createAt = month.getFirstDayTimeMillis()
+            }
         }
     }
 }
