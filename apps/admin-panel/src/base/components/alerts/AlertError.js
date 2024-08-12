@@ -42,6 +42,9 @@ export function AlertError(props) {
                         position: 'relative',
                         top: '2px'
                     },
+                    '& .MuiAlert-icon svg': {
+                        color: 'white.main',
+                    },
                     '& .MuiButtonBase-root': {
                         color: 'white.main',
                         position: 'relative',
@@ -58,7 +61,7 @@ export function AlertError(props) {
                             setTimeout(() => onClose(), 200)
                         }}
                     >
-                        <Close fontSize="inherit"/>
+                        <Close color="white" fontSize="inherit"/>
                     </IconButton>
                 }
             >

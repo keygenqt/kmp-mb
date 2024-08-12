@@ -17,15 +17,21 @@
 import * as React from 'react';
 import {
     Stack,
-    Typography,
 } from '@mui/material';
+
+import {FormLogin} from './elements/FormLogin';
 
 export function LoginPage(props) {
     return (
-        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
-            <Typography variant="h4" color={'text.primary'}>
-                Login
-            </Typography>
+        <Stack
+            spacing={2}
+            direction="row"
+            justifyContent="center"
+            sx={{
+                p: 3
+            }}
+        >
+            <FormLogin/>
         </Stack>
     );
 }

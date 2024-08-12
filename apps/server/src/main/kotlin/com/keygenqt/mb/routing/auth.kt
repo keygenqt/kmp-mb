@@ -20,11 +20,10 @@ import com.keygenqt.mb.base.SessionService
 import com.keygenqt.mb.base.SessionUser
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.service.UsersService
 import com.keygenqt.mb.shared.responses.StateResponse
-import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.shared.responses.UserRolesResponse
 import com.keygenqt.mb.validators.models.LoginValidate
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -33,36 +32,49 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
 
-fun Route.login() {
+fun Route.auth() {
 
     val usersService: UsersService by inject()
     val sessionService: SessionService by inject()
 
-    post("/login") {
-        // check role
-        call.userRoleNotHasForbidden(UserRole.GUEST)
-        // get request
-        val request = call.receiveValidate<LoginValidate>()
-        // act
-        val response = usersService.transaction {
-            usersService.findUserByAuth(
-                lname = request.lname,
-                password = request.password
-            )?.toResponse(call.getUserRoles()) ?: throw Exceptions.Unauthorized()
+    route("/auth") {
+        get("/roles") {
+            // act
+            val roles = call.getUserRoles()
+            // response
+            call.respond(
+                UserRolesResponse(
+                    roles = roles.toTypedArray()
+                )
+            )
         }
-        call.sessions.set(
-            SessionUser(
-                userId = response.id,
-                roles = response.roles?.toList(),
-                token = sessionService.generateToken(response.id),
+        post("/jwt") {
+            // get request
+            val request = call.receiveValidate<LoginValidate>()
+            // act
+            val response = usersService.transaction {
+                usersService.findUserByAuth(
+                    lname = request.lname,
+                    password = request.password
+                )?.toResponse(call.getUserRoles()) ?: throw Exceptions.Unauthorized()
+            }
+            // clear session if exist
+            call.sessions.clear<SessionUser>()
+            // set new session
+            call.sessions.set(
+                SessionUser(
+                    userId = response.id,
+                    roles = response.roles?.toList(),
+                    token = sessionService.generateToken(response.id),
+                )
             )
-        )
-        // response
-        call.respond(
-            StateResponse(
-                code = HttpStatusCode.OK.value,
-                message = HttpStatusCode.OK.description
+            // response
+            call.respond(
+                StateResponse(
+                    code = HttpStatusCode.OK.value,
+                    message = HttpStatusCode.OK.description
+                )
             )
-        )
+        }
     }
 }

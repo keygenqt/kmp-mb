@@ -60,4 +60,9 @@ class GetRequest(private val client: HttpClient) {
     suspend fun registrationExpert(id: Int): RegExpertResponse {
         return client.get("api/registration-experts/$id").body()
     }
+
+    @Throws(Exception::class)
+    suspend fun authRoles(): UserRolesResponse {
+        return client.get("api/auth/roles").body()
+    }
 }

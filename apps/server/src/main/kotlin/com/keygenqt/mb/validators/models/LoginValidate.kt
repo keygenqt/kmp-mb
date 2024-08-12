@@ -26,9 +26,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginValidate(
     @field:NotNullNotBlank
+    @field:Size(min = 3, max = 250)
     val lname: String? = null,
 
     @field:NotNullNotBlank
-    @field:Size(min = 8, max = 12, message = "Размер должен быть от 8 до 12.")
+    @field:Size(min = 8, max = 12)
     val password: String? = null
 )

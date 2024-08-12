@@ -14,11 +14,18 @@
  * limitations under the License.
  */
 
-// Common
-import logo from '../../assets/images/common/logo.svg';
-import logo192 from '../../assets/images/common/logo192.png';
-
-export const DataImages = {
-    logo: logo,
-    logo192: logo192,
+export const Helper = {
+    /**
+     * Find error array validate
+     */
+    findError: function (field, stateResponse) {
+        if (!stateResponse.validates) {
+            return null
+        }
+        return stateResponse.validates
+            .find(el => el['filed'] === field)
+            ?.errors.map((e) => e.charAt(0).toUpperCase() + e.slice(1) + '.')
+            ?.join(' ')
+            ?? null
+    },
 };

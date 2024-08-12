@@ -31,13 +31,13 @@ import {
 } from '@mui/material';
 
 export function EmptyLayout(props) {
-    const darkMode = useCacheStorage(CacheKeys.darkMode, false)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
     return (
         <>
             <Box
                 className={'Table-Row'}
                 sx={{
-                    background: '#802aea14'
+                    background: '#802aea0a'
                 }}
             >
                 <Box id={'Table-Cell-Page'} className={'Table-Cell ' + props.className} sx={{
@@ -53,11 +53,12 @@ export function EmptyLayout(props) {
                     height: '50px',
                     position: 'absolute',
                     top: 16,
-                    right: 16
+                    right: 16,
+                    borderRadius: 50
                 }}
                 color='primary'
                 onClick={() => {
-                    CacheStorage.set(CacheKeys.darkMode, !darkMode)
+                    CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
                 }}
             >
                 {darkMode ? (

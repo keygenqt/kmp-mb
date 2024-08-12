@@ -27,8 +27,6 @@ import io.ktor.server.sessions.*
 
 fun Route.logout() {
     post("/logout") {
-        // check role
-        call.userRoleHasForbidden(UserRole.GUEST)
         // act
         call.sessions.clear<SessionUser>()
         // response

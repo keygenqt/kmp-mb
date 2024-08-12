@@ -17,15 +17,15 @@
 import {useCallback, useLayoutEffect, useState} from "react";
 import {CacheStorage} from "../cache/CacheStorage";
 
-export function useCacheStorage(key, defaultValue = undefined) {
+export function useCacheStorage(key, defaultValue = undefined, isCrypto = true) {
     const getValueType = useCallback(
         () => {
-            const value = CacheStorage.get(key)
+            const value = CacheStorage.get(key, isCrypto)
             if (value !== null && value !== undefined) {
                 return value;
             }
             return defaultValue
-        }, [defaultValue, key]);
+        }, [defaultValue, isCrypto, key]);
 
     const [value, setValue] = useState(getValueType());
 

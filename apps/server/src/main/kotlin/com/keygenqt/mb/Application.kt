@@ -122,7 +122,7 @@ fun Application.module() {
             staticResources("/static", "assets")
             home()
             route("/api") {
-                login()
+                auth()
                 logout()
                 dashboard()
                 directions()

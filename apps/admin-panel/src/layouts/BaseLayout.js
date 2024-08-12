@@ -74,7 +74,7 @@ export function BaseLayout(props) {
                             sx={{
                                 p: 3,
                                 boxSizing: 'border-box',
-                                background: '#802aea14',
+                                background: '#802aea0a',
                                 borderRadius: 3,
                                 transitionDuration: '200ms',
                             }}

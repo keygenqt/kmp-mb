@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,12 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.requests
 
-// Common
-import logo from '../../assets/images/common/logo.svg';
-import logo192 from '../../assets/images/common/logo192.png';
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-export const DataImages = {
-    logo: logo,
-    logo192: logo192,
-};
+/**
+ * Request Login JWT
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class AuthJwtRequest(
+    val lname: String,
+    val password: String,
+)

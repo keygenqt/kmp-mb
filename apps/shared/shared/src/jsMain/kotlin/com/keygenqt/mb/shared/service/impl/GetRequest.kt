@@ -49,4 +49,7 @@ class GetRequestJS(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun registrationExpert(id: Int) = GlobalScope.promise { client.get.registrationExpert(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun authRoles() = GlobalScope.promise { client.get.authRoles() }
 }

@@ -51,3 +51,14 @@ data class UserResponse(
     val contacts: Array<UserContactResponse>? = null,
     val media: Array<UserMediaResponse>? = null,
 )
+
+/**
+ * User roles response
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+@Suppress("ArrayInDataClass")
+data class UserRolesResponse(
+    val roles: Array<UserRole>,
+)

@@ -15,10 +15,7 @@
  */
 package com.keygenqt.mb.shared.service.impl
 
-import com.keygenqt.mb.shared.requests.RegExpertRequest
-import com.keygenqt.mb.shared.requests.RegOrganizerRequest
-import com.keygenqt.mb.shared.requests.RegPartnerRequest
-import com.keygenqt.mb.shared.requests.StatisticViewRequest
+import com.keygenqt.mb.shared.requests.*
 import com.keygenqt.mb.shared.responses.StateResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -63,5 +60,23 @@ class PostRequest(private val client: HttpClient) {
         request: StatisticViewRequest
     ): StateResponse {
         return client.post("api/statistic-view") { setBody(request) }.body()
+    }
+
+    /**
+     * Login JWT
+     */
+    @Throws(Exception::class)
+    suspend fun authJwt(
+        request: AuthJwtRequest
+    ): StateResponse {
+        return client.post("api/auth/jwt") { setBody(request) }.body()
+    }
+
+    /**
+     * Logout JWT
+     */
+    @Throws(Exception::class)
+    suspend fun logout(): StateResponse {
+        return client.post("api/logout").body()
     }
 }

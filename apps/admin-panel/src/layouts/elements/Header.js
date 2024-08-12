@@ -18,12 +18,14 @@ import * as React from 'react';
 import {
     Brightness5Outlined,
     Brightness4Outlined,
-    Menu
+    Menu,
+    Logout
 } from '@mui/icons-material';
 import {
     CacheStorage,
     CacheKeys,
     useCacheStorage,
+    Shared,
 } from '../../base';
 import {
     useTheme,
@@ -34,13 +36,12 @@ import {
     Box,
     Stack,
     Typography,
-    ButtonGroup
 } from '@mui/material';
 
 export function Header(props) {
     const theme = useTheme()
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
-    const darkMode = useCacheStorage(CacheKeys.darkMode, false)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
     const showMenu = useCacheStorage(CacheKeys.showMenu, true)
 
     return (
@@ -51,14 +52,14 @@ export function Header(props) {
                     minWidth: '50px !important',
                     height: '50px',
                     position: 'relative',
-                    left: -8
+                    left: -8,
+                    borderRadius: 50
                 }}
-                color={'inherit'}
                 onClick={() => {
                     CacheStorage.set(CacheKeys.showMenu, !showMenu)
                 }}
             >
-                <Menu/>
+                <Menu color={'inherit'}/>
             </Button>
 
             <Stack
@@ -82,33 +83,44 @@ export function Header(props) {
 
             <Stack
                 direction='row'
-                spacing={isLG ? 0.5 : 2}
+                spacing={0}
             >
-                <ButtonGroup
-                    color={'primary'}
-                    size='small'
-                    variant='text'
-                    aria-label='Mode'
+                <Button
+                    sx={{
+                        minWidth: '50px !important',
+                        height: '50px',
+                        position: 'relative',
+                        right: -8,
+                        borderRadius: 50
+                    }}
+                    color='primary'
+                    onClick={() => {
+                        CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
+                    }}
                 >
-                    <Button
-                        sx={{
-                            minWidth: '50px !important',
-                            height: '50px',
-                            position: 'relative',
-                            right: -8
-                        }}
-                        color='primary'
-                        onClick={() => {
-                            CacheStorage.set(CacheKeys.darkMode, !darkMode)
-                        }}
-                    >
-                        {darkMode ? (
-                            <Brightness4Outlined color='primary'/>
-                        ) : (
-                            <Brightness5Outlined color='primary'/>
-                        )}
-                    </Button>
-                </ButtonGroup>
+                    {darkMode ? (
+                        <Brightness4Outlined color='primary'/>
+                    ) : (
+                        <Brightness5Outlined color='primary'/>
+                    )}
+                </Button>
+
+                <Button
+                    sx={{
+                        minWidth: '50px !important',
+                        height: '50px',
+                        position: 'relative',
+                        right: -8,
+                        borderRadius: 50
+                    }}
+                    color='primary'
+                    onClick={async () => {
+                        CacheStorage.set(CacheKeys.userRoles, ['GUEST'])
+                        await Shared.httpClient.post.logout()
+                    }}
+                >
+                    <Logout color='primary'/>
+                </Button>
             </Stack>
         </Toolbar>
     </AppBar>

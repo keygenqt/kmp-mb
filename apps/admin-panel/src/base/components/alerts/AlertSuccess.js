@@ -42,8 +42,10 @@ export function AlertSuccess(props) {
                         position: 'relative',
                         top: '2px'
                     },
-                    '& .MuiButtonBase-root': {
+                    '& .MuiAlert-icon svg': {
                         color: 'white.main',
+                    },
+                    '& .MuiButtonBase-root': {
                         position: 'relative',
                         top: '2px'
                     }
@@ -58,7 +60,7 @@ export function AlertSuccess(props) {
                             setTimeout(() => onClose(), 200)
                         }}
                     >
-                        <Close fontSize="inherit"/>
+                        <Close color="white" fontSize="inherit"/>
                     </IconButton>
                 }
             >
