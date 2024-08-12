@@ -28,45 +28,48 @@ import {
 import {
     Box,
     Button,
+    Stack,
 } from '@mui/material';
 
 export function EmptyLayout(props) {
     const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
     return (
         <>
-            <Box
-                className={'Table-Row'}
-                sx={{
-                    background: '#802aea0a'
-                }}
-            >
+            <Box className={'Table-Row'} sx={{ background: '#802aea0a' }} >
+                <Stack direction={'row'}>
+                    <Box sx={{ flexGrow: 1 }}/>
+
+                    <Button
+                        sx={{
+                            minWidth: '50px !important',
+                            height: '50px',
+                            borderRadius: 50,
+                            position: 'relative',
+                            top: 14,
+                            right: 8
+                        }}
+                        color='primary'
+                        onClick={() => {
+                            CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
+                        }}
+                    >
+                        {darkMode ? (
+                            <Brightness4Outlined color='primary'/>
+                        ) : (
+                            <Brightness5Outlined color='primary'/>
+                        )}
+                    </Button>
+                </Stack>
+            </Box>
+            <Box className={'Table-Row'} sx={{ background: '#802aea0a' }} >
                 <Box id={'Table-Cell-Page'} className={'Table-Cell ' + props.className} sx={{
-                        verticalAlign: props.isCenter === true ? 'middle' : 'top'
+                        verticalAlign: props.isCenter === true ? 'middle' : 'top',
                     }}
                 >
                     {props.children}
                 </Box>
             </Box>
-            <Button
-                sx={{
-                    minWidth: '50px !important',
-                    height: '50px',
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    borderRadius: 50
-                }}
-                color='primary'
-                onClick={() => {
-                    CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
-                }}
-            >
-                {darkMode ? (
-                    <Brightness4Outlined color='primary'/>
-                ) : (
-                    <Brightness5Outlined color='primary'/>
-                )}
-            </Button>
+
         </>
     )
 }

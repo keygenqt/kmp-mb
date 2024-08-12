@@ -22,6 +22,9 @@ import {
     Box,
     Stack,
 } from '@mui/material';
+import {
+    useWindowResize,
+} from '../base';
 
 import {Menu} from './elements/Menu';
 import {Header} from './elements/Header';
@@ -31,7 +34,8 @@ export function BaseLayout(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const widthMenu = isMD ? 250: 300
-
+    const {width, scrollable} = useWindowResize()
+    const maxWidthHF = width - (scrollable ? 17 : 0)
     const [showMenu, setShowMenu] = React.useState(!isMD)
 
     React.useEffect(() => {
@@ -43,7 +47,9 @@ export function BaseLayout(props) {
             {/* Header */}
             <Box className={'Table-Row'}>
                 <Box className={'Table-Cell Header'} sx={{height: '1px'}}>
-                    <Header onClickMenu={() => setShowMenu(!showMenu)}/>
+                    <Box sx={{maxWidth: maxWidthHF}}>
+                        <Header onClickMenu={() => setShowMenu(!showMenu)}/>
+                    </Box>
                 </Box>
             </Box>
             {/* Content */}
@@ -82,7 +88,6 @@ export function BaseLayout(props) {
                         {/* Body */}
                         <Stack
                             width={showMenu ? `calc(100% - ${widthMenu}px - 50px)` : 'calc(100% - 35px)'}
-                            minWidth={315}
                             direction="column"
                             justifyContent={props.isCenter === true ? 'center' : 'flex-start'}
                             alignItems={props.isCenter === true ? 'center' : 'flex-start'}
@@ -100,10 +105,13 @@ export function BaseLayout(props) {
                     </Stack>
                 </Box>
             </Box>
+
             {/* Footer */}
             <Box className={'Table-Row'} sx={{height: '1px'}}>
                 <Box className={'Table-Cell Footer'}>
-                    <Footer/>
+                    <Box sx={{maxWidth: maxWidthHF}}>
+                        <Footer/>
+                    </Box>
                 </Box>
             </Box>
         </>

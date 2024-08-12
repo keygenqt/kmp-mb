@@ -36,6 +36,7 @@ import {
     Button,
     Stack,
     Typography,
+    Box,
 } from '@mui/material';
 
 export function Header(props) {
@@ -76,54 +77,55 @@ export function Header(props) {
                             Admin-Panel
                         </Typography>
                     </Stack>
+
+                    <Box sx={{ flexGrow: 1 }}/>
+
+                    <Stack
+                        direction='row'
+                        spacing={0}
+                    >
+                        <Button
+                            sx={{
+                                minWidth: '50px !important',
+                                height: '50px',
+                                position: 'relative',
+                                right: -8,
+                                borderRadius: 50
+                            }}
+                            color='primary'
+                            onClick={() => {
+                                CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
+                            }}
+                        >
+                            {darkMode ? (
+                                <Brightness4Outlined color='primary'/>
+                            ) : (
+                                <Brightness5Outlined color='primary'/>
+                            )}
+                        </Button>
+
+                        <Button
+                            sx={{
+                                minWidth: '50px !important',
+                                height: '50px',
+                                position: 'relative',
+                                right: -8,
+                                borderRadius: 50
+                            }}
+                            color='primary'
+                            onClick={async () => {
+                                CacheStorage.set(CacheKeys.userRoles, ['GUEST'])
+                                try {
+                                    await Shared.httpClient.post.logout()
+                                } catch (e) {}
+                            }}
+                        >
+                            <Logout color='primary'/>
+                        </Button>
+                    </Stack>
+
                 </Toolbar>
             </AppBar>
-            <Stack
-                direction='row'
-                spacing={0}
-                sx={{
-                    position: 'absolute',
-                    right: 16,
-                    top: 16
-                }}
-            >
-                <Button
-                    sx={{
-                        minWidth: '50px !important',
-                        height: '50px',
-                        position: 'relative',
-                        right: -8,
-                        borderRadius: 50
-                    }}
-                    color='primary'
-                    onClick={() => {
-                        CacheStorage.set(CacheKeys.darkMode, !darkMode, false)
-                    }}
-                >
-                    {darkMode ? (
-                        <Brightness4Outlined color='primary'/>
-                    ) : (
-                        <Brightness5Outlined color='primary'/>
-                    )}
-                </Button>
-
-                <Button
-                    sx={{
-                        minWidth: '50px !important',
-                        height: '50px',
-                        position: 'relative',
-                        right: -8,
-                        borderRadius: 50
-                    }}
-                    color='primary'
-                    onClick={async () => {
-                        CacheStorage.set(CacheKeys.userRoles, ['GUEST'])
-                        await Shared.httpClient.post.logout()
-                    }}
-                >
-                    <Logout color='primary'/>
-                </Button>
-            </Stack>
         </>
     );
 }

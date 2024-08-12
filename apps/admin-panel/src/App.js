@@ -30,7 +30,7 @@ function App() {
     const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
     return (
         <ThemeProvider theme={darkMode ? ThemeDark : ThemeLight}>
-            <Box className={'Table ' + (darkMode ? 'ThemeDark' : 'ThemeLight')} sx={{
+            <Box className={(darkMode ? 'Table ThemeDark' : 'Table ThemeLight')} sx={{
                 backgroundColor: 'background.default'
             }}>
                 <AuthState/>

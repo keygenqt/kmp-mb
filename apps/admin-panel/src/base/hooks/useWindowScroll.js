@@ -27,6 +27,7 @@ export function useWindowScroll(effect = undefined) {
     const [position, setPosition] = React.useState({
         x: window.scrollX,
         y: window.scrollY,
+        scrollable: false
     });
 
     React.useLayoutEffect(() => {

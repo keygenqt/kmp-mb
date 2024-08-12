@@ -50,5 +50,6 @@ export * from './hooks/useHttpQuery';
 export * from './hooks/useWindowScroll';
 export * from './hooks/useCacheStorage';
 export * from './hooks/useAuthSession';
+export * from './hooks/useWindowResize';
 // utils
 export * from './utils/Helper';
