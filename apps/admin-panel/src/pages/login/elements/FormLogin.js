@@ -229,7 +229,7 @@ export function FormLogin(props) {
                                         variant={'contained'}
                                         size={'large'}
                                         disabled={Boolean(isSubmitting || (status && status.success) || Object.keys(errors).length !== 0 || Object.keys(touched).length === 0)}
-                                        startIcon={isSubmitting ? (
+                                        startIcon={isSubmitting && !errors.submit ? (
                                             <CircularProgress sx={{
                                                 mr: 0.5,
                                                 height: '18px !important',
