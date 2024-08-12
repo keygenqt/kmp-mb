@@ -34,8 +34,7 @@ export function BaseLayout(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
     const widthMenu = isMD ? 250: 300
-    const {width, scrollable} = useWindowResize()
-    const maxWidthHF = width - (scrollable ? 17 : 0)
+    const {width} = useWindowResize()
     const [showMenu, setShowMenu] = React.useState(!isMD)
 
     React.useEffect(() => {
@@ -47,7 +46,7 @@ export function BaseLayout(props) {
             {/* Header */}
             <Box className={'Table-Row'}>
                 <Box className={'Table-Cell Header'} sx={{height: '1px'}}>
-                    <Box sx={{maxWidth: maxWidthHF}}>
+                    <Box sx={{maxWidth: width}}>
                         <Header onClickMenu={() => setShowMenu(!showMenu)}/>
                     </Box>
                 </Box>
@@ -109,7 +108,7 @@ export function BaseLayout(props) {
             {/* Footer */}
             <Box className={'Table-Row'} sx={{height: '1px'}}>
                 <Box className={'Table-Cell Footer'}>
-                    <Box sx={{maxWidth: maxWidthHF}}>
+                    <Box sx={{maxWidth: width}}>
                         <Footer/>
                     </Box>
                 </Box>
