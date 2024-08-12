@@ -98,11 +98,10 @@ export function FormLogin(props) {
                         });
                     }
 
-                    // Loading for animation
-                    await new Promise(r => setTimeout(r, 1000));
-
-                    // Save session roles
                     if (response.code === 200) {
+                        // Show success alert
+                        await new Promise(r => setTimeout(r, 1000));
+                        // Update roles for login user
                         const response = await Shared.httpClient.get.authRoles()
                         CacheStorage.set(CacheKeys.userRoles, response.roles?.mapToUserRoles())
                     }
