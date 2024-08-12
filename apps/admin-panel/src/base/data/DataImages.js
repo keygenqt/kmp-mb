@@ -16,9 +16,7 @@
 
 // Common
 import logo from '../../assets/images/common/logo.svg';
-import logo192 from '../../assets/images/common/logo192.png';
 
 export const DataImages = {
     logo: logo,
-    logo192: logo192,
 };

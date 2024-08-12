@@ -22,8 +22,23 @@ import {
 
 export function Footer(props) {
     return (
-        <Stack spacing={2} direction="row" justifyContent="flex-end" sx={{p: 2}}>
-            <Typography variant="caption" color={'text.primary'}>
+        <Stack
+            spacing={2}
+            direction="row"
+            justifyContent="flex-end"
+            sx={{
+                height: 50
+            }}
+        >
+            <Typography
+                variant="caption"
+                color={'text.primary'}
+                sx={{
+                    position: 'absolute',
+                    right: 16,
+                    bottom: 13
+                }}
+            >
                 © Mobile Broadcast 2024
             </Typography>
         </Stack>

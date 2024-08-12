@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {
     Brightness5Outlined,
     Brightness4Outlined,
@@ -33,7 +34,6 @@ import {
     AppBar,
     Toolbar,
     Button,
-    Box,
     Stack,
     Typography,
 } from '@mui/material';
@@ -42,48 +42,50 @@ export function Header(props) {
     const theme = useTheme()
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
-    const showMenu = useCacheStorage(CacheKeys.showMenu, true)
 
     return (
-        <AppBar position='relative' color={'transparent'} elevation={0}>
-        <Toolbar>
-            <Button
-                sx={{
-                    minWidth: '50px !important',
-                    height: '50px',
-                    position: 'relative',
-                    left: -8,
-                    borderRadius: 50
-                }}
-                onClick={() => {
-                    CacheStorage.set(CacheKeys.showMenu, !showMenu)
-                }}
-            >
-                <Menu color={'inherit'}/>
-            </Button>
+        <>
+            <AppBar position='relative' color={'transparent'} elevation={0}>
+                <Toolbar>
+                    <Button
+                        sx={{
+                            minWidth: '50px !important',
+                            height: '50px',
+                            position: 'relative',
+                            left: -8,
+                            borderRadius: 50
+                        }}
+                        onClick={props.onClickMenu}
+                    >
+                        <Menu color={'inherit'}/>
+                    </Button>
 
-            <Stack
-                direction='row'
-                spacing={isLG ? 0.5 : 2}
-            >
-                <Stack direction='row'>
-                    <Typography variant="h5" color={'#802aea'}>
-                        M
-                    </Typography>
-                    <Typography variant="h5" color={'#b959ff'}>
-                        B
-                    </Typography>
-                </Stack>
-                <Typography variant="caption" color={'text.primary'}>
-                    Admin-Panel
-                </Typography>
-            </Stack>
-
-            <Box sx={{ flexGrow: 1 }}/>
-
+                    <Stack
+                        direction='row'
+                        spacing={isLG ? 0.5 : 2}
+                    >
+                        <Stack direction='row'>
+                            <Typography variant="h5" color={'#802aea'}>
+                                M
+                            </Typography>
+                            <Typography variant="h5" color={'#b959ff'}>
+                                B
+                            </Typography>
+                        </Stack>
+                        <Typography variant="caption" color={'text.primary'}>
+                            Admin-Panel
+                        </Typography>
+                    </Stack>
+                </Toolbar>
+            </AppBar>
             <Stack
                 direction='row'
                 spacing={0}
+                sx={{
+                    position: 'absolute',
+                    right: 16,
+                    top: 16
+                }}
             >
                 <Button
                     sx={{
@@ -122,9 +124,10 @@ export function Header(props) {
                     <Logout color='primary'/>
                 </Button>
             </Stack>
-        </Toolbar>
-    </AppBar>
+        </>
     );
 }
 
-Header.propTypes = {};
+Header.propTypes = {
+    onClickMenu: PropTypes.func.isRequired
+};

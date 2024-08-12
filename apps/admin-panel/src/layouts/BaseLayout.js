@@ -17,10 +17,8 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import {
-    CacheKeys,
-    useCacheStorage,
-} from '../base';
-import {
+    useTheme,
+    useMediaQuery,
     Box,
     Stack,
 } from '@mui/material';
@@ -30,19 +28,34 @@ import {Header} from './elements/Header';
 import {Footer} from './elements/Footer';
 
 export function BaseLayout(props) {
-    const showMenu = useCacheStorage(CacheKeys.showMenu, true)
+    const theme = useTheme()
+    const isMD = useMediaQuery(theme.breakpoints.down('md'))
+    const widthMenu = isMD ? 250: 300
+
+    const [showMenu, setShowMenu] = React.useState(!isMD)
+
+    React.useEffect(() => {
+        setShowMenu(!isMD)
+    }, [isMD])
+
     return (
         <>
+            {/* Header */}
             <Box className={'Table-Row'}>
                 <Box className={'Table-Cell Header'} sx={{height: '1px'}}>
-                    <Header/>
+                    <Header onClickMenu={() => setShowMenu(!showMenu)}/>
                 </Box>
             </Box>
+            {/* Content */}
             <Box className={'Table-Row'}>
-                <Box id={'Table-Cell-Page'} className={'Table-Cell ' + props.className} sx={{
+                <Box
+                    id={'Table-Cell-Page'}
+                    className={'Table-Cell ' + props.className}
+                    sx={{
                         verticalAlign: props.isCenter === true ? 'middle' : 'top'
                     }}
                 >
+                    {/* Body with menu */}
                     <Stack
                         direction="row"
                         justifyContent="flex-start"
@@ -52,21 +65,24 @@ export function BaseLayout(props) {
                             height: '100%'
                         }}
                     >
+                        {/* Menu */}
                         <Stack
-                            width={300}
+                            width={widthMenu}
                             direction="column"
                             spacing={2}
                             sx={{
                                 p: 2,
                                 paddingRight: 0,
-                                marginLeft: showMenu ? '0' : '-315px !important',
+                                marginLeft: showMenu ? '0' : `calc(-${widthMenu}px - 15px) !important`,
                                 transitionDuration: '200ms',
                             }}
                         >
                             <Menu/>
                         </Stack>
+                        {/* Body */}
                         <Stack
-                            width={showMenu ? 'calc(100% - 350px)' : 'calc(100% - 35px)'}
+                            width={showMenu ? `calc(100% - ${widthMenu}px - 50px)` : 'calc(100% - 35px)'}
+                            minWidth={315}
                             direction="column"
                             justifyContent={props.isCenter === true ? 'center' : 'flex-start'}
                             alignItems={props.isCenter === true ? 'center' : 'flex-start'}
@@ -84,6 +100,7 @@ export function BaseLayout(props) {
                     </Stack>
                 </Box>
             </Box>
+            {/* Footer */}
             <Box className={'Table-Row'} sx={{height: '1px'}}>
                 <Box className={'Table-Cell Footer'}>
                     <Footer/>

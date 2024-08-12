@@ -16,6 +16,5 @@
 
 export const CacheKeys = {
     darkMode: 'darkMode',
-    showMenu: 'showMenu',
     userRoles: 'userRoles',
 };

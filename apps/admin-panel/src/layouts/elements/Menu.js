@@ -54,6 +54,9 @@ export function Menu(props) {
                     borderRadius: 2,
                     paddingTop: 1,
                     paddingBottom: 1
+                },
+                '& .MuiMenuItem-root': {
+                    minHeight: 'auto'
                 }
             }}
         >
