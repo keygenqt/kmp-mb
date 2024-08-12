@@ -38,7 +38,6 @@ export function EmptyLayout(props) {
             <Box className={'Table-Row'} sx={{ background: '#802aea0a' }} >
                 <Stack direction={'row'}>
                     <Box sx={{ flexGrow: 1 }}/>
-
                     <Button
                         sx={{
                             minWidth: '50px !important',
@@ -46,7 +45,7 @@ export function EmptyLayout(props) {
                             borderRadius: 50,
                             position: 'relative',
                             top: 14,
-                            right: 8
+                            right: 14
                         }}
                         color='primary'
                         onClick={() => {
@@ -69,7 +68,6 @@ export function EmptyLayout(props) {
                     {props.children}
                 </Box>
             </Box>
-
         </>
     )
 }
