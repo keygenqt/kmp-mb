@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import {CacheStorage} from '../cache/CacheStorage';
+import {useCallback, useLayoutEffect, useState} from "react";
+import {CacheStorage} from "../cache/CacheStorage";
 
-export function useCacheStorage(key, defaultValue = undefined) {
-    const getValueType = React.useCallback(
+export function useCacheStorage(key, defaultValue = undefined, isCrypto = true) {
+    const getValueType = useCallback(
         () => {
-            const value = CacheStorage.get(key)
+            const value = CacheStorage.get(key, isCrypto)
             if (value !== null && value !== undefined) {
                 return value;
             }
             return defaultValue
-        }, [defaultValue, key]);
+        }, [defaultValue, isCrypto, key]);
 
-    const [value, setValue] = React.useState(getValueType());
+    const [value, setValue] = useState(getValueType());
 
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
         const element = document.querySelector('#root');
+
         const observer = new MutationObserver(function (mutations) {
             mutations.forEach(function (mutation) {
                 if (mutation.type === "attributes") {
@@ -38,9 +39,11 @@ export function useCacheStorage(key, defaultValue = undefined) {
                 }
             });
         });
+
         observer.observe(element, {
             attributes: true
         });
+
         return () => {
             observer.disconnect()
         };

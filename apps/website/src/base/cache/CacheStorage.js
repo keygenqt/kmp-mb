@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const CacheStorage = {
     // Version up for clear old cache
-    version: 5,
+    version: 6,
 
     set: function (key, value, isCrypto = true, quiet = false) {
         key = `${key}-${CacheStorage.version}`

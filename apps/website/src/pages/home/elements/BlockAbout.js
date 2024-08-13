@@ -37,7 +37,7 @@ export function BlockAbout(props) {
     const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const {t} = React.useContext(LocalizationContext)
     const {route, routes} = React.useContext(RouteContext)
-    const darkMode = useCacheStorage(CacheKeys.darkMode, false)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
 
     return (
         <Box className={'BlockAbout'} sx={{ textAlign: isLG ? 'center' : 'inherit', overflow: 'hidden' }} >

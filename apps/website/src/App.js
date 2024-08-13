@@ -22,10 +22,10 @@ import {useCacheStorage, CacheKeys, RouteContext} from './base';
 
 function App() {
     const {route} = React.useContext(RouteContext)
-    const darkMode = useCacheStorage(CacheKeys.darkMode)
+    const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
     return (
         <ThemeProvider theme={darkMode ? ThemeDark : ThemeLight}>
-            <Box className={'Table ' + (darkMode ? 'ThemeDark' : 'ThemeLight')} sx={{ backgroundColor: 'background.default' }}>
+            <Box className={darkMode ? 'Table ThemeDark' : ' Table ThemeLight'} sx={{ backgroundColor: 'background.default' }}>
                 {route.render()}
             </Box>
         </ThemeProvider>
