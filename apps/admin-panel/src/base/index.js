@@ -36,6 +36,7 @@ export * from './components/states/PageError404';
 export * from './components/alerts/AlertError';
 export * from './components/alerts/AlertSuccess';
 export * from './components/other/AuthState';
+export * from './components/other/CardCount';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

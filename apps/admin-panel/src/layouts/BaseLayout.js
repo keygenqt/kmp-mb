@@ -33,13 +33,14 @@ import {Footer} from './elements/Footer';
 export function BaseLayout(props) {
     const theme = useTheme()
     const isMD = useMediaQuery(theme.breakpoints.down('md'))
+    const isLG = useMediaQuery(theme.breakpoints.down('lg'))
     const widthMenu = isMD ? 250: 300
     const {width} = useWindowResize()
-    const [showMenu, setShowMenu] = React.useState(!isMD)
+    const [showMenu, setShowMenu] = React.useState(!isLG)
 
     React.useEffect(() => {
-        setShowMenu(!isMD)
-    }, [isMD])
+        setShowMenu(!isLG)
+    }, [isLG])
 
     return (
         <>

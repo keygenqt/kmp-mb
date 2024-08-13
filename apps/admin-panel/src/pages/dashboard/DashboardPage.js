@@ -15,18 +15,70 @@
  */
 
 import * as React from 'react';
+import humanNumber from 'human-number';
 import {
-    Stack,
-    Typography,
+    Grid,
+    Card,
+    Box,
 } from '@mui/material';
+import {
+    CardCount
+} from '../../base'
+import {
+    Home,
+    Apartment,
+    Star,
+    AppRegistration,
+} from '@mui/icons-material';
 
 export function DashboardPage(props) {
     return (
-        <Stack spacing={2} direction="row" justifyContent="center" sx={{p: 2}}>
-            <Typography variant="h4" color={'text.primary'}>
-                Dashboard
-            </Typography>
-        </Stack>
+        <Box sx={{width: 1}}>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={3}>
+                    <CardCount
+                        icon={<Home/>}
+                        title={'Main page\nviews'}
+                        desc={'Number of views of the main page of the website.'}
+                    >
+                        {humanNumber(100)}
+                    </CardCount>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={3}>
+                    <CardCount
+                        icon={<Apartment/>}
+                        title={'Community\nviews'}
+                        desc={'Number of views of the community page of the website.'}
+                    >
+                        {humanNumber(1111)}
+                    </CardCount>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={3}>
+                    <CardCount
+                        icon={<Star/>}
+                        title={'Experts\nviews'}
+                        desc={'Number of views of the experts page of the website.'}
+                    >
+                        {humanNumber(20000)}
+                    </CardCount>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={6} xl={3}>
+                    <CardCount
+                        icon={<AppRegistration/>}
+                        title={'Registrations\nviews'}
+                        desc={'Number of views of the registrations page of the website.'}
+                    >
+                        {humanNumber(100000)}
+                    </CardCount>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={8}>
+                    <Card>Chart</Card>
+                </Grid>
+                <Grid item xs={12} sm={12} md={6} lg={4}>
+                    <Card>Top</Card>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 

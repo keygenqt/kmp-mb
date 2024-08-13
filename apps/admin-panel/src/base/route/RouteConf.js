@@ -108,7 +108,7 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'DashboardPage'}>
+                        <BaseLayout isCenter={false} className={'DashboardPage'}>
                             <DashboardPage/>
                         </BaseLayout>
                     }

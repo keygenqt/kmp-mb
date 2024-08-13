@@ -41,6 +41,14 @@ export const components = {
             }
         }
     },
+    MuiDivider: {
+        styleOverrides: {
+            root: ({ theme }) =>
+                theme.unstable_sx({
+                    borderColor: theme.palette.mode === 'dark' ? '#cb8ff747' : '#802aea2b',
+                }),
+        }
+    },
     MuiCard: {
         styleOverrides: {
             root: ({ theme }) =>
@@ -58,6 +66,13 @@ export const components = {
                         opacity: '1'
                     },
                 }),
+        }
+    },
+    MuiButton: {
+        styleOverrides: {
+            root: {
+                boxShadow: 'none !important'
+            }
         }
     },
     MuiToolbar: {
