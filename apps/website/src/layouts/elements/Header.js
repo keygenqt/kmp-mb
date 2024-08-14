@@ -86,10 +86,7 @@ export function Header(props) {
                 <Button
                     color='primary'
                     onClick={() => {
-                        if (route.isPage(routes.city)) {
-                            route.toBack()
-                        }
-                        else if (route.isPage(routes.community)) {
+                        if (route.isPage(routes.community)) {
                             // Clear page cache
                             [
                                 Shared.queries.countries,
@@ -107,10 +104,7 @@ export function Header(props) {
                 <Button
                     color='primary'
                     onClick={() => {
-                        if (route.isPage(routes.expert)) {
-                            route.toBack()
-                        }
-                        else if (route.isPage(routes.experts)) {
+                        if (route.isPage(routes.experts)) {
                             // Clear page cache
                             [
                                 Shared.queries.experts,
