@@ -66,3 +66,18 @@ a:hover {
     vertical-align: middle;
     height: 100%;
 }
+
+/* Dark apexcharts */
+.ThemeDark .apexcharts-text {
+    fill: #fff;
+}
+.ThemeDark .apexcharts-tooltip,
+.ThemeDark .apexcharts-tooltip-title {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid #555 !important;
+  }
+.ThemeDark .apexcharts-legend-text {
+    color: #fff !important;
+    border: 1px solid #555 !important;
+  }

@@ -16,7 +16,12 @@
 package com.keygenqt.mb.shared.service.impl
 
 import com.keygenqt.mb.shared.extensions.promise
+import com.keygenqt.mb.shared.responses.CityResponse
+import com.keygenqt.mb.shared.responses.DataKeyValuesResponse
+import com.keygenqt.mb.shared.responses.DataValueResponse
 import com.keygenqt.mb.shared.service.ServiceRequest
+import io.ktor.client.call.*
+import io.ktor.client.request.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 
@@ -52,4 +57,22 @@ class GetRequestJS(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun authRoles() = GlobalScope.promise { client.get.authRoles() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countPageViewHome() = GlobalScope.promise { client.get.countPageViewHome() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countPageViewCommunity() = GlobalScope.promise { client.get.countPageViewCommunity() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countPageViewExperts() = GlobalScope.promise { client.get.countPageViewExperts() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countPageViewRegs() = GlobalScope.promise { client.get.countPageViewRegs() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun topCommunity() = GlobalScope.promise { client.get.topCommunity() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun countPageViewActivity() = GlobalScope.promise { client.get.countPageViewActivity() }
 }

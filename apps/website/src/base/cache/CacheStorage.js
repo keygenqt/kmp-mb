@@ -21,7 +21,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const CacheStorage = {
     // Version up for clear old cache
-    version: 6,
+    version: 7,
 
     set: function (key, value, isCrypto = true, quiet = false) {
         key = `${key}-${CacheStorage.version}`
@@ -59,7 +59,7 @@ export const CacheStorage = {
     },
 
     clearByKey: function (key, quiet = false) {
-        const hashKey = MD5(key)
+        const hashKey = MD5(`${key}-${CacheStorage.version}`)
         localStorage.removeItem(hashKey)
         if (!quiet) {
             CacheStorage._updateHash()

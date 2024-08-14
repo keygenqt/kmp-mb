@@ -37,6 +37,7 @@ export * from './components/alerts/AlertError';
 export * from './components/alerts/AlertSuccess';
 export * from './components/other/AuthState';
 export * from './components/other/CardCount';
+export * from './components/other/CardIcon';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

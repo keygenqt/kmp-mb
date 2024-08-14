@@ -19,6 +19,15 @@
  * @link https://mui.com/material-ui/customization/theme-components/
  */
 export const components = {
+    MuiAvatar: {
+        styleOverrides: {
+            root: ({ theme }) =>
+                theme.unstable_sx({
+                    border: '1px solid',
+                    borderColor: theme.palette.mode === 'dark' ? '#cb8ff747' : '#802aea2b',
+                }),
+        }
+    },
     MuiFormGroup: {
         styleOverrides: {
             root: ({ theme }) =>

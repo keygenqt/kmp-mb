@@ -15,17 +15,23 @@
  */
 
 import * as React from 'react';
-import {Shared} from "../shared/Shared";
-import {CacheStorage} from "../cache/CacheStorage"
+import {Shared} from '../shared/Shared';
+import {CacheStorage} from '../cache/CacheStorage';
+import {useCacheStorage} from './useCacheStorage';
 
 
 export function useHttpQuery(method, ...arg) {
 
-    const cacheKey = `${method}${arg.length ? arg : ''}-${CacheStorage.version}`
-    const cacheData = CacheStorage.get(cacheKey)
+    const cacheKey = `${method}${arg.length ? arg : ''}`
+    const cacheData = useCacheStorage(cacheKey)
 
     const [value, setValue] = React.useState(cacheData)
     const wasCalled = React.useRef(false)
+
+    React.useEffect(() => {
+        setValue(cacheData)
+        wasCalled.current = cacheData !== undefined;
+    }, [cacheData])
 
     React.useEffect(() => {
         if(wasCalled.current) return;
@@ -75,15 +81,15 @@ export function useHttpQuery(method, ...arg) {
                     }
                     // Save to cache
                     CacheStorage.set(cacheKey, mapValue)
-                    // Save value
-                    setValue(mapValue)
                 })
                 .catch(async (e) => {
                     await funcDelay(startTime)
+                    CacheStorage.clearByKey(cacheKey, true)
                     setValue(null)
                     console.error(e)
                 });
         } catch (e) {
+            CacheStorage.clearByKey(cacheKey, true)
             setValue(null)
             console.error(e)
         }

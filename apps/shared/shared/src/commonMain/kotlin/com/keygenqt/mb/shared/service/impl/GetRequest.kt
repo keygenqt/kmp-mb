@@ -65,4 +65,34 @@ class GetRequest(private val client: HttpClient) {
     suspend fun authRoles(): UserRolesResponse {
         return client.get("api/auth/roles").body()
     }
+
+    @Throws(Exception::class)
+    suspend fun countPageViewHome(): DataValueResponse {
+        return client.get("api/dashboard/view-home").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun countPageViewCommunity(): DataValueResponse {
+        return client.get("api/dashboard/view-community").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun countPageViewExperts(): DataValueResponse {
+        return client.get("api/dashboard/view-experts").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun countPageViewRegs(): DataValueResponse {
+        return client.get("api/dashboard/view-regs").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun topCommunity(): List<CityResponse> {
+        return client.get("api/dashboard/top-community").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun countPageViewActivity(): DataKeyValuesResponse {
+        return client.get("api/dashboard/view-activity").body()
+    }
 }

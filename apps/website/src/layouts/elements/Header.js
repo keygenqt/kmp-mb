@@ -92,12 +92,10 @@ export function Header(props) {
                         else if (route.isPage(routes.community)) {
                             // Clear page cache
                             [
+                                Shared.queries.countries,
                                 CacheKeys.communityFilterSearch,
                                 CacheKeys.communityFilterCountry,
-                                Shared.queries.countries,
                             ].forEach(key => CacheStorage.clearByKey(key))
-                            // Refresh
-                            route.refreshPage()
                         } else {
                             route.toLocation(routes.community)
                         }
@@ -115,12 +113,10 @@ export function Header(props) {
                         else if (route.isPage(routes.experts)) {
                             // Clear page cache
                             [
+                                Shared.queries.experts,
                                 CacheKeys.expertFilterSearch,
                                 CacheKeys.expertFilterDirection,
-                                Shared.queries.experts,
                             ].forEach(key => CacheStorage.clearByKey(key))
-                            // Refresh
-                            route.refreshPage()
                         } else {
                             route.toLocation(routes.experts)
                         }

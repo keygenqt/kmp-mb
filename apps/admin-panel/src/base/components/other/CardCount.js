@@ -54,7 +54,7 @@ export function CardCount(props) {
                     container
                     alignItems="center"
                 >
-                    <Grid item xs={7} sm={7} md={7} lg={7}>
+                    <Grid item xs={7} sm={8} md={8} lg={7}>
                         <Stack direction={'row'}>
                             <Stack
                                 justifyContent="space-between"
@@ -62,7 +62,7 @@ export function CardCount(props) {
                             >
                                 {props.icon}
                                 <Stack spacing={2} sx={{marginTop: 2}}>
-                                    <Typography variant="h4" color={'text.primary'} sx={{whiteSpace: 'pre'}}>
+                                    <Typography variant="h4" color={'text.primary'} sx={{whiteSpace: isMD ? 'inherit' : 'pre'}}>
                                         {props.title}
                                     </Typography>
                                     <Typography
@@ -78,7 +78,7 @@ export function CardCount(props) {
                             <Divider orientation='vertical' flexItem />
                         </Stack>
                     </Grid>
-                    <Grid item xs={5} sm={5} md={5} lg={5}>
+                    <Grid item xs={5} sm={4} md={4} lg={5}>
                         <Typography
                             variant="h2"
                             color={'text.primary'}
@@ -100,5 +100,8 @@ export function CardCount(props) {
 }
 
 CardCount.propTypes = {
-    children: PropTypes.string.isRequired
+    icon: PropTypes.element.isRequired,
+    title: PropTypes.string.isRequired,
+    desc: PropTypes.string.isRequired,
+    children: PropTypes.string.isRequired,
 };
