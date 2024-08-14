@@ -161,7 +161,14 @@ export function DashboardPage(props) {
                                         'Jura',
                                         'sans-serif',
                                     ].join(','),
-                                }
+                                    textOverflow: 'ellipsis',
+                                    noWrap: true,
+                                    overflow: 'hidden',
+                                },
+                                '& .MuiCardHeader-content': {
+                                    display: 'block',
+                                    overflow: 'hidden',
+                                },
                             }
                         }>
                             {topCommunity ? (
