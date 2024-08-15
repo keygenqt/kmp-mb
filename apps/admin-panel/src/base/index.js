@@ -38,6 +38,7 @@ export * from './components/alerts/AlertSuccess';
 export * from './components/other/AuthState';
 export * from './components/other/CardCount';
 export * from './components/other/CardIcon';
+export * from './components/other/CustomDataGrid';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

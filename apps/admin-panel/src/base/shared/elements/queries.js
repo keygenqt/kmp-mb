@@ -22,4 +22,5 @@ export const queries = {
     countPageViewRegs: 'countPageViewRegs',
     topCommunity: 'topCommunity',
     countPageViewActivity: 'countPageViewActivity',
+    countries: 'countries',
 }

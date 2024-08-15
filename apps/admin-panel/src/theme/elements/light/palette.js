@@ -28,6 +28,7 @@ export const palette = {
     },
     background: {
         default: '#ffffff',
+        dark: '#F9F9F9',
     },
     text: {
         primary: '#3d3d3d'

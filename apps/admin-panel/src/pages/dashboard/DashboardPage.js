@@ -31,8 +31,6 @@ import {
 } from '@mui/material';
 import {
     useHttpQuery,
-    useCacheStorage,
-    CacheKeys,
     Shared,
     CardCount,
     CardIcon,
@@ -52,7 +50,6 @@ export function DashboardPage(props) {
     const {palette, breakpoints} = useTheme();
     const {route} = React.useContext(RouteContext)
     const isMD = useMediaQuery(breakpoints.down('md'))
-    const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
 
     const countPageViewHome = useHttpQuery(Shared.queries.countPageViewHome)
     const countPageViewCommunity = useHttpQuery(Shared.queries.countPageViewCommunity)

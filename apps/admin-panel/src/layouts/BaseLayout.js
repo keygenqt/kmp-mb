@@ -37,6 +37,7 @@ export function BaseLayout(props) {
     const widthMenu = isMD ? 250: 300
     const {width} = useWindowResize()
     const [showMenu, setShowMenu] = React.useState(!isLG)
+    const [showMenuState, setShowMenuState] = React.useState(!isLG)
 
     React.useEffect(() => {
         setShowMenu(!isLG)
@@ -48,7 +49,13 @@ export function BaseLayout(props) {
             <Box className={'Table-Row'}>
                 <Box className={'Table-Cell Header'} sx={{height: '1px'}}>
                     <Box sx={{maxWidth: width}}>
-                        <Header onClickMenu={() => setShowMenu(!showMenu)}/>
+                        <Header onClickMenu={() => {
+                            setShowMenu(!showMenu)
+                            setShowMenuState(!showMenu)
+                            setTimeout(() => {
+                                setShowMenuState(undefined)
+                            }, 200)
+                        }}/>
                     </Box>
                 </Box>
             </Box>
@@ -80,14 +87,14 @@ export function BaseLayout(props) {
                                 p: 2,
                                 paddingRight: 0,
                                 marginLeft: showMenu ? '0' : `calc(-${widthMenu}px - 15px) !important`,
-                                transitionDuration: '200ms',
+                                transitionDuration: showMenu === showMenuState ? '200ms' : 'none',
                             }}
                         >
                             <Menu/>
                         </Stack>
                         {/* Body */}
                         <Stack
-                            width={showMenu ? `calc(100% - ${widthMenu}px - 50px)` : 'calc(100% - 35px)'}
+                            width={width + (showMenu ? (isMD ? 0 : -widthMenu) : 15) - 50}
                             direction="column"
                             justifyContent={props.isCenter === true ? 'center' : 'flex-start'}
                             alignItems={props.isCenter === true ? 'center' : 'flex-start'}
@@ -97,7 +104,7 @@ export function BaseLayout(props) {
                                 boxSizing: 'border-box',
                                 background: '#802aea0a',
                                 borderRadius: 3,
-                                transitionDuration: '200ms',
+                                transitionDuration: showMenu === showMenuState ? '200ms' : 'none',
                             }}
                         >
                             {props.children}
