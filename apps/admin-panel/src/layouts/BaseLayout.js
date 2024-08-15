@@ -86,7 +86,7 @@ export function BaseLayout(props) {
                         </Stack>
                         {/* Body */}
                         <Stack
-                            width={width + (showMenu ? (isMD ? 0 : -widthMenu) : 15) - 50}
+                            width={width + (showMenu ? (isMD ? 15 : -widthMenu) : 15) - 50}
                             direction="column"
                             justifyContent={props.isCenter === true ? 'center' : 'flex-start'}
                             alignItems={props.isCenter === true ? 'center' : 'flex-start'}
