@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {RouteTypes} from './RouteTypes';
 import {Route} from 'react-router-dom';
 import {BaseLayout} from '../../layouts/BaseLayout';
 import {EmptyLayout} from '../../layouts/EmptyLayout';
@@ -55,8 +56,26 @@ export const RouteConf = {
                 />
             }
         },
-        city: {
-            path: '/city',
+        cityAdd: {
+            path: '/cities/add',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'CityPage'}>
+                            <CityPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        cityEdit: {
+            path: '/cities/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -85,8 +104,26 @@ export const RouteConf = {
                 />
             }
         },
-        country: {
-            path: '/country',
+        countryAdd: {
+            path: '/countries/add',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={true} className={'CountryPage'}>
+                            <CountryPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        countryEdit: {
+            path: '/countries/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -115,8 +152,23 @@ export const RouteConf = {
                 />
             }
         },
-        direction: {
-            path: '/direction',
+        directions: {
+            path: '/directions',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'DirectionsPage'}>
+                            <DirectionsPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        directionAdd: {
+            path: '/directions/add',
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -130,16 +182,19 @@ export const RouteConf = {
                 />
             }
         },
-        directions: {
-            path: '/directions',
+        directionEdit: {
+            path: '/directions/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={false} className={'DirectionsPage'}>
-                            <DirectionsPage/>
+                        <BaseLayout isCenter={true} className={'DirectionPage'}>
+                            <DirectionPage/>
                         </BaseLayout>
                     }
                 />
@@ -176,7 +231,10 @@ export const RouteConf = {
             }
         },
         regExpert: {
-            path: '/reg-expert',
+            path: '/reg-expert/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -206,7 +264,10 @@ export const RouteConf = {
             }
         },
         regOrganizer: {
-            path: '/reg-organizer',
+            path: '/reg-organizer/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -236,7 +297,10 @@ export const RouteConf = {
             }
         },
         regPartner: {
-            path: '/reg-partner',
+            path: '/reg-partner/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -265,8 +329,23 @@ export const RouteConf = {
                 />
             }
         },
-        user: {
-            path: '/user',
+        users: {
+            path: '/users',
+            render: function (key, path) {
+                return <Route
+                    key={key}
+                    exact
+                    path={path}
+                    element={
+                        <BaseLayout isCenter={false} className={'UsersPage'}>
+                            <UsersPage/>
+                        </BaseLayout>
+                    }
+                />
+            }
+        },
+        userAdd: {
+            path: '/users/add',
             render: function (key, path) {
                 return <Route
                     key={key}
@@ -280,16 +359,19 @@ export const RouteConf = {
                 />
             }
         },
-        users: {
-            path: '/users',
+        userEdit: {
+            path: '/users/:id',
+            match: {
+                id: RouteTypes.integer,
+            },
             render: function (key, path) {
                 return <Route
                     key={key}
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={false} className={'UsersPage'}>
-                            <UsersPage/>
+                        <BaseLayout isCenter={true} className={'UserPage'}>
+                            <UserPage/>
                         </BaseLayout>
                     }
                 />

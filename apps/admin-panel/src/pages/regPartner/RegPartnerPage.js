@@ -15,16 +15,19 @@
  */
 
 import * as React from 'react';
+import {useParams} from 'react-router';
 import {
     Stack,
     Typography,
 } from '@mui/material';
 
 export function RegPartnerPage(props) {
+    let {id} = useParams();
+
     return (
         <Stack spacing={2} direction="row">
             <Typography variant="h4" color={'text.primary'}>
-                Reg Partner
+                {`Edit reg partner - ${id}`}.
             </Typography>
         </Stack>
     );

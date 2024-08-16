@@ -19,6 +19,7 @@ import com.keygenqt.mb.shared.extensions.promise
 import com.keygenqt.mb.shared.responses.CityResponse
 import com.keygenqt.mb.shared.responses.DataKeyValuesResponse
 import com.keygenqt.mb.shared.responses.DataValueResponse
+import com.keygenqt.mb.shared.responses.UserResponse
 import com.keygenqt.mb.shared.service.ServiceRequest
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -31,6 +32,9 @@ import kotlinx.coroutines.GlobalScope
 class GetRequestJS(
     private val client: ServiceRequest
 ) {
+    @OptIn(DelicateCoroutinesApi::class)
+    fun users() = GlobalScope.promise { client.get.users() }
+
     @OptIn(DelicateCoroutinesApi::class)
     fun experts() = GlobalScope.promise { client.get.experts() }
 
@@ -54,6 +58,18 @@ class GetRequestJS(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun registrationExpert(id: Int) = GlobalScope.promise { client.get.registrationExpert(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationOrganizers() = GlobalScope.promise { client.get.registrationOrganizers() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationOrganizer(id: Int) = GlobalScope.promise { client.get.registrationOrganizer(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationPartners() = GlobalScope.promise { client.get.registrationPartners() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun registrationPartner(id: Int) = GlobalScope.promise { client.get.registrationPartner(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun authRoles() = GlobalScope.promise { client.get.authRoles() }

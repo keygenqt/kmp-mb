@@ -22,6 +22,11 @@ import io.ktor.client.request.*
 
 class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
+    suspend fun users(): List<UserResponse> {
+        return client.get("api/users").body()
+    }
+
+    @Throws(Exception::class)
     suspend fun experts(): List<UserResponse> {
         return client.get("api/experts").body()
     }
@@ -59,6 +64,26 @@ class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
     suspend fun registrationExpert(id: Int): RegExpertResponse {
         return client.get("api/registration-experts/$id").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationOrganizers(): List<RegOrganizerResponse> {
+        return client.get("api/registration-organizers").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationOrganizer(id: Int): RegOrganizerResponse {
+        return client.get("api/registration-organizers/$id").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationPartners(): List<RegPartnerResponse> {
+        return client.get("api/registration-partners").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationPartner(id: Int): RegPartnerResponse {
+        return client.get("api/registration-partners/$id").body()
     }
 
     @Throws(Exception::class)

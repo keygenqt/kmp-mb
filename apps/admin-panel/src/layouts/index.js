@@ -14,23 +14,6 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
-
-export function CityPage(props) {
-    let {id} = useParams();
-
-    return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {id ? `Edit city - ${id}` : 'Add city'}.
-            </Typography>
-        </Stack>
-    );
-}
-
-CityPage.propTypes = {};
+export * from './BaseLayout';
+export * from './EmptyLayout';
+export * from './GridLayout';

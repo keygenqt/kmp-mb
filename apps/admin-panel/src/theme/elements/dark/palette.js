@@ -33,8 +33,11 @@ export const palette = {
     text: {
         primary: '#e7e7e7'
     },
+    info: {
+        main: '#2e78c7',
+    },
     success: {
-        main: '#074f07',
+        main: '#097a09',
     },
     error: {
         main: '#d32f2f',

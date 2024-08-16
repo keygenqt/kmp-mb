@@ -15,39 +15,80 @@
  */
 
 import * as React from 'react';
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { Tooltip, Avatar } from '@mui/material';
+import { EditOutlined, BrokenImageOutlined } from '@mui/icons-material';
+import { GridLayout } from '../../layouts';
 import {
-    Box,
-    Stack,
-    Button,
-    Typography,
-} from '@mui/material';
-import {
-    Add,
-} from '@mui/icons-material';
-import {
+    useHttpQuery,
     RouteContext,
+    Shared,
 } from '../../base';
+
 
 export function CitiesPage(props) {
     const {route, routes} = React.useContext(RouteContext)
+    const rows = useHttpQuery(Shared.queries.cities)
+
     return (
-        <Stack spacing={2} direction="row" sx={{width: 1}}>
-            <Typography variant="h4" color={'text.primary'}>
-                Cities
-            </Typography>
-            <Box sx={{ flexGrow: 1 }}/>
-            <Button
-                variant="contained"
-                color='white'
-                endIcon={<Add color='text.primary' />}
-                onClick={() => {
-                    route.toLocation(routes.city)
-                }}
-            >
-                Add
-            </Button>
-        </Stack>
-    );
+        <GridLayout
+            title='Cities'
+            rows={rows?.toArray()}
+            onClickAdd={() => {
+                route.toLocation(routes.cityAdd)
+            }}
+            columns={[
+                {
+                    field: 'image',
+                    headerName: 'Image',
+                    minWidth: 70,
+                    disableColumnMenu: true,
+                    sortable: false,
+                    renderCell: (data) => <Avatar
+                        alt={'Icon'}
+                        src={data.row.image}
+                        sx={{width: 24, height: 24, marginLeft: '5px'}}
+                    >
+                        <BrokenImageOutlined sx={{width: 18, height: 18}}/>
+                    </Avatar>
+                },
+                {
+                    minWidth: 120,
+                    field: 'name',
+                    headerName: 'Name',
+                    flex: 1
+                },
+                {
+                    field: 'createAt',
+                    headerName: 'Created',
+                    width: 130,
+                    valueGetter: (createAt) => new Intl
+                        .DateTimeFormat('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        .format(Date.parse(createAt))
+                },
+                {
+                    minWidth: 50,
+                    field: 'actions',
+                    type: 'actions',
+                    getActions: (params) => [
+                        (
+                            <GridActionsCellItem color="secondary" onClick={() => {
+                                route.toLocation(routes.cityEdit, params.row.id)
+                            }} icon={(
+                                <Tooltip placement="top" arrow title="Edit">
+                                    <EditOutlined/>
+                                </Tooltip>
+                            )} label="Edit"/>
+                        ),
+                    ]
+                },
+            ]}
+        />
+    )
 }
 
 CitiesPage.propTypes = {};

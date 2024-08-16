@@ -15,39 +15,66 @@
  */
 
 import * as React from 'react';
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { Tooltip } from '@mui/material';
+import { EditOutlined } from '@mui/icons-material';
+import { GridLayout } from '../../layouts';
 import {
-    Box,
-    Stack,
-    Button,
-    Typography,
-} from '@mui/material';
-import {
-    Add,
-} from '@mui/icons-material';
-import {
+    useHttpQuery,
     RouteContext,
+    Shared,
 } from '../../base';
+
 
 export function DirectionsPage(props) {
     const {route, routes} = React.useContext(RouteContext)
+    const rows = useHttpQuery(Shared.queries.directions)
+
     return (
-        <Stack spacing={2} direction="row" sx={{width: 1}}>
-            <Typography variant="h4" color={'text.primary'}>
-                Directions
-            </Typography>
-            <Box sx={{ flexGrow: 1 }}/>
-            <Button
-                variant="contained"
-                color='white'
-                endIcon={<Add color='text.primary' />}
-                onClick={() => {
-                    route.toLocation(routes.direction)
-                }}
-            >
-                Add
-            </Button>
-        </Stack>
-    );
+        <GridLayout
+            title='Directions'
+            rows={rows?.toArray()}
+            onClickAdd={() => {
+                route.toLocation(routes.directionAdd)
+            }}
+            columns={[
+                {
+                    minWidth: 120,
+                    field: 'name',
+                    headerName: 'Name',
+                    flex: 1
+                },
+                {
+                    field: 'createAt',
+                    headerName: 'Created',
+                    width: 130,
+                    valueGetter: (createAt) => new Intl
+                        .DateTimeFormat('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        .format(Date.parse(createAt))
+                },
+                {
+                    minWidth: 50,
+                    field: 'actions',
+                    type: 'actions',
+                    getActions: (params) => [
+                        (
+                            <GridActionsCellItem color="secondary" onClick={() => {
+                                route.toLocation(routes.directionEdit, params.row.id)
+                            }} icon={(
+                                <Tooltip placement="top" arrow title="Edit">
+                                    <EditOutlined/>
+                                </Tooltip>
+                            )} label="Edit"/>
+                        ),
+                    ]
+                },
+            ]}
+        />
+    )
 }
 
 DirectionsPage.propTypes = {};

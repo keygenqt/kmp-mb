@@ -66,21 +66,28 @@ export function CustomDataGrid(props) {
             },
             '& div[data-field="actions"] .MuiIconButton-root': {
                 backgroundColor: '#802aea29'
+            },
+            '& div[data-field="image"] .MuiAvatar-root': {
+                position: 'relative',
+                top: 12,
             }
         }}>
             <DataGrid
                 pageSize={9}
+                disableColumnFilter
+                disableColumnSorting
+                disableColumnResize
                 disableRowSelectionOnClick
                 disableColumnSelector
-                disableColumnFilter
+                disableColumnMenu
                 rows={props.rows}
                 columns={props.columns}
-                pageSizeOptions={[10]}
+                pageSizeOptions={[12]}
                 initialState={{
                     pagination: {
                         paginationModel: {
                             page: 0,
-                            pageSize: 10,
+                            pageSize: 12,
                         },
                     },
                 }}

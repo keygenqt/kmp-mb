@@ -23,4 +23,10 @@ export const queries = {
     topCommunity: 'topCommunity',
     countPageViewActivity: 'countPageViewActivity',
     countries: 'countries',
+    cities: 'cities',
+    directions: 'directions',
+    users: 'users',
+    registrationExperts: 'registrationExperts',
+    registrationOrganizers: 'registrationOrganizers',
+    registrationPartners: 'registrationPartners',
 }

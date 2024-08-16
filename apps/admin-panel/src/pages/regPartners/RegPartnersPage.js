@@ -15,21 +15,63 @@
  */
 
 import * as React from 'react';
+import { GridActionsCellItem } from "@mui/x-data-grid";
+import { Tooltip } from '@mui/material';
+import { EditOutlined } from '@mui/icons-material';
+import { GridLayout } from '../../layouts';
 import {
-    Box,
-    Stack,
-    Typography,
-} from '@mui/material';
+    useHttpQuery,
+    RouteContext,
+    Shared,
+} from '../../base';
 
 export function RegPartnersPage(props) {
+    const {route, routes} = React.useContext(RouteContext)
+    const rows = useHttpQuery(Shared.queries.registrationPartners)
+
     return (
-        <Stack spacing={2} direction="row" sx={{width: 1}}>
-            <Typography variant="h4" color={'text.primary'}>
-                Registration Partners
-            </Typography>
-            <Box sx={{ flexGrow: 1 }}/>
-        </Stack>
-    );
+        <GridLayout
+            title='Registration Partners'
+            rows={rows?.toArray()}
+            columns={[
+                {
+                    minWidth: 120,
+                    field: 'name',
+                    headerName: 'Name',
+                    flex: 1,
+                    renderCell: (data) => `${data.row.fname} ${data.row.lname}`
+                },
+                {
+                    field: 'createAt',
+                    headerName: 'Created',
+                    width: 130,
+                    valueGetter: (createAt) => new Intl
+                        .DateTimeFormat('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        .format(Date.parse(createAt))
+                },
+                {
+                    minWidth: 50,
+                    field: 'actions',
+                    type: 'actions',
+                    getActions: (params) => [
+                        (
+                            <GridActionsCellItem color="secondary" onClick={() => {
+                                route.toLocation(routes.regPartner, params.row.id)
+                            }} icon={(
+                                <Tooltip placement="top" arrow title="Edit">
+                                    <EditOutlined/>
+                                </Tooltip>
+                            )} label="Edit"/>
+                        ),
+                    ]
+                },
+            ]}
+        />
+    )
 }
 
 RegPartnersPage.propTypes = {};
