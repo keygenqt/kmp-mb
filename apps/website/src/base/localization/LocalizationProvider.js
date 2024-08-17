@@ -29,7 +29,7 @@ export function LocalizationProvider(props) {
             value={{
                 t,
                 i18n,
-                language: i18n.language,
+                language: i18n.language === 'en-US' ? 'en-EN' : i18n.language,
                 isLocEn,
             }}>
             {props.children}
