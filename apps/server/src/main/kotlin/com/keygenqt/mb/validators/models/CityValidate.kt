@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.validators.custom.CheckColumnLocales
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
@@ -49,6 +50,7 @@ data class CityValidate(
     /**
      * List locales data
      */
+    @field:CheckColumnLocales
     @field:Valid
     val locales: List<ColumnLocaleValidate> = listOf(),
 

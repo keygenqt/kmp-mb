@@ -16,19 +16,6 @@
 
 // shared module
 export * from './shared/Shared';
-export * from './shared/mappers/CityResponse';
-export * from './shared/mappers/ColumnLocaleResponse';
-export * from './shared/mappers/ContactTypes';
-export * from './shared/mappers/CountryResponse';
-export * from './shared/mappers/Locale';
-export * from './shared/mappers/UploadResponse';
-export * from './shared/mappers/UserContactResponse';
-export * from './shared/mappers/UserDirectionResponse';
-export * from './shared/mappers/UserLocaleResponse';
-export * from './shared/mappers/UserMediaResponse';
-export * from './shared/mappers/UserMediaTypes';
-export * from './shared/mappers/UserResponse';
-export * from './shared/mappers/UserRole';
 // components
 export * from './components/states/PageLoader';
 export * from './components/states/PageError500';

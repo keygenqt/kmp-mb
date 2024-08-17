@@ -17,14 +17,18 @@
 
 import shared from "shared";
 import {AppConf} from "../../conf/AppConf";
-import {locale} from "./elements/locale"
 import {queries} from "./elements/queries"
 
 const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
+const LocaleShared = shared.com.keygenqt.mb.shared.responses.Locale
 const Requests = shared.com.keygenqt.mb.shared.requests
 
 export const Shared = {
-    locale: locale,
+    locale: LocaleShared,
+    locales: [
+        LocaleShared.BY,
+        LocaleShared.EN,
+    ],
     queries: queries,
     httpClient: HttpClient,
     requests: Requests,

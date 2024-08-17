@@ -25,6 +25,7 @@ import {
     FormGroup,
     Stack,
     TextField,
+    Typography,
 } from "@mui/material";
 import {
     AlertError,
@@ -43,20 +44,42 @@ import {
 export function FormCountry(props) {
     const {route, routes} = React.useContext(RouteContext)
     const [isFormChange, setIsFormChange] = React.useState(false)
+    const locales = {}
+
+    // Array locales base data
+    Shared.locales.forEach((locale) => {
+        locales[`name-${locale}`] = locale
+    });
 
     return (
         <Formik
             initialValues={{
                 name: props.model?.name ?? '',
                 submit: null,
-                isRedirect: CacheStorage.get(CacheKeys.redirectCreateCountry)
+                // Redirect from create page
+                isRedirect: CacheStorage.get(CacheKeys.redirectCreateCountry),
+                // Array locales fields
+                ...Object.fromEntries(Object.keys(locales).map((fieldName) => [
+                    fieldName,
+                    props.model
+                        ?.locales
+                        ?.filter((item) => item.locale === locales[fieldName])[0]
+                        ?.text ?? ''
+                ]))
             }}
             validationSchema={Yup.object().shape({
-                name: Yup
-                    .string()
-                    .min(3, 'Size must be between 3 and 250.')
-                    .max(250, 'Size must be between 3 and 250.')
-                    .required('Must not be null and not blank.'),
+                name: Yup.string()
+                        .min(3, 'Size must be between 3 and 250.')
+                        .max(250, 'Size must be between 3 and 250.')
+                        .required('Must not be null and not blank.'),
+                // Array locales validate
+                ...Object.fromEntries(Object.keys(locales).map((fieldName) => [
+                    fieldName,
+                    Yup.string()
+                        .min(3, 'Size must be between 3 and 1000.')
+                        .max(250, 'Size must be between 3 and 1000.')
+                        .required('Must not be null and not blank.')
+                ]))
             })}
             validate={() => {
                 setIsFormChange(true)
@@ -69,16 +92,23 @@ export function FormCountry(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
+                // Array locales prepare
+                const localesRequest = Object.keys(locales).map((fieldName) => new Shared.requests.ColumnLocaleRequest(
+                    props.model?.locales?.filter((item) => item.locale === locales[fieldName])[0]?.id,
+                    values[fieldName],
+                    locales[fieldName]
+                ));
+
                 try {
                     const response = Boolean(props.id) ? (
                         await Shared.httpClient.put.editCountry(props.id, new Shared.requests.CountryRequest(
                             values.name,
-                            []
+                            localesRequest
                         ))
                     ) : (
                         await Shared.httpClient.post.addCountry(new Shared.requests.CountryRequest(
                             values.name,
-                            []
+                            localesRequest
                         ))
                     )
                     if (!Boolean(props.id)) {
@@ -92,10 +122,17 @@ export function FormCountry(props) {
                     if (error.code === 422 && error.validates !== null) {
                         setErrors({
                             name: Helper.findError('name', error),
+                            // Array locales common
+                            submit: Helper.findError('locales', error),
+                            // Array locales error field
+                            ...Object.fromEntries(Object.keys(locales).map((fieldName, index) => [
+                                fieldName,
+                                Helper.findError(`locales[${index}].text`, error)
+                            ]))
                         });
                     } else {
                         setErrors({
-                            submit: 'Server error, please try again later.'
+                            submit: error.message
                         });
                     }
                 }
@@ -150,7 +187,36 @@ export function FormCountry(props) {
                                     fullWidth
                                     label={'Last name'}
                                     variant="filled"
+                                    inputProps={{ autoComplete: 'off' }}
                                 />
+
+                                <Stack spacing={1}>
+                                    <Typography variant='h6' color={'text.primary'}>
+                                        Locales
+                                    </Typography>
+                                    <Typography variant='caption' color={'text.primary'}>
+                                        The main language is Russian, but all other fields are mandatory; it is not good if the user does not find a translation on the site.
+                                    </Typography>
+                                </Stack>
+
+                                {/* Array locales fields */}
+                                {Object.keys(locales).map((fieldName) => (
+                                    <TextField
+                                        key={`fieldName-${fieldName}`}
+                                        disabled={isSubmitting}
+                                        type={'text'}
+                                        name={fieldName}
+                                        value={values[fieldName]}
+                                        helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
+                                        error={Boolean(touched[fieldName] && errors[fieldName])}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        label={`Last name (${locales[fieldName].name})`}
+                                        variant="filled"
+                                        inputProps={{ autoComplete: 'off' }}
+                                    />
+                                ))}
 
                                 <Stack direction={'row'}>
                                     <Box sx={{ flexGrow: 1 }}/>
