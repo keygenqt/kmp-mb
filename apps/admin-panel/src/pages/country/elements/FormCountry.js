@@ -28,6 +28,7 @@ import {
     Typography,
 } from "@mui/material";
 import {
+    AlertInfo,
     AlertError,
     AlertSuccess,
     Helper,
@@ -45,6 +46,8 @@ export function FormCountry(props) {
     const {route, routes} = React.useContext(RouteContext)
     const [isFormChange, setIsFormChange] = React.useState(false)
     const locales = {}
+    const roles = CacheStorage.get(CacheKeys.userRoles)
+    const isAdmin = roles?.includes('ADMIN')
 
     // Array locales base data
     Shared.locales.forEach((locale) => {
@@ -119,7 +122,11 @@ export function FormCountry(props) {
                         setStatus({success: true});
                     }
                 } catch (error) {
-                    if (error.code === 422 && error.validates !== null) {
+                    if (error.code === 403) {
+                        setErrors({
+                            submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
+                        });
+                    } else if (error.code === 422 && error.validates !== null) {
                         setErrors({
                             name: Helper.findError('name', error),
                             // Array locales common
@@ -160,6 +167,12 @@ export function FormCountry(props) {
                                     </AlertError>
                                 )}
 
+                                {props.id === undefined && !errors.submit && !isAdmin && (
+                                    <AlertInfo>
+                                        You are not allowed to create a new country.
+                                    </AlertInfo>
+                                )}
+
                                 {values.isRedirect && (
                                     <AlertSuccess onClear={() => {
                                         CacheStorage.set(CacheKeys.redirectCreateCountry, false, true, true)
@@ -175,7 +188,7 @@ export function FormCountry(props) {
                                 )}
 
                                 <TextField
-                                    disabled={isSubmitting}
+                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'name'}
@@ -203,7 +216,7 @@ export function FormCountry(props) {
                                 {Object.keys(locales).map((fieldName) => (
                                     <TextField
                                         key={`fieldName-${fieldName}`}
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         type={'text'}
                                         name={fieldName}
                                         value={values[fieldName]}

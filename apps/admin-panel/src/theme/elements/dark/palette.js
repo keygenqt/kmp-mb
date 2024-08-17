@@ -34,7 +34,7 @@ export const palette = {
         primary: '#e7e7e7'
     },
     info: {
-        main: '#2e78c7',
+        main: '#313e4d',
     },
     success: {
         main: '#097a09',

@@ -81,7 +81,7 @@ fun Route.cities() {
         }
         put("/{id}") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             val request = call.receiveValidate<CityValidate>()

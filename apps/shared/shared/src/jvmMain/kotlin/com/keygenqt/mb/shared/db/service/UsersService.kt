@@ -21,12 +21,9 @@ import com.keygenqt.mb.shared.extension.toText
 import com.keygenqt.mb.shared.interfaces.IService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.shared.utils.Password
-import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.selectAll
 
 class UsersService(
     override val db: DatabaseMysql
@@ -69,7 +66,11 @@ class UsersService(
         lname: String?,
         password: String?
     ) = UserEntity
-        .find { (Users.lname eq (lname ?: "")) and (Users.roles like "%${UserRole.ADMIN.name}%") }
+        .find {
+            (Users.lname eq (lname ?: "")) and (
+                (Users.roles like "%${UserRole.ADMIN.name}%") or (Users.roles like "%${UserRole.MANAGER.name}%")
+            )
+        }
         .firstOrNull()
         ?.let {
             if (it.paswd != null && Password.validate(password, it.paswd!!)) {

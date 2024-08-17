@@ -21,6 +21,7 @@ export * from './components/states/PageLoader';
 export * from './components/states/PageError500';
 export * from './components/states/PageError404';
 export * from './components/alerts/AlertError';
+export * from './components/alerts/AlertInfo';
 export * from './components/alerts/AlertSuccess';
 export * from './components/other/AuthState';
 export * from './components/other/CardCount';

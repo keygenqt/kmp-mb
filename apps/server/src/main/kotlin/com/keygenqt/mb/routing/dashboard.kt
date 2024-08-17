@@ -35,7 +35,7 @@ fun Route.dashboard() {
     route("/dashboard") {
         get("view-home") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.HOME)
@@ -45,7 +45,7 @@ fun Route.dashboard() {
         }
         get("view-community") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.COMMUNITY)
@@ -55,7 +55,7 @@ fun Route.dashboard() {
         }
         get("view-experts") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.EXPERTS)
@@ -65,7 +65,7 @@ fun Route.dashboard() {
         }
         get("view-regs") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageRegs()
@@ -75,7 +75,7 @@ fun Route.dashboard() {
         }
         get("top-community") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val data = rawService.transactionRaw {
                 it.getTopCommunityIDs()
@@ -94,7 +94,7 @@ fun Route.dashboard() {
         }
         get("view-activity") {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getActivityByMonths()

@@ -89,7 +89,7 @@ export function FormLogin(props) {
                     await new Promise(r => setTimeout(r, 1000));
                     // Update roles for login user
                     const response = await Shared.httpClient.get.authRoles()
-                    CacheStorage.set(CacheKeys.userRoles, response.roles?.mapToUserRoles())
+                    CacheStorage.set(CacheKeys.userRoles, response.roles.map((item) => item.name))
                 } catch (error) {
                     if (error.code === 422 && error.validates !== null) {
                         setErrors({

@@ -56,7 +56,7 @@ fun Route.directions() {
         }
         post {
             // check role
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<DirectionValidate>()
             // act
