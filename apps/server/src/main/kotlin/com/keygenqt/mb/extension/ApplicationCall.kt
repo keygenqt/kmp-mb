@@ -86,7 +86,6 @@ suspend fun ApplicationCall.checkChangeRoles() {
     if (userId != null) {
         val sessionService: SessionService by inject(SessionService::class.java)
         if (!sessionService.checkUserRoles(userId, sessions.get<SessionUser>()?.roles!!)) {
-            sessions.clear<SessionUser>()
             throw Exceptions.Unauthorized()
         }
     }
