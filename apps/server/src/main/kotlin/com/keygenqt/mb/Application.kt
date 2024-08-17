@@ -16,6 +16,8 @@
 package com.keygenqt.mb
 
 import com.keygenqt.mb.base.SessionService
+import com.keygenqt.mb.base.SessionUser
+import com.keygenqt.mb.extension.SESSION_AUTH_KEY
 import com.keygenqt.mb.extension.auth
 import com.keygenqt.mb.extension.configure
 import com.keygenqt.mb.extension.session

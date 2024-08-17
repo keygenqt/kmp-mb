@@ -16,10 +16,7 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.extension.*
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.RegExpertsService
@@ -39,6 +36,7 @@ fun Route.registrationExperts() {
     route("/registration-experts") {
         get {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
             val response = regExpertsService.transaction {
@@ -49,6 +47,7 @@ fun Route.registrationExperts() {
         }
         get("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
@@ -60,6 +59,8 @@ fun Route.registrationExperts() {
             call.respond(response)
         }
         post {
+            // check role
+            call.checkChangeRoles()
             // get request
             val request = call.receiveValidate<RegExpertValidate>()
             // act
@@ -88,6 +89,7 @@ fun Route.registrationExperts() {
         }
         put("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
@@ -104,6 +106,7 @@ fun Route.registrationExperts() {
         }
         delete("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

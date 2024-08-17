@@ -29,6 +29,8 @@ fun SessionsConfig.session(
 ) {
     if (secret != null && signKey != null) {
         cookie<SessionUser>(SESSION_AUTH_KEY) {
+            cookie.path = "/"
+            cookie.maxAgeInSeconds = 604800 // One week
             transform(
                 SessionTransportTransformerEncrypt(
                     secret.md5Hex(),

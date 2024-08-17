@@ -16,10 +16,7 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.extension.*
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.RegPartnersService
@@ -39,6 +36,7 @@ fun Route.registrationPartners() {
     route("/registration-partners") {
         get {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // act
             val response = regPartnersService.transaction {
@@ -49,6 +47,7 @@ fun Route.registrationPartners() {
         }
         get("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
@@ -60,6 +59,8 @@ fun Route.registrationPartners() {
             call.respond(response)
         }
         post {
+            // check role
+            call.checkChangeRoles()
             // get request
             val request = call.receiveValidate<RegPartnerValidate>()
             // act
@@ -84,6 +85,7 @@ fun Route.registrationPartners() {
         }
         put("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
@@ -100,6 +102,7 @@ fun Route.registrationPartners() {
         }
         delete("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

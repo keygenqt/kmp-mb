@@ -16,6 +16,7 @@
 
 import * as React from 'react';
 import {Shared} from '../shared/Shared';
+import {CacheStorage, CacheKeys} from '../../base';
 
 export function useHttpQuery(method, ...arg) {
 
@@ -31,8 +32,12 @@ export function useHttpQuery(method, ...arg) {
                     setValue(value)
                 })
                 .catch(async (e) => {
-                    setValue(null)
-                    console.error('Error catch response')
+                    if (e.code === 401) {
+                        CacheStorage.clearByKey(CacheKeys.userRoles)
+                    } else {
+                        setValue(null)
+                        console.error('Error catch response')
+                    }
                 });
         } catch (e) {
             setValue(null)

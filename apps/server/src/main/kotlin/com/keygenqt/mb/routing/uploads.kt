@@ -16,6 +16,7 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
+import com.keygenqt.mb.extension.checkChangeRoles
 import com.keygenqt.mb.extension.getStringParam
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.userRoleNotHasForbidden
@@ -51,6 +52,7 @@ fun Route.uploads() {
         }
         post {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val uploads = mutableListOf<UploadEntity>()
@@ -86,6 +88,7 @@ fun Route.uploads() {
         }
         delete("/{name}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val name = call.getStringParam()

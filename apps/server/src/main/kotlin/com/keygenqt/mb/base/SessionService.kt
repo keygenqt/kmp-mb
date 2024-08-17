@@ -22,6 +22,7 @@ import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserEntity
 import com.keygenqt.mb.shared.db.entities.Users
 import com.keygenqt.mb.shared.db.entities.toResponse
+import com.keygenqt.mb.shared.responses.UserRole
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import java.util.*
 
@@ -69,6 +70,16 @@ class SessionService(
         } catch (ex: ExposedSQLException) {
             null
         }
+    }
+
+    /**
+     * Check change roles
+     */
+    suspend fun checkUserRoles(
+        userId: Int,
+        roles: List<UserRole>
+    ) = db.transaction {
+        UserEntity.findById(userId)?.roles == roles.joinToString(",")
     }
 
     /**

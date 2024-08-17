@@ -16,12 +16,16 @@
 package com.keygenqt.mb.extension
 
 import com.keygenqt.mb.base.Exceptions
+import com.keygenqt.mb.base.SessionService
 import com.keygenqt.mb.base.SessionUser
 import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.sessions.*
 import jakarta.validation.Validation
+import kotlinx.coroutines.runBlocking
+import org.koin.java.KoinJavaComponent.inject
 
 /**
  * Get value from params with validate
@@ -75,9 +79,24 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(): T {
 }
 
 /**
+ * Check change roles after login
+ */
+suspend fun ApplicationCall.checkChangeRoles() {
+    val userId = sessions.get<SessionUser>()?.userId
+    if (userId != null) {
+        val sessionService: SessionService by inject(SessionService::class.java)
+        if (!sessionService.checkUserRoles(userId, sessions.get<SessionUser>()?.roles!!)) {
+            sessions.clear<SessionUser>()
+            throw Exceptions.Unauthorized()
+        }
+    }
+}
+
+/**
  * Get user roles
  */
 fun ApplicationCall.getUserRoles(): List<UserRole> = sessions.get<SessionUser>()?.roles ?: listOf(UserRole.GUEST)
+
 
 /**
  * Check contains roles has

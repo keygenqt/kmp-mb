@@ -16,10 +16,7 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.extension.*
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.DirectionsService
@@ -37,6 +34,8 @@ fun Route.directions() {
 
     route("/directions") {
         get {
+            // check role
+            call.checkChangeRoles()
             // act
             val response = directionsService.transaction {
                 getAll().toResponses(call.getUserRoles())
@@ -45,6 +44,8 @@ fun Route.directions() {
             call.respond(response)
         }
         get("/{id}") {
+            // check role
+            call.checkChangeRoles()
             // get request
             val id = call.getNumberParam()
             // act
@@ -56,6 +57,7 @@ fun Route.directions() {
         }
         post {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<DirectionValidate>()
@@ -70,6 +72,7 @@ fun Route.directions() {
         }
         put("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
@@ -85,6 +88,7 @@ fun Route.directions() {
         }
         delete("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

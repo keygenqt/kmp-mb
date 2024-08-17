@@ -16,10 +16,7 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.getNumberParam
-import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.extension.receiveValidate
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
+import com.keygenqt.mb.extension.*
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.CitiesService
@@ -39,6 +36,8 @@ fun Route.cities() {
 
     route("/cities") {
         get {
+            // check role
+            call.checkChangeRoles()
             // act
             val response = citiesService.transaction {
                 getAll().toResponses(call.getUserRoles())
@@ -47,6 +46,8 @@ fun Route.cities() {
             call.respond(response)
         }
         get("/{id}") {
+            // check role
+            call.checkChangeRoles()
             // get request
             val id = call.getNumberParam()
             // act
@@ -58,6 +59,7 @@ fun Route.cities() {
         }
         post {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val request = call.receiveValidate<CityValidate>()
@@ -81,6 +83,7 @@ fun Route.cities() {
         }
         put("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
@@ -110,6 +113,7 @@ fun Route.cities() {
         }
         delete("/{id}") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

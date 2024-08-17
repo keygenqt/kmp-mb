@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.routing
 
+import com.keygenqt.mb.extension.checkChangeRoles
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponses
@@ -35,6 +36,7 @@ fun Route.dashboard() {
     route("/dashboard") {
         get("view-home") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
@@ -45,6 +47,7 @@ fun Route.dashboard() {
         }
         get("view-community") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
@@ -55,6 +58,7 @@ fun Route.dashboard() {
         }
         get("view-experts") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
@@ -65,6 +69,7 @@ fun Route.dashboard() {
         }
         get("view-regs") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
@@ -75,6 +80,7 @@ fun Route.dashboard() {
         }
         get("top-community") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val data = rawService.transactionRaw {
@@ -94,6 +100,7 @@ fun Route.dashboard() {
         }
         get("view-activity") {
             // check role
+            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
