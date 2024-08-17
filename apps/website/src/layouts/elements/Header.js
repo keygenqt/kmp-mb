@@ -89,6 +89,7 @@ export function Header(props) {
                         if (route.isPage(routes.community)) {
                             // Clear page cache
                             [
+                                Shared.queries.cities,
                                 Shared.queries.countries,
                                 CacheKeys.communityFilterSearch,
                                 CacheKeys.communityFilterCountry,
@@ -108,6 +109,7 @@ export function Header(props) {
                             // Clear page cache
                             [
                                 Shared.queries.experts,
+                                Shared.queries.directions,
                                 CacheKeys.expertFilterSearch,
                                 CacheKeys.expertFilterDirection,
                             ].forEach(key => CacheStorage.clearByKey(key))
