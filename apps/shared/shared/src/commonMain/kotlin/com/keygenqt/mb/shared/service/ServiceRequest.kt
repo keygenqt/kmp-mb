@@ -15,6 +15,8 @@
  */
 package com.keygenqt.mb.shared.service
 
+import com.keygenqt.mb.shared.responses.StateResponse
+import com.keygenqt.mb.shared.responses.StateResponseException
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -23,6 +25,8 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import com.keygenqt.mb.shared.service.impl.GetRequest
 import com.keygenqt.mb.shared.service.impl.PostRequest
+import com.keygenqt.mb.shared.service.impl.PutRequest
+import io.ktor.client.call.*
 
 /**
  * Get platform client
@@ -49,8 +53,21 @@ class ServiceRequest(url: String) {
         install(ContentNegotiation) {
             json(json)
         }
+        HttpResponseValidator {
+            validateResponse { response ->
+                if (response.status != HttpStatusCode.OK) {
+                    val state: StateResponse = response.body()
+                    throw StateResponseException(
+                        code = state.code,
+                        message = state.message,
+                        validates = state.validates
+                    )
+                }
+            }
+        }
     }
 
     val get = GetRequest(httpClient)
     val post = PostRequest(httpClient)
+    val put = PutRequest(httpClient)
 }

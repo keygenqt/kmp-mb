@@ -19,8 +19,8 @@ import {Shared} from '../shared/Shared';
 
 export function useHttpQuery(method, ...arg) {
 
-    const [value, setValue] = React.useState(undefined)
     const wasCalled = React.useRef(false)
+    const [value, setValue] = React.useState(undefined)
 
     React.useEffect(() => {
         if(wasCalled.current) return;
@@ -32,11 +32,11 @@ export function useHttpQuery(method, ...arg) {
                 })
                 .catch(async (e) => {
                     setValue(null)
-                    console.error(e)
+                    console.error('Error catch response')
                 });
         } catch (e) {
             setValue(null)
-            console.error(e)
+            console.error('Error catch query')
         }
     }, [arg, method])
 

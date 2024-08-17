@@ -37,7 +37,7 @@ export const palette = {
         main: '#2e78c7',
     },
     success: {
-        main: '#329132',
+        main: '#4fa84f',
     },
     error: {
         main: '#d43030'

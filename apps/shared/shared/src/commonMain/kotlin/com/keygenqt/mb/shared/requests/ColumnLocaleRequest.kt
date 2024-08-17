@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.requests
 
-import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import com.keygenqt.mb.shared.responses.Locale
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-export function CountryPage(props) {
-    let {id} = useParams();
-
-    return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {id ? `Edit country - ${id}` : 'Add country'}.
-            </Typography>
-        </Stack>
-    );
-}
-
-CountryPage.propTypes = {};
+/**
+ * Request CommonLocale for any models
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class ColumnLocaleRequest(
+    val id: Int?,
+    val text: String,
+    val locale: Locale,
+)

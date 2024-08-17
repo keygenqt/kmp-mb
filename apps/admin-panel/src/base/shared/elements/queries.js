@@ -29,4 +29,6 @@ export const queries = {
     registrationExperts: 'registrationExperts',
     registrationOrganizers: 'registrationOrganizers',
     registrationPartners: 'registrationPartners',
+    country: 'country', // id: Int
+    city: 'city', // id: Int
 }

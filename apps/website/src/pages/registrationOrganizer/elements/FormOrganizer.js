@@ -134,44 +134,44 @@ export function FormOrganizer(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
-                const response = await Shared.httpClient.post.registrationOrganizer(new Shared.requests.RegOrganizerRequest(
-                    values.fname,
-                    values.lname,
-                    values.why,
-                    values.experience,
-                    values.activity,
-                    values.email,
-                    values.emailNotion,
-                    values.telegram,
-                    values.city,
-                    values.country,
-                    values.expectations,
-                ))
-
-                if (response.code === 200) {
+                try {
+                    await Shared.httpClient.post.registrationOrganizer(new Shared.requests.RegOrganizerRequest(
+                        values.fname,
+                        values.lname,
+                        values.why,
+                        values.experience,
+                        values.activity,
+                        values.email,
+                        values.emailNotion,
+                        values.telegram,
+                        values.city,
+                        values.country,
+                        values.expectations,
+                    ))
                     resetForm();
                     setStatus({success: true});
-                } else if (response.code === 422 && response.validates !== null) {
-                    setErrors({
-                        fname: Helper.findError(t, 'fname', response),
-                        lname: Helper.findError(t, 'lname', response),
-                        why: Helper.findError(t, 'why', response),
-                        experience: Helper.findError(t, 'experience', response),
-                        activity: Helper.findError(t, 'activity', response),
-                        email: Helper.findError(t, 'email', response),
-                        emailNotion: Helper.findError(t, 'emailNotion', response),
-                        telegram: Helper.findError(t, 'telegram', response),
-                        city: Helper.findError(t, 'city', response),
-                        country: Helper.findError(t, 'country', response),
-                        expectations: Helper.findError(t, 'expectations', response),
-                        submit: t('pages.registrationOrganizer.t_error_form')
-                    });
-                } else {
-                    setErrors({
-                        submit: response.message
-                    });
+                } catch (error) {
+                    if (error.code === 422 && error.validates !== null) {
+                        setErrors({
+                            fname: Helper.findError(t, 'fname', error),
+                            lname: Helper.findError(t, 'lname', error),
+                            why: Helper.findError(t, 'why', error),
+                            experience: Helper.findError(t, 'experience', error),
+                            activity: Helper.findError(t, 'activity', error),
+                            email: Helper.findError(t, 'email', error),
+                            emailNotion: Helper.findError(t, 'emailNotion', error),
+                            telegram: Helper.findError(t, 'telegram', error),
+                            city: Helper.findError(t, 'city', error),
+                            country: Helper.findError(t, 'country', error),
+                            expectations: Helper.findError(t, 'expectations', error),
+                            submit: t('pages.registrationOrganizer.t_error_form')
+                        });
+                    } else {
+                        setErrors({
+                            submit: error.message
+                        });
+                    }
                 }
-
                 // Scroll to top
                 const root = document.getElementById("root")
                 const element = document.getElementById("FormId")

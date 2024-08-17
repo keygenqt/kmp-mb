@@ -105,34 +105,35 @@ export function FormPartner(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
-                const response = await Shared.httpClient.post.registrationPartner(new Shared.requests.RegPartnerRequest(
-                    values.company,
-                    values.fname,
-                    values.lname,
-                    values.email,
-                    values.telegram,
-                    values.phone,
-                    values.format,
-                ))
-
-                if (response.code === 200) {
+                try {
+                    await Shared.httpClient.post.registrationPartner(new Shared.requests.RegPartnerRequest(
+                        values.company,
+                        values.fname,
+                        values.lname,
+                        values.email,
+                        values.telegram,
+                        values.phone,
+                        values.format,
+                    ))
                     resetForm();
                     setStatus({success: true});
-                } else if (response.code === 422 && response.validates !== null) {
-                    setErrors({
-                        company: Helper.findError(t, 'company', response),
-                        fname: Helper.findError(t, 'fname', response),
-                        lname: Helper.findError(t, 'lname', response),
-                        email: Helper.findError(t, 'email', response),
-                        telegram: Helper.findError(t, 'telegram', response),
-                        phone: Helper.findError(t, 'phone', response),
-                        format: Helper.findError(t, 'format', response),
-                        submit: t('pages.registrationPartner.t_error_form')
-                    });
-                } else {
-                    setErrors({
-                        submit: response.message
-                    });
+                } catch (error) {
+                    if (error.code === 422 && error.validates !== null) {
+                        setErrors({
+                            company: Helper.findError(t, 'company', error),
+                            fname: Helper.findError(t, 'fname', error),
+                            lname: Helper.findError(t, 'lname', error),
+                            email: Helper.findError(t, 'email', error),
+                            telegram: Helper.findError(t, 'telegram', error),
+                            phone: Helper.findError(t, 'phone', error),
+                            format: Helper.findError(t, 'format', error),
+                            submit: t('pages.registrationPartner.t_error_form')
+                        });
+                    } else {
+                        setErrors({
+                            submit: error.message
+                        });
+                    }
                 }
 
                 // Scroll to top

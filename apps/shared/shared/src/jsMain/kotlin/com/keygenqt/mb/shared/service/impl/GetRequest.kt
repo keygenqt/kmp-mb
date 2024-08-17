@@ -45,6 +45,9 @@ class GetRequestJS(
     fun directions() = GlobalScope.promise { client.get.directions() }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun direction(id: Int) = GlobalScope.promise { client.get.direction(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun cities() = GlobalScope.promise { client.get.cities() }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -52,6 +55,9 @@ class GetRequestJS(
 
     @OptIn(DelicateCoroutinesApi::class)
     fun countries() = GlobalScope.promise { client.get.countries() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun country(id: Int) = GlobalScope.promise { client.get.country(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
     fun registrationExperts() = GlobalScope.promise { client.get.registrationExperts() }

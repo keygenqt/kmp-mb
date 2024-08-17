@@ -79,36 +79,32 @@ export function FormLogin(props) {
                 await new Promise(r => setTimeout(r, 500));
 
                 try {
-                    const response = await Shared.httpClient.post.authJwt(new Shared.requests.AuthJwtRequest(
+                    await Shared.httpClient.post.authJwt(new Shared.requests.AuthJwtRequest(
                         values.lname,
                         values.password,
                     ))
-
-                    if (response.code === 200) {
-                        resetForm();
-                        setStatus({success: true});
-                    } else if (response.code === 422 && response.validates !== null) {
+                    resetForm();
+                    setStatus({success: true});
+                    // Show success alert
+                    await new Promise(r => setTimeout(r, 1000));
+                    // Update roles for login user
+                    const response = await Shared.httpClient.get.authRoles()
+                    CacheStorage.set(CacheKeys.userRoles, response.roles?.mapToUserRoles())
+                } catch (error) {
+                    if (error.code === 422 && error.validates !== null) {
                         setErrors({
-                            lname: Helper.findError('lname', response),
-                            password: Helper.findError('password', response),
+                            lname: Helper.findError('lname', error),
+                            password: Helper.findError('password', error),
                         });
-                    } else {
+                    } else if (error.code === 401) {
                         setErrors({
                             submit: 'Incorrect login or password.'
                         });
+                    } else {
+                        setErrors({
+                            submit: 'Server error, please try again later.'
+                        });
                     }
-
-                    if (response.code === 200) {
-                        // Show success alert
-                        await new Promise(r => setTimeout(r, 1000));
-                        // Update roles for login user
-                        const response = await Shared.httpClient.get.authRoles()
-                        CacheStorage.set(CacheKeys.userRoles, response.roles?.mapToUserRoles())
-                    }
-                } catch (e) {
-                    setErrors({
-                        submit: 'Server error, please try again later.'
-                    });
                 }
             }}
         >

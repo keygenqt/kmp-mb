@@ -22,7 +22,8 @@ import {
     CitiesPage,
     CityPage,
     CountriesPage,
-    CountryPage,
+    CountryAddPage,
+    CountryEditPage,
     DashboardPage,
     DirectionPage,
     DirectionsPage,
@@ -112,8 +113,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CountryPage'}>
-                            <CountryPage/>
+                        <BaseLayout isCenter={false} className={'CountryPage'}>
+                            <CountryAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -130,8 +131,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CountryPage'}>
-                            <CountryPage/>
+                        <BaseLayout isCenter={false} className={'CountryPage'}>
+                            <CountryEditPage/>
                         </BaseLayout>
                     }
                 />

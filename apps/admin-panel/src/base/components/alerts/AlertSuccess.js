@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import {Alert, Collapse, IconButton} from "@mui/material";
-import {Close} from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
-import PropTypes from "prop-types";
+import * as React from 'react';
+import PropTypes from 'prop-types';
+import {Alert, Collapse, IconButton} from '@mui/material';
+import {Close} from '@mui/icons-material';
+import Typography from '@mui/material/Typography';
 
 export function AlertSuccess(props) {
 
-    const {
-        onClose
-    } = props
-
     const [collapse, setCollapse] = React.useState(true);
+
+    const wasCalled = React.useRef(false)
+    React.useEffect(() => {
+        if(wasCalled.current) return;
+        wasCalled.current = true;
+        if (props.onClear) props.onClear()
+    }, [props])
 
     return (
         <Collapse in={collapse}>
@@ -57,7 +60,9 @@ export function AlertSuccess(props) {
                         size="small"
                         onClick={() => {
                             setCollapse(false);
-                            setTimeout(() => onClose(), 200)
+                            if (props.onClose) {
+                                setTimeout(() => props.onClose(), 200)
+                            }
                         }}
                     >
                         <Close color="white" fontSize="inherit"/>
@@ -74,6 +79,7 @@ export function AlertSuccess(props) {
 
 AlertSuccess.propTypes = {
     style: PropTypes.object,
-    onClose: PropTypes.func.isRequired,
+    onClose: PropTypes.func,
+    onClear: PropTypes.func,
     children: PropTypes.string.isRequired
 };

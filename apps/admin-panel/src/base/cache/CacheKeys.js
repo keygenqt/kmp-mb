@@ -17,4 +17,5 @@
 export const CacheKeys = {
     darkMode: 'darkMode',
     userRoles: 'userRoles',
+    redirectCreateCountry: 'redirectCreateCountry',
 };

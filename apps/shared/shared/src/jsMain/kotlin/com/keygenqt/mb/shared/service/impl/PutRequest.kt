@@ -24,39 +24,12 @@ import kotlinx.coroutines.GlobalScope
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Suppress("unused", "NON_EXPORTABLE_TYPE")
-class PostRequestJS(
+class PutRequestJS(
     private val client: ServiceRequest
 ) {
     @OptIn(DelicateCoroutinesApi::class)
-    fun authJwt(
-        request: AuthJwtRequest
-    ) = GlobalScope.promise { client.post.authJwt(request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun sendStatisticView(
-        request: StatisticViewRequest
-    ) = GlobalScope.promise { client.post.sendStatisticView(request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun logout() = GlobalScope.promise { client.post.logout() }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun registrationExpert(
-        request: RegExpertRequest
-    ) = GlobalScope.promise { client.post.registrationExpert(request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun registrationOrganizer(
-        request: RegOrganizerRequest
-    ) = GlobalScope.promise { client.post.registrationOrganizer(request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun registrationPartner(
-        request: RegPartnerRequest
-    ) = GlobalScope.promise { client.post.registrationPartner(request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun addCountry(
+    fun editCountry(
+        id: Int,
         request: CountryRequest
-    ) = GlobalScope.promise { client.post.addCountry(request) }
+    ) = GlobalScope.promise { client.put.editCountry(id, request) }
 }

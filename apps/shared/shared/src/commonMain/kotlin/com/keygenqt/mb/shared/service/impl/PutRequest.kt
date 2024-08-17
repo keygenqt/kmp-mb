@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,8 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.service.impl
 
-export * from './BaseLayout';
-export * from './EmptyLayout';
-export * from './FormLayout';
-export * from './GridLayout';
+import com.keygenqt.mb.shared.requests.*
+import com.keygenqt.mb.shared.responses.CountryResponse
+import com.keygenqt.mb.shared.responses.StateResponse
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+
+class PutRequest(private val client: HttpClient) {
+    @Throws(Exception::class)
+    suspend fun editCountry(
+        id: Int,
+        request: CountryRequest
+    ): CountryResponse {
+        return client.put("api/countries/$id") { setBody(request) }.body()
+    }
+}

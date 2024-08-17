@@ -131,44 +131,44 @@ export function FormExpert(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
-                const response = await Shared.httpClient.post.registrationExpert(new Shared.requests.RegExpertRequest(
-                    values.directionID,
-                    values.expertID,
-                    values.why,
-                    values.fname,
-                    values.lname,
-                    values.email,
-                    values.telegram,
-                    values.cv,
-                    values.location,
-                    values.experience,
-                    values.contribution,
-                ))
-
-                if (response.code === 200) {
+                try {
+                    await Shared.httpClient.post.registrationExpert(new Shared.requests.RegExpertRequest(
+                        values.directionID,
+                        values.expertID,
+                        values.why,
+                        values.fname,
+                        values.lname,
+                        values.email,
+                        values.telegram,
+                        values.cv,
+                        values.location,
+                        values.experience,
+                        values.contribution,
+                    ))
                     resetForm();
                     setStatus({success: true});
-                } else if (response.code === 422 && response.validates !== null) {
-                    setErrors({
-                        directionID: Helper.findError(t, 'directionID', response),
-                        expertID: Helper.findError(t, 'expertID', response),
-                        why: Helper.findError(t, 'why', response),
-                        fname: Helper.findError(t, 'fname', response),
-                        lname: Helper.findError(t, 'lname', response),
-                        email: Helper.findError(t, 'email', response),
-                        telegram: Helper.findError(t, 'telegram', response),
-                        cv: Helper.findError(t, 'cv', response),
-                        location: Helper.findError(t, 'location', response),
-                        experience: Helper.findError(t, 'experience', response),
-                        contribution: Helper.findError(t, 'contribution', response),
-                        submit: t('pages.registrationExpert.t_error_form')
-                    });
-                } else {
-                    setErrors({
-                        submit: response.message
-                    });
+                } catch (error) {
+                    if (error.code === 422 && error.validates !== null) {
+                        setErrors({
+                            directionID: Helper.findError(t, 'directionID', error),
+                            expertID: Helper.findError(t, 'expertID', error),
+                            why: Helper.findError(t, 'why', error),
+                            fname: Helper.findError(t, 'fname', error),
+                            lname: Helper.findError(t, 'lname', error),
+                            email: Helper.findError(t, 'email', error),
+                            telegram: Helper.findError(t, 'telegram', error),
+                            cv: Helper.findError(t, 'cv', error),
+                            location: Helper.findError(t, 'location', error),
+                            experience: Helper.findError(t, 'experience', error),
+                            contribution: Helper.findError(t, 'contribution', error),
+                            submit: t('pages.registrationExpert.t_error_form')
+                        });
+                    } else {
+                        setErrors({
+                            submit: error.message
+                        });
+                    }
                 }
-
                 // Scroll to top
                 const root = document.getElementById("root")
                 const element = document.getElementById("FormId")

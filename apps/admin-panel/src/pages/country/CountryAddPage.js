@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-export * from './BaseLayout';
-export * from './EmptyLayout';
-export * from './FormLayout';
-export * from './GridLayout';
+import * as React from 'react';
+import { FormLayout } from '../../layouts';
+import {FormCountry} from './elements/FormCountry';
+
+export function CountryAddPage(props) {
+    return (
+        <FormLayout title={'Add country'} model={null} >
+            <FormCountry/>
+        </FormLayout>
+    )
+}
+
+CountryAddPage.propTypes = {};

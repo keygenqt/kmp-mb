@@ -13,47 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.shared.responses
+package com.keygenqt.mb.shared.requests
 
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
 
 /**
- * Error response for HttpResponseValidator
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@Suppress("ArrayInDataClass")
-data class StateResponseException(
-    val code: Int,
-    override val message: String,
-    val validates: Array<StateValidateResponse>? = null,
-) : RuntimeException()
-
-/**
- * State response common
+ * Request country
  */
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Serializable
 @Suppress("ArrayInDataClass")
-data class StateResponse(
-    val code: Int,
-    val message: String,
-    val validates: Array<StateValidateResponse>? = null,
+data class CountryRequest(
+    val name: String,
+    val locales: Array<ColumnLocaleRequest>,
 )
-
-/**
- * State validate response
- */
-@OptIn(ExperimentalJsExport::class)
-@JsExport
-@Serializable
-@Suppress("ArrayInDataClass")
-data class StateValidateResponse(
-    val filed: String,
-    val errors: Array<String>
-)
-
-

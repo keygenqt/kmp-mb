@@ -42,6 +42,11 @@ class GetRequest(private val client: HttpClient) {
     }
 
     @Throws(Exception::class)
+    suspend fun direction(id: Int): UserDirectionResponse {
+        return client.get("api/directions/$id").body()
+    }
+
+    @Throws(Exception::class)
     suspend fun cities(): List<CityResponse> {
         return client.get("api/cities").body()
     }
@@ -54,6 +59,11 @@ class GetRequest(private val client: HttpClient) {
     @Throws(Exception::class)
     suspend fun countries(): List<CountryResponse> {
         return client.get("api/countries").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun country(id: Int): CountryResponse {
+        return client.get("api/countries/$id").body()
     }
 
     @Throws(Exception::class)

@@ -16,6 +16,7 @@
 package com.keygenqt.mb.shared.service.impl
 
 import com.keygenqt.mb.shared.requests.*
+import com.keygenqt.mb.shared.responses.CountryResponse
 import com.keygenqt.mb.shared.responses.StateResponse
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -23,33 +24,13 @@ import io.ktor.client.request.*
 
 class PostRequest(private val client: HttpClient) {
     /**
-     * Registration expert
+     * Login JWT
      */
     @Throws(Exception::class)
-    suspend fun registrationExpert(
-        request: RegExpertRequest
+    suspend fun authJwt(
+        request: AuthJwtRequest
     ): StateResponse {
-        return client.post("api/registration-experts") { setBody(request) }.body()
-    }
-
-    /**
-     * Registration organizer
-     */
-    @Throws(Exception::class)
-    suspend fun registrationOrganizer(
-        request: RegOrganizerRequest
-    ): StateResponse {
-        return client.post("api/registration-organizers") { setBody(request) }.body()
-    }
-
-    /**
-     * Registration partner
-     */
-    @Throws(Exception::class)
-    suspend fun registrationPartner(
-        request: RegPartnerRequest
-    ): StateResponse {
-        return client.post("api/registration-partners") { setBody(request) }.body()
+        return client.post("api/auth/jwt") { setBody(request) }.body()
     }
 
     /**
@@ -62,21 +43,36 @@ class PostRequest(private val client: HttpClient) {
         return client.post("api/statistic-view") { setBody(request) }.body()
     }
 
-    /**
-     * Login JWT
-     */
-    @Throws(Exception::class)
-    suspend fun authJwt(
-        request: AuthJwtRequest
-    ): StateResponse {
-        return client.post("api/auth/jwt") { setBody(request) }.body()
-    }
-
-    /**
-     * Logout JWT
-     */
     @Throws(Exception::class)
     suspend fun logout(): StateResponse {
         return client.post("api/logout").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationExpert(
+        request: RegExpertRequest
+    ): StateResponse {
+        return client.post("api/registration-experts") { setBody(request) }.body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationOrganizer(
+        request: RegOrganizerRequest
+    ): StateResponse {
+        return client.post("api/registration-organizers") { setBody(request) }.body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun registrationPartner(
+        request: RegPartnerRequest
+    ): StateResponse {
+        return client.post("api/registration-partners") { setBody(request) }.body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun addCountry(
+        request: CountryRequest
+    ): CountryResponse {
+        return client.post("api/countries") { setBody(request) }.body()
     }
 }
