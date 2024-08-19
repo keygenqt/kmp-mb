@@ -23,6 +23,7 @@ import {
     useHttpQuery,
     RouteContext,
     Shared,
+    CacheKeys,
 } from '../../base';
 
 
@@ -37,6 +38,7 @@ export function CountriesPage(props) {
             onClickAdd={() => {
                 route.toLocation(routes.countryAdd)
             }}
+            redirect={CacheKeys.redirectRemoveCountry}
             columns={[
                 {
                     minWidth: 120,

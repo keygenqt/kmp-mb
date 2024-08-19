@@ -16,7 +16,6 @@
 package com.keygenqt.mb.shared.service.impl
 
 import com.keygenqt.mb.shared.extensions.promise
-import com.keygenqt.mb.shared.requests.*
 import com.keygenqt.mb.shared.service.ServiceRequest
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -24,42 +23,15 @@ import kotlinx.coroutines.GlobalScope
 @OptIn(ExperimentalJsExport::class)
 @JsExport
 @Suppress("unused", "NON_EXPORTABLE_TYPE")
-class PutRequestJS(
+class DeleteRequestJS(
     private val client: ServiceRequest
 ) {
     @OptIn(DelicateCoroutinesApi::class)
-    fun editCountry(
-        id: Int,
-        request: CountryRequest
-    ) = GlobalScope.promise { client.put.editCountry(id, request) }
+    fun deleteCountry(id: Int) = GlobalScope.promise { client.delete.deleteCountry(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun editCity(
-        id: Int,
-        request: CityRequest
-    ) = GlobalScope.promise { client.put.editCity(id, request) }
+    fun deleteCity(id: Int) = GlobalScope.promise { client.delete.deleteCity(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun editDirection(
-        id: Int,
-        request: DirectionRequest
-    ) = GlobalScope.promise { client.put.editUserDirection(id, request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun editRegExpert(
-        id: Int,
-        request: RegExpertEditRequest
-    ) = GlobalScope.promise { client.put.editRegExpert(id, request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun editRegOrganizer(
-        id: Int,
-        request: RegOrganizerEditRequest
-    ) = GlobalScope.promise { client.put.editRegOrganizer(id, request) }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    fun editRegPartner(
-        id: Int,
-        request: RegPartnerEditRequest
-    ) = GlobalScope.promise { client.put.editRegPartner(id, request) }
+    fun deleteDirection(id: Int) = GlobalScope.promise { client.delete.deleteDirection(id) }
 }

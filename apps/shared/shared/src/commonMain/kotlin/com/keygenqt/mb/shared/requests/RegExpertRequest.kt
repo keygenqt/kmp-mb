@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.requests
 
+import com.keygenqt.mb.shared.responses.RegExpertState
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
@@ -37,4 +38,15 @@ data class RegExpertRequest(
     val location: String,
     val experience: String,
     val contribution: String,
+)
+
+/**
+ * Request edit RegExpert
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class RegExpertEditRequest(
+    val note: String,
+    val state: RegExpertState,
 )

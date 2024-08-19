@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.requests
 
+import com.keygenqt.mb.shared.responses.RegOrganizerState
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
@@ -37,4 +38,15 @@ data class RegOrganizerRequest(
     val city: String,
     val country: String,
     val expectations: String,
+)
+
+/**
+ * Request edit RegOrganizer
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class RegOrganizerEditRequest(
+    val note: String,
+    val state: RegOrganizerState,
 )

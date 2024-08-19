@@ -23,6 +23,7 @@ import {
     useHttpQuery,
     RouteContext,
     Shared,
+    CacheKeys,
 } from '../../base';
 
 
@@ -37,6 +38,7 @@ export function DirectionsPage(props) {
             onClickAdd={() => {
                 route.toLocation(routes.directionAdd)
             }}
+            redirect={CacheKeys.redirectRemoveDirection}
             columns={[
                 {
                     minWidth: 120,

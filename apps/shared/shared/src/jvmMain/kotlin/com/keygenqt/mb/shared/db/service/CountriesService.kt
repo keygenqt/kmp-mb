@@ -31,7 +31,7 @@ class CountriesService(
      */
     fun getAll() = CountryEntity
         .all()
-        .orderBy(Pair(Countries.name, SortOrder.ASC))
+        .orderBy(Pair(Countries.id, SortOrder.DESC))
 
     /**
      * Find entity by id.
@@ -74,10 +74,10 @@ class CountriesService(
             throw RuntimeException("There are dependencies on this model in the database.")
         }
         // Get relations ids
-        val idsLocale = RelationsCitiesColumnLocales
-            .select(RelationsCitiesColumnLocales.locale)
-            .where { RelationsCitiesColumnLocales.city eq id }
-            .map { it[RelationsCitiesColumnLocales.locale] }
+        val idsLocale = RelationsCountriesColumnLocales
+            .select(RelationsCountriesColumnLocales.locale)
+            .where { RelationsCountriesColumnLocales.country eq id }
+            .map { it[RelationsCountriesColumnLocales.locale] }
             .toList()
         // Delete relations
         RelationsCountriesColumnLocales.deleteWhere { country eq id }

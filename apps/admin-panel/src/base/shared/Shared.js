@@ -21,6 +21,9 @@ import {queries} from "./elements/queries"
 
 const HttpClient = new shared.com.keygenqt.mb.shared.service.ServiceRequestJS(AppConf.apiUrl)
 const LocaleShared = shared.com.keygenqt.mb.shared.responses.Locale
+const RegExpertState = shared.com.keygenqt.mb.shared.responses.RegExpertState
+const RegOrganizerState = shared.com.keygenqt.mb.shared.responses.RegOrganizerState
+const RegPartnerState = shared.com.keygenqt.mb.shared.responses.RegPartnerState
 const Requests = shared.com.keygenqt.mb.shared.requests
 
 export const Shared = {
@@ -28,6 +31,29 @@ export const Shared = {
     locales: [
         LocaleShared.BY,
         LocaleShared.EN,
+    ],
+    RegExpertState: RegExpertState,
+    RegExpertStates: [
+        RegExpertState.WAITING,
+        RegExpertState.HOLD,
+        RegExpertState.PROBATION,
+        RegExpertState.REJECT,
+        RegExpertState.APPROVED,
+    ],
+    RegOrganizerState: RegOrganizerState,
+    RegOrganizerStates: [
+        RegOrganizerState.WAITING,
+        RegOrganizerState.HOLD,
+        RegOrganizerState.PROBATION,
+        RegOrganizerState.REJECT,
+        RegOrganizerState.APPROVED,
+    ],
+    RegPartnerState: RegPartnerState,
+    RegPartnerStates: [
+        RegPartnerState.WAITING,
+        RegPartnerState.HOLD,
+        RegPartnerState.CLOSE,
+        RegPartnerState.DONE,
     ],
     queries: queries,
     httpClient: HttpClient,

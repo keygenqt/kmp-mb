@@ -34,7 +34,7 @@ object Countries : IntIdTable() {
 
 object RelationsCountriesColumnLocales : Table() {
     val country = reference("country", Countries)
-    private val locale = reference("locale", ColumnLocales)
+    val locale = reference("locale", ColumnLocales)
     override val primaryKey = PrimaryKey(country, locale, name = "PK_countryLocale_c_l")
 }
 

@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.requests
 
-export const CacheKeys = {
-    darkMode: 'darkMode',
-    userRoles: 'userRoles',
-    redirectCreateCountry: 'redirectCreateCountry',
-    redirectRemoveCountry: 'redirectRemoveCountry',
-    redirectCreateCity: 'redirectCreateCity',
-    redirectRemoveCity: 'redirectRemoveCity',
-    redirectCreateDirection: 'redirectCreateDirection',
-    redirectRemoveDirection: 'redirectRemoveDirection',
-};
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
+
+/**
+ * Request direction
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class DirectionRequest(
+    val name: String,
+)

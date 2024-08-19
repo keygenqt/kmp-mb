@@ -25,7 +25,8 @@ import {
     CountryAddPage,
     CountryEditPage,
     DashboardPage,
-    DirectionPage,
+    DirectionAddPage,
+    DirectionEditPage,
     DirectionsPage,
     ErrorPage,
     LoginPage,
@@ -176,8 +177,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'DirectionPage'}>
-                            <DirectionPage/>
+                        <BaseLayout isCenter={true} className={'DirectionAddPage'}>
+                            <DirectionAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -194,8 +195,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'DirectionPage'}>
-                            <DirectionPage/>
+                        <BaseLayout isCenter={true} className={'DirectionEditPage'}>
+                            <DirectionEditPage/>
                         </BaseLayout>
                     }
                 />

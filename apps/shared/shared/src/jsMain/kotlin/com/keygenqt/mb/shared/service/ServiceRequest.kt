@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.service
 
+import com.keygenqt.mb.shared.service.impl.DeleteRequestJS
 import com.keygenqt.mb.shared.service.impl.GetRequestJS
 import com.keygenqt.mb.shared.service.impl.PostRequestJS
 import com.keygenqt.mb.shared.service.impl.PutRequestJS
@@ -33,4 +34,5 @@ class ServiceRequestJS(url: String) {
     val get = GetRequestJS(request)
     val post = PostRequestJS(request)
     val put = PutRequestJS(request)
+    val delete = DeleteRequestJS(request)
 }

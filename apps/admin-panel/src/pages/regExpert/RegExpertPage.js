@@ -15,22 +15,26 @@
  */
 
 import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import { useParams } from 'react-router';
+import { FormLayout } from '../../layouts';
+import { useHttpQuery, Shared } from '../../base';
+import { RegExpertForm } from './elements/RegExpertForm';
 
 export function RegExpertPage(props) {
     let {id} = useParams();
-
+    const model = useHttpQuery(Shared.queries.registrationExpert, id)
     return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {`Edit reg expert - ${id}`}.
-            </Typography>
-        </Stack>
-    );
+        <FormLayout
+            id={id}
+            model={model}
+            title={'Registration expert'}
+        >
+            <RegExpertForm
+                id={id}
+                model={model}
+            />
+        </FormLayout>
+    )
 }
 
 RegExpertPage.propTypes = {};

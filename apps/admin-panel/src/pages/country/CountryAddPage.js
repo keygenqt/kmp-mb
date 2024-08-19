@@ -16,12 +16,12 @@
 
 import * as React from 'react';
 import { FormLayout } from '../../layouts';
-import {FormCountry} from './elements/FormCountry';
+import { CountryForm } from './elements/CountryForm';
 
 export function CountryAddPage(props) {
     return (
         <FormLayout title={'Add country'} model={null} >
-            <FormCountry/>
+            <CountryForm/>
         </FormLayout>
     )
 }

@@ -18,18 +18,18 @@ import * as React from 'react';
 import { useParams } from 'react-router';
 import { FormLayout } from '../../layouts';
 import { useHttpQuery, Shared } from '../../base';
-import { RegPartnerForm } from './elements/RegPartnerForm';
+import { DirectionForm } from './elements/DirectionForm';
 
-export function RegPartnerPage(props) {
+export function DirectionEditPage(props) {
     let {id} = useParams();
-    const model = useHttpQuery(Shared.queries.registrationPartner, id)
+    const model = useHttpQuery(Shared.queries.direction, id)
     return (
         <FormLayout
             id={id}
             model={model}
-            title={'Registration partner'}
+            title={'Edit direction'}
         >
-            <RegPartnerForm
+            <DirectionForm
                 id={id}
                 model={model}
             />
@@ -37,4 +37,4 @@ export function RegPartnerPage(props) {
     )
 }
 
-RegPartnerPage.propTypes = {};
+DirectionEditPage.propTypes = {};

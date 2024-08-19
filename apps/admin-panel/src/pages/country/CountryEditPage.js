@@ -15,10 +15,10 @@
  */
 
 import * as React from 'react';
-import {useParams} from 'react-router';
+import { useParams } from 'react-router';
 import { FormLayout } from '../../layouts';
 import { useHttpQuery, Shared } from '../../base';
-import {FormCountry} from './elements/FormCountry';
+import { CountryForm } from './elements/CountryForm';
 
 export function CountryEditPage(props) {
     let {id} = useParams();
@@ -29,7 +29,7 @@ export function CountryEditPage(props) {
             model={model}
             title={'Edit country'}
         >
-            <FormCountry
+            <CountryForm
                 id={id}
                 model={model}
             />

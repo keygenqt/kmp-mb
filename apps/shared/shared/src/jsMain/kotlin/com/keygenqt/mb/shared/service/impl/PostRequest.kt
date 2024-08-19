@@ -59,4 +59,14 @@ class PostRequestJS(
     fun addCountry(
         request: CountryRequest
     ) = GlobalScope.promise { client.post.addCountry(request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun addCity(
+        request: CityRequest
+    ) = GlobalScope.promise { client.post.addCity(request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun addDirection(
+        request: DirectionRequest
+    ) = GlobalScope.promise { client.post.addDirection(request) }
 }

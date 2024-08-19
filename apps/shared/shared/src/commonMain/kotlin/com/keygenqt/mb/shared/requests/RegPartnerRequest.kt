@@ -15,6 +15,7 @@
  */
 package com.keygenqt.mb.shared.requests
 
+import com.keygenqt.mb.shared.responses.RegPartnerState
 import kotlinx.serialization.Serializable
 import kotlin.js.ExperimentalJsExport
 import kotlin.js.JsExport
@@ -33,4 +34,15 @@ data class RegPartnerRequest(
     val telegram: String?,
     val phone: String,
     val format: String,
+)
+
+/**
+ * Request edit RegPartner
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+data class RegPartnerEditRequest(
+    val note: String,
+    val state: RegPartnerState,
 )

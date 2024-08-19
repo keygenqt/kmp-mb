@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,24 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.requests
 
-import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
 
-export function DirectionPage(props) {
-    let {id} = useParams();
-
-    return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {id ? `Edit direction - ${id}` : 'Add direction'}.
-            </Typography>
-        </Stack>
-    );
-}
-
-DirectionPage.propTypes = {};
+/**
+ * Request city
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+@Suppress("ArrayInDataClass")
+data class CityRequest(
+    val countryID: Int,
+    val image: String,
+    val link: String,
+    val name: String,
+    val locales: Array<ColumnLocaleRequest>,
+    val organizers: Array<Int>,
+    val uploads: Array<Int>,
+)

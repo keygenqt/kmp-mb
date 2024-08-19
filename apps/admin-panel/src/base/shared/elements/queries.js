@@ -31,4 +31,8 @@ export const queries = {
     registrationPartners: 'registrationPartners',
     country: 'country', // id: Int
     city: 'city', // id: Int
+    direction: 'direction', // id: Int
+    registrationExpert: 'registrationExpert', // id: Int
+    registrationOrganizer: 'registrationOrganizer', // id: Int
+    registrationPartner: 'registrationPartner', // id: Int
 }

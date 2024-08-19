@@ -15,22 +15,26 @@
  */
 
 import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import { useParams } from 'react-router';
+import { FormLayout } from '../../layouts';
+import { useHttpQuery, Shared } from '../../base';
+import { RegOrganizerForm } from './elements/RegOrganizerForm';
 
 export function RegOrganizerPage(props) {
     let {id} = useParams();
-
+    const model = useHttpQuery(Shared.queries.registrationOrganizer, id)
     return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {`Edit reg organize - ${id}`}.
-            </Typography>
-        </Stack>
-    );
+        <FormLayout
+            id={id}
+            model={model}
+            title={'Registration organizer'}
+        >
+            <RegOrganizerForm
+                id={id}
+                model={model}
+            />
+        </FormLayout>
+    )
 }
 
 RegOrganizerPage.propTypes = {};

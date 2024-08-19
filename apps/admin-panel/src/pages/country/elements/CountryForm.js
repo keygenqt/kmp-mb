@@ -36,15 +36,18 @@ import {
     RouteContext,
     CacheStorage,
     CacheKeys,
+    DialogRemove,
 } from '../../../base';
 import {
+    Delete,
     DoneOutlined,
 } from "@mui/icons-material";
 
 
-export function FormCountry(props) {
+export function CountryForm(props) {
     const {route, routes} = React.useContext(RouteContext)
     const [isFormChange, setIsFormChange] = React.useState(false)
+    const [isFormRemove, setIsFormRemove] = React.useState(false)
     const locales = {}
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
@@ -58,6 +61,7 @@ export function FormCountry(props) {
         <Formik
             initialValues={{
                 name: props.model?.name ?? '',
+                isRemove: false,
                 submit: null,
                 // Redirect from create page
                 isRedirect: CacheStorage.get(CacheKeys.redirectCreateCountry),
@@ -95,74 +99,103 @@ export function FormCountry(props) {
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
-                // Array locales prepare
-                const localesRequest = Object.keys(locales).map((fieldName) => new Shared.requests.ColumnLocaleRequest(
-                    props.model?.locales?.filter((item) => item.locale === locales[fieldName])[0]?.id,
-                    values[fieldName],
-                    locales[fieldName]
-                ));
-
-                try {
-                    const response = Boolean(props.id) ? (
-                        await Shared.httpClient.put.editCountry(props.id, new Shared.requests.CountryRequest(
-                            values.name,
-                            localesRequest
-                        ))
-                    ) : (
-                        await Shared.httpClient.post.addCountry(new Shared.requests.CountryRequest(
-                            values.name,
-                            localesRequest
-                        ))
-                    )
-                    if (!Boolean(props.id)) {
-                        CacheStorage.set(CacheKeys.redirectCreateCountry, true, true, true)
-                        route.toLocationReplace(routes.countryEdit, response.id)
-                    } else {
-                        setFieldValue('name', response.name)
-                        setStatus({success: true});
-                    }
-                } catch (error) {
-                    if (error.code === 403) {
-                        setErrors({
-                            submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
-                        });
-                    } else if (error.code === 422 && error.validates !== null) {
-                        setErrors({
-                            name: Helper.findError('name', error),
-                            // Array locales common
-                            submit: Helper.findError('locales', error),
-                            // Array locales error field
-                            ...Object.fromEntries(Object.keys(locales).map((fieldName, index) => [
-                                fieldName,
-                                Helper.findError(`locales[${index}].text`, error)
-                            ]))
-                        });
-                    } else {
+                if (values.isRemove) {
+                    setFieldValue('isRemove', false)
+                    console.log('isRemove')
+                    try {
+                        await Shared.httpClient.delete.deleteCountry(props.id)
+                        // Success remove
+                        CacheStorage.set(CacheKeys.redirectRemoveCountry, true, true, true)
+                        route.toLocationReplace(routes.countries)
+                    } catch (error) {
                         setErrors({
                             submit: error.message
                         });
+                    }
+                } else {
+                    // Array locales prepare
+                    const localesRequest = Object.keys(locales).map((fieldName) => new Shared.requests.ColumnLocaleRequest(
+                        props.model?.locales?.filter((item) => item.locale === locales[fieldName])[0]?.id,
+                        values[fieldName],
+                        locales[fieldName]
+                    ));
+                    try {
+                        const response = Boolean(props.id) ? (
+                            await Shared.httpClient.put.editCountry(props.id, new Shared.requests.CountryRequest(
+                                values.name,
+                                localesRequest
+                            ))
+                        ) : (
+                            await Shared.httpClient.post.addCountry(new Shared.requests.CountryRequest(
+                                values.name,
+                                localesRequest
+                            ))
+                        )
+                        if (!Boolean(props.id)) {
+                            CacheStorage.set(CacheKeys.redirectCreateCountry, true, true, true)
+                            route.toLocationReplace(routes.countryEdit, response.id)
+                        } else {
+                            setFieldValue('name', response.name)
+                            setStatus({success: true});
+                        }
+                    } catch (error) {
+                        if (error.code === 403) {
+                            setErrors({
+                                submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
+                            });
+                        } else if (error.code === 422 && error.validates !== null) {
+                            setErrors({
+                                name: Helper.findError('name', error),
+                                // Array locales common
+                                submit: Helper.findError('locales', error),
+                                // Array locales error field
+                                ...Object.fromEntries(Object.keys(locales).map((fieldName, index) => [
+                                    fieldName,
+                                    Helper.findError(`locales[${index}].text`, error)
+                                ]))
+                            });
+                        } else {
+                            setErrors({
+                                submit: error.message
+                            });
+                        }
                     }
                 }
             }}
         >
             {({
-                  status,
-                  errors,
-                  touched,
-                  values,
-                  isSubmitting,
-                  setStatus,
-                  setErrors,
-                  handleBlur,
-                  handleChange,
-                  handleSubmit,
-              }) => (
+                status,
+                errors,
+                touched,
+                values,
+                isSubmitting,
+                setStatus,
+                setErrors,
+                handleBlur,
+                handleChange,
+                handleSubmit,
+                setFieldValue,
+                submitForm,
+            }) => (
                 <form style={{width: '100%'}} noValidate onSubmit={handleSubmit}>
                     <FormGroup>
                         <Box id={'FormId'}>
                             <Stack spacing={2} >
+
+                                <DialogRemove
+                                    isOpen={isFormRemove}
+                                    onClickAgree={() => {
+                                        setFieldValue('isRemove', true)
+                                        setIsFormRemove(false)
+                                        submitForm()
+                                    }}
+                                    onClickDisagree={() => {
+                                        setIsFormRemove(false)
+                                    }}
+                                />
+
                                 {errors.submit && (
-                                    <AlertError onClose={() => setErrors({submit: null})}>
+                                    <AlertError onClose={() => setErrors({})}>
                                         {errors.submit}
                                     </AlertError>
                                 )}
@@ -231,32 +264,44 @@ export function FormCountry(props) {
                                     />
                                 ))}
 
-                                <Stack direction={'row'}>
+                                <Stack direction={'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>
-                                    <Box>
+                                    {props.id && isAdmin && (
                                         <Button
-                                            fullWidth
-                                            type={'submit'}
-                                            variant={'contained'}
+                                            variant={'outlined'}
                                             size={'large'}
-                                            disabled={
-                                                Boolean(isSubmitting
-                                                    || (props.id === undefined && !isFormChange)
-                                                    || Object.keys(errors).length !== 0)
+                                            disabled={Boolean(isSubmitting 
+                                                || Object.keys(errors).length !== 0)
                                             }
-                                            startIcon={isSubmitting && !errors.submit ? (
-                                                <CircularProgress sx={{
-                                                    mr: 0.5,
-                                                    height: '18px !important',
-                                                    width: '18px !important'
-                                                }}/>
-                                            ) : (
-                                                <DoneOutlined color={'text.primary'} sx={{height: 18}}/>
-                                            )}
+                                            color={'inherit'}
+                                            startIcon={<Delete color={'default'} sx={{height: 18}}/>}
+                                            onClick={() => setIsFormRemove(true)}
                                         >
-                                            Submit
+                                            Remove
                                         </Button>
-                                    </Box>
+                                    )}
+
+                                    <Button
+                                        type={'submit'}
+                                        variant={'contained'}
+                                        size={'large'}
+                                        disabled={
+                                            Boolean(isSubmitting
+                                                || (props.id === undefined && !isFormChange)
+                                                || Object.keys(errors).length !== 0)
+                                        }
+                                        startIcon={isSubmitting && !errors.submit ? (
+                                            <CircularProgress sx={{
+                                                mr: 0.5,
+                                                height: '18px !important',
+                                                width: '18px !important'
+                                            }}/>
+                                        ) : (
+                                            <DoneOutlined color={'text.primary'} sx={{height: 18}}/>
+                                        )}
+                                    >
+                                        Submit
+                                    </Button>
                                 </Stack>
                             </Stack>
                         </Box>
@@ -267,7 +312,7 @@ export function FormCountry(props) {
     );
 }
 
-FormCountry.propTypes = {
+CountryForm.propTypes = {
     id: PropTypes.string,
     model: PropTypes.object,
 };

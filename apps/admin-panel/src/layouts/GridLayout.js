@@ -28,6 +28,9 @@ import {
     CloudOff,
 } from '@mui/icons-material';
 import {
+    CacheKeys,
+    CacheStorage,
+    AlertSuccess,
     CustomDataGrid,
 } from '../base';
 
@@ -84,10 +87,20 @@ export function GridLayout(props) {
                         <Box/>
                     </>
                 ) : (
-                    <CustomDataGrid
-                        rows={props.rows}
-                        columns={props.columns}
-                    />
+                    <Stack sx={{width: 1}} spacing={2}>
+                        {props.redirect && CacheStorage.get(props.redirect) && (
+                            <AlertSuccess onClear={() => {
+                                console.log(props.redirect)
+                                CacheStorage.set(props.redirect, false, true, true)
+                            }}>
+                                The data was successfully deleted.
+                            </AlertSuccess>
+                        )}
+                        <CustomDataGrid
+                            rows={props.rows}
+                            columns={props.columns}
+                        />
+                    </Stack>
                 )
             )}
         </Stack>
@@ -99,4 +112,5 @@ GridLayout.propTypes = {
     rows: PropTypes.array,
     columns: PropTypes.array.isRequired,
     onClickAdd: PropTypes.func,
+    redirect: PropTypes.string,
 };

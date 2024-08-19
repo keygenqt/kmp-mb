@@ -17,6 +17,7 @@ package com.keygenqt.mb.shared.service
 
 import com.keygenqt.mb.shared.responses.StateResponse
 import com.keygenqt.mb.shared.responses.StateResponseException
+import com.keygenqt.mb.shared.service.impl.DeleteRequest
 import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -70,4 +71,5 @@ class ServiceRequest(url: String) {
     val get = GetRequest(httpClient)
     val post = PostRequest(httpClient)
     val put = PutRequest(httpClient)
+    val delete = DeleteRequest(httpClient)
 }

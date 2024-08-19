@@ -16,6 +16,7 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
+import com.keygenqt.mb.shared.db.entities.Countries
 import com.keygenqt.mb.shared.db.entities.RelationsUserDirections
 import com.keygenqt.mb.shared.db.entities.UserDirectionEntity
 import com.keygenqt.mb.shared.db.entities.UserDirections
@@ -31,7 +32,7 @@ class DirectionsService(
      */
     fun getAll() = UserDirectionEntity
         .all()
-        .orderBy(Pair(UserDirections.name, SortOrder.ASC))
+        .orderBy(Pair(UserDirections.id, SortOrder.DESC))
 
     /**
      * Find entity by id.

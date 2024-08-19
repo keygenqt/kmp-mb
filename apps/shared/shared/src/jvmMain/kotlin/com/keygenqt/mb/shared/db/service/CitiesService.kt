@@ -34,7 +34,7 @@ class CitiesService(
      */
     fun getAll() = CityEntity
         .all()
-        .orderBy(Pair(Cities.name, SortOrder.ASC))
+        .orderBy(Pair(Cities.id, SortOrder.DESC))
 
     /**
      * Find entity by id.
