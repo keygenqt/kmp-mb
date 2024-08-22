@@ -16,24 +16,46 @@
 
 import * as React from 'react';
 import { useParams } from 'react-router';
-import { FormLayout } from '../../layouts';
 import { useHttpQuery, Shared } from '../../base';
+import { FormWithViewLayout } from '../../layouts';
+import { RegPartnerView } from './elements/RegPartnerView';
 import { RegPartnerForm } from './elements/RegPartnerForm';
+import {
+    Grid,
+    Stack,
+    Typography,
+    Card,
+} from '@mui/material';
 
 export function RegPartnerPage(props) {
     let {id} = useParams();
     const model = useHttpQuery(Shared.queries.registrationPartner, id)
+
     return (
-        <FormLayout
+        <FormWithViewLayout
             id={id}
             model={model}
-            title={'Registration partner'}
+            title={'Registration Partner'}
         >
-            <RegPartnerForm
-                id={id}
-                model={model}
-            />
-        </FormLayout>
+            <Grid container spacing={3}>
+                <Grid item xs={12} sm={12} md={7} lg={7} xl={8}>
+                    {model && (<RegPartnerView model={model} />)}
+                </Grid>
+                <Grid item xs={12} sm={12} md={5} lg={5} xl={4}>
+                    <Card sx={{p: 3, width: 1, boxSizing: 'border-box'}}>
+                        <Stack spacing={2} sx={{width: 1}}>
+                            <Typography variant="h5" color={'text.primary'}>
+                                Update state
+                            </Typography>
+                            <RegPartnerForm
+                                id={id}
+                                model={model}
+                            />
+                        </Stack>
+                    </Card>
+                </Grid>
+            </Grid>
+        </FormWithViewLayout>
     )
 }
 

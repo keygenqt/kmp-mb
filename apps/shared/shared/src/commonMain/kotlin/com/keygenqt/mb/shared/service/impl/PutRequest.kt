@@ -39,6 +39,14 @@ class PutRequest(private val client: HttpClient) {
     }
 
     @Throws(Exception::class)
+    suspend fun editUser(
+        id: Int,
+        request: UserRequest
+    ): UserResponse {
+        return client.put("api/users/$id") { setBody(request) }.body()
+    }
+
+    @Throws(Exception::class)
     suspend fun editUserDirection(
         id: Int,
         request: DirectionRequest

@@ -16,8 +16,8 @@
 
 import * as React from 'react';
 import { GridActionsCellItem } from "@mui/x-data-grid";
-import { Tooltip } from '@mui/material';
-import { EditOutlined } from '@mui/icons-material';
+import { Tooltip, Chip } from '@mui/material';
+import { Visibility } from '@mui/icons-material';
 import { GridLayout } from '../../layouts';
 import {
     useHttpQuery,
@@ -40,7 +40,65 @@ export function RegExpertsPage(props) {
                     field: 'name',
                     headerName: 'Name',
                     flex: 1,
-                    renderCell: (data) => `${data.row.fname} ${data.row.lname}`
+                    renderCell: (data) => `${data.row.fname} ${data.row.lname} (${data.row.direction.name})`
+                },
+                {
+                    field: 'state',
+                    headerName: 'State',
+                    width: 140,
+                    renderCell: (data) => {
+                        if (data.row.state === Shared.RegExpertState.WAITING) {
+                            return (
+                                <Chip
+                                    label={data.row.state.name}
+                                    variant="outlined"
+                                    color="warning"
+                                />
+                            )
+                        }
+                        if (data.row.state === Shared.RegExpertState.HOLD) {
+                            return (
+                                <Chip
+                                    label={data.row.state.name}
+                                    variant="outlined"
+                                    color="info"
+                                />
+                            )
+                        }
+                        if (data.row.state === Shared.RegExpertState.REJECT) {
+                            return (
+                                <Chip
+                                    label={data.row.state.name}
+                                    variant="outlined"
+                                    color="error"
+                                />
+                            )
+                        }
+                        if (data.row.state === Shared.RegExpertState.APPROVED) {
+                            return (
+                                <Chip
+                                    label={data.row.state.name}
+                                    variant="outlined"
+                                    color="success"
+                                />
+                            )
+                        }
+                        return (
+                            <Chip label={data.row.state.name} variant="outlined" />
+                        )
+                    }
+                },
+                {
+                    field: 'updateAt',
+                    headerName: 'Update',
+                    width: 130,
+                    valueGetter: (updateAt) => new Intl
+                        .DateTimeFormat('en-US', {
+                            year: 'numeric',
+                            month: '2-digit',
+                            day: '2-digit',
+                        })
+                        .format(Date.parse(updateAt))
                 },
                 {
                     field: 'createAt',
@@ -64,7 +122,7 @@ export function RegExpertsPage(props) {
                                 route.toLocation(routes.regExpert, params.row.id)
                             }} icon={(
                                 <Tooltip placement="top" arrow title="Edit">
-                                    <EditOutlined/>
+                                    <Visibility/>
                                 </Tooltip>
                             )} label="Edit"/>
                         ),

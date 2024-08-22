@@ -29,6 +29,7 @@ import {
 
 export function FormLayout(props) {
     const isLoading = props.model === undefined
+        || (props.loading !== undefined ? props.loading : false)
     const isEmpty = props.model === null
 
     return (
@@ -74,4 +75,5 @@ FormLayout.propTypes = {
     children: PropTypes.element.isRequired,
     id: PropTypes.string,
     model: PropTypes.object,
+    loading: PropTypes.bool,
 };

@@ -15,7 +15,8 @@
  */
 
 export * from './cities/CitiesPage';
-export * from './city/CityPage';
+export * from './city/CityAddPage';
+export * from './city/CityEditPage';
 export * from './countries/CountriesPage';
 export * from './country/CountryAddPage';
 export * from './country/CountryEditPage';
@@ -31,5 +32,6 @@ export * from './regOrganizer/RegOrganizerPage';
 export * from './regOrganizers/RegOrganizersPage';
 export * from './regPartner/RegPartnerPage';
 export * from './regPartners/RegPartnersPage';
-export * from './user/UserPage';
+export * from './user/UserAddPage';
+export * from './user/UserEditPage';
 export * from './users/UsersPage';

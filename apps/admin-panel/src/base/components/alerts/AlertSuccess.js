@@ -39,7 +39,6 @@ export function AlertSuccess(props) {
                 sx={{
                     color: 'white.main',
                     backgroundColor: 'success.main',
-                    borderRadius: 1,
                     '& .MuiAlert-icon': {
                         color: 'white.main',
                         position: 'relative',

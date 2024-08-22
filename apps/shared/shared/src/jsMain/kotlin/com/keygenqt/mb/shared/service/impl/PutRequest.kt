@@ -40,6 +40,12 @@ class PutRequestJS(
     ) = GlobalScope.promise { client.put.editCity(id, request) }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun editUser(
+        id: Int,
+        request: UserRequest
+    ) = GlobalScope.promise { client.put.editUser(id, request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun editDirection(
         id: Int,
         request: DirectionRequest

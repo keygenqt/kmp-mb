@@ -47,7 +47,7 @@ export const components = {
                 theme.unstable_sx({
                     borderRadius: 5,
                     boxShadow: 'none !important',
-                    background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#F9F9F9',
+                    background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#f6f6f6',
                     border: '1px solid',
                     borderColor: theme.palette.mode === 'dark' ? '#cb8ff747' : '#802aea2b',
                     '& .MuiCardHoverShow': {

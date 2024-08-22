@@ -36,6 +36,9 @@ class GetRequestJS(
     fun users() = GlobalScope.promise { client.get.users() }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun user(id: Int) = GlobalScope.promise { client.get.user(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun experts() = GlobalScope.promise { client.get.experts() }
 
     @OptIn(DelicateCoroutinesApi::class)

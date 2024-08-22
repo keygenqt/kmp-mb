@@ -123,7 +123,7 @@ export function RegOrganizerForm(props) {
                                     variant="filled"
                                     inputProps={{ autoComplete: 'off' }}
                                     multiline
-                                    minRows={3}
+                                    minRows={4}
                                     maxRows={15}
                                 />
 

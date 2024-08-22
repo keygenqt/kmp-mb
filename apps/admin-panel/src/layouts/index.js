@@ -18,3 +18,4 @@ export * from './BaseLayout';
 export * from './EmptyLayout';
 export * from './FormLayout';
 export * from './GridLayout';
+export * from './FormWithViewLayout';

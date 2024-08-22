@@ -15,22 +15,24 @@
  */
 
 import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import { FormLayout } from '../../layouts';
+import { useHttpQuery, Shared } from '../../base';
+import { UserForm } from './elements/UserForm';
 
-export function UserPage(props) {
-    let {id} = useParams();
-
+export function UserAddPage(props) {
+    const directions = useHttpQuery(Shared.queries.directions)
     return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {id ? `Edit user - ${id}` : 'Add user'}.
-            </Typography>
-        </Stack>
-    );
+        <FormLayout
+            title={'Add user'}
+            model={null}
+            loading={directions === undefined}
+        >
+            <UserForm
+                roles={Shared.roles}
+                directions={directions?.toArray() ?? []}
+            />
+        </FormLayout>
+    )
 }
 
-UserPage.propTypes = {};
+UserAddPage.propTypes = {};

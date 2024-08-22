@@ -28,7 +28,6 @@ import {
     CloudOff,
 } from '@mui/icons-material';
 import {
-    CacheKeys,
     CacheStorage,
     AlertSuccess,
     CustomDataGrid,
@@ -47,7 +46,7 @@ export function GridLayout(props) {
             justifyContent={isLoading || isEmpty ? 'space-between' : 'flex-start'}
         >
             <Stack spacing={2} direction="row" sx={{width: 1}}>
-                <Typography variant="h4" color={'text.primary'}>
+                <Typography variant="h4" color={'text.primary'} sx={{marginBottom: '6px !important'}}>
                     {props.title}
                 </Typography>
                 <Box sx={{ flexGrow: 1 }}/>

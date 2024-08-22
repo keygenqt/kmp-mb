@@ -27,7 +27,6 @@ export function AlertInfo(props) {
             sx={{
                 color: 'white.main',
                 backgroundColor: 'info.main',
-                borderRadius: 1,
                 '& .MuiAlert-icon': {
                     color: 'white.main',
                     position: 'relative',

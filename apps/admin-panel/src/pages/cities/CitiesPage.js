@@ -23,6 +23,7 @@ import {
     useHttpQuery,
     RouteContext,
     Shared,
+    CacheKeys
 } from '../../base';
 
 
@@ -37,6 +38,7 @@ export function CitiesPage(props) {
             onClickAdd={() => {
                 route.toLocation(routes.cityAdd)
             }}
+            redirect={CacheKeys.redirectRemoveCity}
             columns={[
                 {
                     field: 'image',

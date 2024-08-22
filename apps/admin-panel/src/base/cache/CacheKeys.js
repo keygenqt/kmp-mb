@@ -23,4 +23,6 @@ export const CacheKeys = {
     redirectRemoveCity: 'redirectRemoveCity',
     redirectCreateDirection: 'redirectCreateDirection',
     redirectRemoveDirection: 'redirectRemoveDirection',
+    redirectCreateUser: 'redirectCreateUser',
+    redirectRemoveUser: 'redirectRemoveUser',
 };

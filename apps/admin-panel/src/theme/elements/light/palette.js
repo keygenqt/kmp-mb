@@ -36,6 +36,9 @@ export const palette = {
     info: {
         main: '#597492',
     },
+    warning: {
+        main: '#d57f00',
+    },
     success: {
         main: '#4fa84f',
     },

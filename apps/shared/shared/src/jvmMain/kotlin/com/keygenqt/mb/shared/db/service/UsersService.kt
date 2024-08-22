@@ -40,7 +40,7 @@ class UsersService(
                 where { Users.roles like "%${role.name}%" }
             }
         }
-        .orderBy(Pair(Users.lname, SortOrder.ASC))
+        .orderBy(Pair(Users.id, SortOrder.DESC))
         .map { UserEntity.wrapRow(it) }
 
     /**

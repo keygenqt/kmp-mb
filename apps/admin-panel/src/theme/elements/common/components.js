@@ -62,9 +62,9 @@ export const components = {
         styleOverrides: {
             root: ({ theme }) =>
                 theme.unstable_sx({
-                    borderRadius: 5,
+                    borderRadius: '15px',
                     boxShadow: 'none !important',
-                    background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#F9F9F9',
+                    background: theme.palette.mode === 'dark' ? '#1e1e1e' : '#fff',
                     border: '1px solid',
                     borderColor: theme.palette.mode === 'dark' ? '#cb8ff747' : '#802aea2b',
                     '& .MuiCardHoverShow': {
@@ -80,6 +80,7 @@ export const components = {
     MuiButton: {
         styleOverrides: {
             root: {
+                borderRadius: 10,
                 boxShadow: 'none !important'
             }
         }
@@ -91,5 +92,5 @@ export const components = {
                 minHeight: 80,
             }
         }
-    }
+    },
 }

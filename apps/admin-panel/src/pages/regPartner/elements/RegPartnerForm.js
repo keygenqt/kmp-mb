@@ -123,31 +123,31 @@ export function RegPartnerForm(props) {
                                     variant="filled"
                                     inputProps={{ autoComplete: 'off' }}
                                     multiline
-                                    minRows={3}
+                                    minRows={4}
                                     maxRows={15}
                                 />
 
                                 <TextField
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                        required
-                                        type={'text'}
-                                        name={'state'}
-                                        value={values.state}
-                                        helperText={touched.note && errors.note ? errors.note : ''}
-                                        error={Boolean(touched.state && errors.state)}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        label={'State'}
-                                        variant="filled"
-                                        select
-                                    >
-                                        {Shared.RegPartnerStates?.map((item) => (
-                                            <MenuItem key={`state-${item.name}`} value={item.name}>
-                                                {item.name}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
+                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    required
+                                    type={'text'}
+                                    name={'state'}
+                                    value={values.state}
+                                    helperText={touched.note && errors.note ? errors.note : ''}
+                                    error={Boolean(touched.state && errors.state)}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    label={'State'}
+                                    variant="filled"
+                                    select
+                                >
+                                    {Shared.RegPartnerStates?.map((item) => (
+                                        <MenuItem key={`state-${item.name}`} value={item.name}>
+                                            {item.name}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
 
                                 <Stack direction={'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>

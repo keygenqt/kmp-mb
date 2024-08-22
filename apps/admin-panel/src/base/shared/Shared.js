@@ -24,14 +24,45 @@ const LocaleShared = shared.com.keygenqt.mb.shared.responses.Locale
 const RegExpertState = shared.com.keygenqt.mb.shared.responses.RegExpertState
 const RegOrganizerState = shared.com.keygenqt.mb.shared.responses.RegOrganizerState
 const RegPartnerState = shared.com.keygenqt.mb.shared.responses.RegPartnerState
+const UserRole = shared.com.keygenqt.mb.shared.responses.UserRole
+const UserMediaTypes = shared.com.keygenqt.mb.shared.responses.UserMediaTypes
+const ContactTypes = shared.com.keygenqt.mb.shared.responses.ContactTypes
 const Requests = shared.com.keygenqt.mb.shared.requests
 
 export const Shared = {
+    queries: queries,
+    httpClient: HttpClient,
+    requests: Requests,
+    /// UserMediaTypes
+    userMediaType: UserMediaTypes,
+    userMediaTypes: [
+        UserMediaTypes.TELEGRAM,
+        UserMediaTypes.GITHUB,
+        UserMediaTypes.YOUTUBE,
+        UserMediaTypes.SITE,
+    ],
+    /// ContactTypes
+    contactType: ContactTypes,
+    contactTypes: [
+        ContactTypes.TELEGRAM,
+        ContactTypes.EMAIL,
+        ContactTypes.LINKEDIN,
+    ],
+    /// UserRole
+    role: UserRole,
+    roles: [
+        UserRole.ORGANIZER,
+        UserRole.EXPERT,
+        UserRole.MANAGER,
+        UserRole.ADMIN,
+    ],
+    /// LocaleShared
     locale: LocaleShared,
     locales: [
         LocaleShared.BY,
         LocaleShared.EN,
     ],
+    /// RegExpertState
     RegExpertState: RegExpertState,
     RegExpertStates: [
         RegExpertState.WAITING,
@@ -40,6 +71,7 @@ export const Shared = {
         RegExpertState.REJECT,
         RegExpertState.APPROVED,
     ],
+    /// RegOrganizerState
     RegOrganizerState: RegOrganizerState,
     RegOrganizerStates: [
         RegOrganizerState.WAITING,
@@ -48,6 +80,7 @@ export const Shared = {
         RegOrganizerState.REJECT,
         RegOrganizerState.APPROVED,
     ],
+    /// RegPartnerState
     RegPartnerState: RegPartnerState,
     RegPartnerStates: [
         RegPartnerState.WAITING,
@@ -55,7 +88,4 @@ export const Shared = {
         RegPartnerState.CLOSE,
         RegPartnerState.DONE,
     ],
-    queries: queries,
-    httpClient: HttpClient,
-    requests: Requests,
 }

@@ -33,7 +33,7 @@ class RegExpertsService(
      */
     fun getAll() = RegExpertEntity
         .all()
-        .orderBy(Pair(RegExperts.updateAt, SortOrder.DESC))
+        .orderBy(Pair(RegExperts.id, SortOrder.DESC))
 
     /**
      * Find entity by id.

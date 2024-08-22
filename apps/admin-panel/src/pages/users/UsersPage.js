@@ -23,6 +23,7 @@ import {
     useHttpQuery,
     RouteContext,
     Shared,
+    CacheKeys,
 } from '../../base';
 
 
@@ -37,6 +38,7 @@ export function UsersPage(props) {
             onClickAdd={() => {
                 route.toLocation(routes.userAdd)
             }}
+            redirect={CacheKeys.redirectRemoveUser}
             columns={[
                 {
                     field: 'image',

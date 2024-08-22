@@ -15,22 +15,21 @@
  */
 
 import * as React from 'react';
-import {useParams} from 'react-router';
-import {
-    Stack,
-    Typography,
-} from '@mui/material';
+import { FormLayout } from '../../layouts';
+import { useHttpQuery, Shared } from '../../base';
+import { CityForm } from './elements/CityForm';
 
-export function CityPage(props) {
-    let {id} = useParams();
-
+export function CityAddPage(props) {
+    const countries = useHttpQuery(Shared.queries.countries)
     return (
-        <Stack spacing={2} direction="row">
-            <Typography variant="h4" color={'text.primary'}>
-                {id ? `Edit city - ${id}` : 'Add city'}.
-            </Typography>
-        </Stack>
-    );
+        <FormLayout
+            title={'Add city'}
+            model={null}
+            loading={countries === undefined}
+        >
+            <CityForm countries={countries?.toArray() ?? []} />
+        </FormLayout>
+    )
 }
 
-CityPage.propTypes = {};
+CityAddPage.propTypes = {};

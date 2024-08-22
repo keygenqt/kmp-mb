@@ -16,6 +16,7 @@
 package com.keygenqt.mb.shared.db.service
 
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
+import com.keygenqt.mb.shared.db.entities.RegOrganizers
 import com.keygenqt.mb.shared.db.entities.RegPartnerEntity
 import com.keygenqt.mb.shared.db.entities.RegPartners
 import com.keygenqt.mb.shared.interfaces.IService
@@ -30,7 +31,7 @@ class RegPartnersService(
      */
     fun getAll() = RegPartnerEntity
         .all()
-        .orderBy(Pair(RegPartners.updateAt, SortOrder.DESC))
+        .orderBy(Pair(RegPartners.id, SortOrder.DESC))
 
     /**
      * Find entity by id.

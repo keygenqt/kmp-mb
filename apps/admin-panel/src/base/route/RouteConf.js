@@ -18,27 +18,7 @@ import {RouteTypes} from './RouteTypes';
 import {Route} from 'react-router-dom';
 import {BaseLayout} from '../../layouts/BaseLayout';
 import {EmptyLayout} from '../../layouts/EmptyLayout';
-import {
-    CitiesPage,
-    CityPage,
-    CountriesPage,
-    CountryAddPage,
-    CountryEditPage,
-    DashboardPage,
-    DirectionAddPage,
-    DirectionEditPage,
-    DirectionsPage,
-    ErrorPage,
-    LoginPage,
-    RegExpertPage,
-    RegExpertsPage,
-    RegOrganizerPage,
-    RegOrganizersPage,
-    RegPartnerPage,
-    RegPartnersPage,
-    UserPage,
-    UsersPage,
-} from "../../pages";
+import * as Page from "../../pages";
 
 export const RouteConf = {
     delay: 200,
@@ -52,7 +32,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'CitiesPage'}>
-                            <CitiesPage/>
+                            <Page.CitiesPage/>
                         </BaseLayout>
                     }
                 />
@@ -66,8 +46,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CityPage'}>
-                            <CityPage/>
+                        <BaseLayout isCenter={true} className={'CityAddPage'}>
+                            <Page.CityAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -84,8 +64,8 @@ export const RouteConf = {
                     exact
                     path={path}
                     element={
-                        <BaseLayout isCenter={true} className={'CityPage'}>
-                            <CityPage/>
+                        <BaseLayout isCenter={true} className={'CityEditPage'}>
+                            <Page.CityEditPage/>
                         </BaseLayout>
                     }
                 />
@@ -100,7 +80,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'CountriesPage'}>
-                            <CountriesPage/>
+                            <Page.CountriesPage/>
                         </BaseLayout>
                     }
                 />
@@ -115,7 +95,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'CountryPage'}>
-                            <CountryAddPage/>
+                            <Page.CountryAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -133,7 +113,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'CountryPage'}>
-                            <CountryEditPage/>
+                            <Page.CountryEditPage/>
                         </BaseLayout>
                     }
                 />
@@ -148,7 +128,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'DashboardPage'}>
-                            <DashboardPage/>
+                            <Page.DashboardPage/>
                         </BaseLayout>
                     }
                 />
@@ -163,7 +143,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'DirectionsPage'}>
-                            <DirectionsPage/>
+                            <Page.DirectionsPage/>
                         </BaseLayout>
                     }
                 />
@@ -178,7 +158,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'DirectionAddPage'}>
-                            <DirectionAddPage/>
+                            <Page.DirectionAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -196,7 +176,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'DirectionEditPage'}>
-                            <DirectionEditPage/>
+                            <Page.DirectionEditPage/>
                         </BaseLayout>
                     }
                 />
@@ -211,7 +191,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'ErrorPage'}>
-                            <ErrorPage/>
+                            <Page.ErrorPage/>
                         </BaseLayout>
                     }
                 />
@@ -226,7 +206,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <EmptyLayout isCenter={true} className={'LoginPage'}>
-                            <LoginPage/>
+                            <Page.LoginPage/>
                         </EmptyLayout>
                     }
                 />
@@ -244,7 +224,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'RegExpertPage'}>
-                            <RegExpertPage/>
+                            <Page.RegExpertPage/>
                         </BaseLayout>
                     }
                 />
@@ -259,7 +239,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'RegExpertsPage'}>
-                            <RegExpertsPage/>
+                            <Page.RegExpertsPage/>
                         </BaseLayout>
                     }
                 />
@@ -277,7 +257,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'RegOrganizerPage'}>
-                            <RegOrganizerPage/>
+                            <Page.RegOrganizerPage/>
                         </BaseLayout>
                     }
                 />
@@ -292,7 +272,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'RegOrganizersPage'}>
-                            <RegOrganizersPage/>
+                            <Page.RegOrganizersPage/>
                         </BaseLayout>
                     }
                 />
@@ -310,7 +290,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'RegPartnerPage'}>
-                            <RegPartnerPage/>
+                            <Page.RegPartnerPage/>
                         </BaseLayout>
                     }
                 />
@@ -325,7 +305,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'RegPartnersPage'}>
-                            <RegPartnersPage/>
+                            <Page.RegPartnersPage/>
                         </BaseLayout>
                     }
                 />
@@ -340,7 +320,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={false} className={'UsersPage'}>
-                            <UsersPage/>
+                            <Page.UsersPage/>
                         </BaseLayout>
                     }
                 />
@@ -355,7 +335,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'UserPage'}>
-                            <UserPage/>
+                            <Page.UserAddPage/>
                         </BaseLayout>
                     }
                 />
@@ -373,7 +353,7 @@ export const RouteConf = {
                     path={path}
                     element={
                         <BaseLayout isCenter={true} className={'UserPage'}>
-                            <UserPage/>
+                            <Page.UserEditPage/>
                         </BaseLayout>
                     }
                 />

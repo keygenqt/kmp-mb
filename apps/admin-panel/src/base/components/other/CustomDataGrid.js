@@ -32,6 +32,9 @@ export function CustomDataGrid(props) {
     return (
         <Box sx={{
             width: 1,
+            '& .MuiDataGrid-root': {
+                borderRadius: '15px !important'
+            },
             '& div': {
                 outline: 'none !important'
             },

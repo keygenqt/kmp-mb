@@ -16,10 +16,7 @@
 package com.keygenqt.mb.shared.service.impl
 
 import com.keygenqt.mb.shared.requests.*
-import com.keygenqt.mb.shared.responses.CityResponse
-import com.keygenqt.mb.shared.responses.CountryResponse
-import com.keygenqt.mb.shared.responses.StateResponse
-import com.keygenqt.mb.shared.responses.UserDirectionResponse
+import com.keygenqt.mb.shared.responses.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -83,6 +80,13 @@ class PostRequest(private val client: HttpClient) {
         request: CityRequest
     ): CityResponse {
         return client.post("api/cities") { setBody(request) }.body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun addUser(
+        request: UserRequest
+    ): UserResponse {
+        return client.post("api/users") { setBody(request) }.body()
     }
 
     @Throws(Exception::class)
