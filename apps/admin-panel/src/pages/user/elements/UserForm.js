@@ -49,110 +49,99 @@ import {
     DoneOutlined,
 } from '@mui/icons-material';
 
+const localeUserFields = [
+    {
+        name: 'fname',
+        required: true,
+        multiline: false,
+        label: 'First name',
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 250.')
+            .max(250, 'Size must be between 3 and 250.')
+            .required('Must not be null and not blank.'),
+    },
+    {
+        name: 'lname',
+        required: true,
+        multiline: false,
+        label: 'Last name',
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 250.')
+            .max(250, 'Size must be between 3 and 250.')
+            .required('Must not be null and not blank.'),
+    },
+    {
+        name: 'short',
+        required: false,
+        multiline: false,
+        label: 'Short',
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 250.')
+            .max(250, 'Size must be between 3 and 250.')
+            .nullable()
+    },
+    {
+        name: 'about',
+        required: false,
+        multiline: true,
+        label: 'About',
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 1000.')
+            .max(1000, 'Size must be between 3 and 1000.')
+            .nullable()
+    },
+    {
+        name: 'quote',
+        required: false,
+        multiline: true,
+        label: 'Quote',
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 1000.')
+            .max(1000, 'Size must be between 3 and 1000.')
+            .nullable()
+    },
+]
 
 export function UserForm(props) {
     const {route, routes} = React.useContext(RouteContext)
     const [isFormChange, setIsFormChange] = React.useState(false)
     const [isFormRemove, setIsFormRemove] = React.useState(false)
-    const [tabLocale, setTabLocale] = React.useState('RU')
+    const [tabLocale, setTabLocale] = React.useState('undefined')
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
 
-    const mediaFields = {}
-    const contactFields = {}
-    const localeFields = {}
+    // Array locales
+    const [localeFields] = React.useState([localeUserFields].concat(
+        Shared.locales.map((locale) => localeUserFields.map((item) => ({
+            ...item,
+            type: locale,
+            fname: `${item.name}-${locale.name}`,
+        })))
+    ))
 
-    // Array fields user media
-    Shared.userMediaTypes.forEach((type) => {
-        mediaFields[`media-${type.name}`] = {
-            type: type,
-            label: `Url (${type.name})`,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 250.')
-                .max(250, 'Size must be between 3 and 250.')
-                .required('Must not be null and not blank.'),
-        }
-    });
+    // Array contacts
+    const [contactFields] = React.useState(Shared.contactTypes.map((item) => ({
+        type: item,
+        name: item.name,
+        fname: `contact-${item.name}`,
+        label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 250.')
+            .max(250, 'Size must be between 3 and 250.')
+            .required('Must not be null and not blank.'),
+    })))
 
-    // Array fields user contacts
-    Shared.contactTypes.forEach((type) => {
-        if (type === Shared.contactType.EMAIL) {
-            contactFields[`contact-${type.name}`] = {
-                type: type,
-                label: `Email`,
-                validate: Yup.string()
-                    .min(3, 'Size must be between 3 and 250.')
-                    .max(250, 'Size must be between 3 and 250.')
-                    .required('Must not be null and not blank.')
-                    .email(),
-            }
-        } else {
-            contactFields[`contact-${type.name}`] = {
-                type: type,
-                label: `Url (${type.name})`,
-                validate: Yup.string()
-                    .min(3, 'Size must be between 3 and 250.')
-                    .max(250, 'Size must be between 3 and 250.')
-                    .required('Must not be null and not blank.')
-            }
-        }
-    });
-
-    // Array locales base data
-    Shared.locales.forEach((locale) => {
-        localeFields[`fname-${locale.name}`] = {
-            name: 'fname',
-            locale: locale,
-            multiline: false,
-            label: 'First name',
-            required: true,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 250.')
-                .max(250, 'Size must be between 3 and 250.')
-                .required('Must not be null and not blank.'),
-        }
-        localeFields[`lname-${locale.name}`] = {
-            name: 'lname',
-            locale: locale,
-            multiline: false,
-            label: 'Last name',
-            required: true,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 250.')
-                .max(250, 'Size must be between 3 and 250.')
-                .required('Must not be null and not blank.'),
-        }
-        localeFields[`short-${locale.name}`] = {
-            name: 'short',
-            locale: locale,
-            multiline: false,
-            label: 'Short description',
-            required: false,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 250.')
-                .max(250, 'Size must be between 3 and 250.'),
-        }
-        localeFields[`about-${locale.name}`] = {
-            name: 'about',
-            locale: locale,
-            multiline: true,
-            label: 'About',
-            required: false,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 1000.')
-                .max(250, 'Size must be between 3 and 1000.')
-        }
-        localeFields[`quote-${locale.name}`] = {
-            name: 'quote',
-            locale: locale,
-            multiline: true,
-            label: 'Quote expert',
-            required: false,
-            validate: Yup.string()
-                .min(3, 'Size must be between 3 and 1000.')
-                .max(250, 'Size must be between 3 and 1000.')
-        }
-    });
+    // Array media
+    const [mediaFields] = React.useState(Shared.userMediaTypes.map((item) => ({
+        type: item,
+        name: item.name,
+        fname: `media-${item.name}`,
+        label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 250.')
+            .max(250, 'Size must be between 3 and 250.')
+            .required('Must not be null and not blank.'),
+    })))
 
     return (
         <Formik
@@ -160,73 +149,61 @@ export function UserForm(props) {
                 roles: props.model?.roles?.map((item) => item.name) ?? [],
                 directions: props.model?.directions?.map((item) => item.id) ?? [],
                 image: props.model?.image ?? '',
-                fname: props.model?.fname ?? '',
-                lname: props.model?.lname ?? '',
-                short: props.model?.short ?? '',
-                about: props.model?.about ?? '',
-                quote: props.model?.quote ?? '',
                 isRemove: false,
                 submit: null,
-                // Redirect from create page
-                isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
-                // Array media fields
-                ...Object.fromEntries(Object.keys(mediaFields).map((fieldName) => [
-                    fieldName,
-                    props.model
-                        ?.media
-                        ?.filter((item) => item.type === mediaFields[fieldName].type)
-                        [0]?.link ?? ''
-                ])),
-                // Array contacts fields
-                ...Object.fromEntries(Object.keys(contactFields).map((fieldName) => [
-                    fieldName,
+
+                // Array locales
+                ...localeFields.map((fields) => Object.fromEntries(fields.map((field) => [
+                    field['fname'] ?? field['name'],
+                    field.type === undefined ? props.model[field.name] : props.model
+                        ?.locales
+                        ?.filter((item) => item.locale === field.type)
+                        ?.[0]
+                        ?.[field.name]
+                ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
+                // Array contacts
+                ...Object.fromEntries(contactFields.map((field) => [
+                    field.fname,
                     props.model
                         ?.contacts
-                        ?.filter((item) => item.type === contactFields[fieldName].type)
-                        [0]?.link ?? ''
+                        ?.filter((item) => item.type === field.type)
+                        ?.[0]
+                        ?.['link']
                 ])),
-                // Array locales fields
-                ...Object.fromEntries(Object.keys(localeFields).map((fieldName) => [
-                    fieldName,
+                // Array media
+                ...Object.fromEntries(mediaFields.map((field) => [
+                    field.fname,
                     props.model
-                        ?.locales
-                        ?.filter((item) => item.locale === localeFields[fieldName].locale)
-                        [0][localeFields[fieldName].name] ?? ''
-                ]))
+                        ?.media
+                        ?.filter((item) => item.type === field.type)
+                        ?.[0]
+                        ?.['link']
+                ])),
+
+                // Redirect from create page
+                isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
             }}
             validationSchema={Yup.object().shape({
-                fname: Yup.string()
+                image: Yup.string()
                     .min(3, 'Size must be between 3 and 250.')
                     .max(250, 'Size must be between 3 and 250.')
                     .required('Must not be null and not blank.'),
-                lname: Yup.string()
-                    .min(3, 'Size must be between 3 and 250.')
-                    .max(250, 'Size must be between 3 and 250.')
-                    .required('Must not be null and not blank.'),
-                short: Yup.string()
-                    .min(3, 'Size must be between 3 and 1000.')
-                    .max(250, 'Size must be between 3 and 1000.'),
-                about: Yup.string()
-                    .min(3, 'Size must be between 3 and 1000.')
-                    .max(250, 'Size must be between 3 and 1000.'),
-                quote: Yup.string()
-                    .min(3, 'Size must be between 3 and 1000.')
-                    .max(250, 'Size must be between 3 and 1000.'),
-                // Array media validate
-                ...Object.fromEntries(Object.keys(mediaFields).map((fieldName) => [
-                    fieldName,
-                    mediaFields[fieldName].validate
+
+                // Array locales
+                ...localeFields.map((fields) => Object.fromEntries(fields.map((field) => [
+                    field['fname'] ?? field['name'],
+                    field.validate
+                ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
+                // Array contacts
+                ...Object.fromEntries(contactFields.map((field) => [
+                    field.fname,
+                    field.validate
                 ])),
-                // Array contacts validate
-                ...Object.fromEntries(Object.keys(contactFields).map((fieldName) => [
-                    fieldName,
-                    contactFields[fieldName].validate
+                // Array media
+                ...Object.fromEntries(mediaFields.map((field) => [
+                    field.fname,
+                    field.validate
                 ])),
-                // Array locales validate
-                ...Object.fromEntries(Object.keys(localeFields).map((fieldName) => [
-                    fieldName,
-                    localeFields[fieldName].validate
-                ]))
             })}
             validate={() => {
                 setIsFormChange(true)
@@ -253,16 +230,51 @@ export function UserForm(props) {
                         });
                     }
                 } else {
+                    // Array locale default prepare
+                    const userLocaleDefault = localeFields.map((fields) => fields[0].type === undefined
+                        ? Object.fromEntries(fields.map((field) => [
+                            field.name,
+                            values[field['name']],
+                        ])) : null)[0]
+
                     // Array locales prepare
-                    const localesRequest = Shared.locales.map((locale) => {
-                        const localRequest = new Shared.requests.ColumnLocaleRequest()
-                        localRequest['id'] = props.model?.locales?.filter((item) => item.locale === locale)[0]['id']
-                        localRequest['locale'] = locale
-                        Object.keys(localeFields).filter((e) => localeFields[e].locale === locale).forEach((fieldName) => {
-                            localRequest[localeFields[fieldName].name] = values[fieldName]
-                        })
-                        return localRequest
-                    })
+                    const userLocaleRequests = localeFields.map((fields) => fields[0].type === undefined ? null : ({
+                        type: fields[0].type,
+                        ...Object.fromEntries(fields.map((field) => [
+                            field.name,
+                            values[field['fname']],
+                        ]))
+                    }))
+                        .filter((item) => item !== null)
+                        .map((valueFields) => new Shared.requests.UserLocaleRequest(
+                            props.model?.locales?.filter((item) => item.locale === valueFields.type)?.[0]?.id,
+                            valueFields.fname,
+                            valueFields.lname,
+                            valueFields.short,
+                            valueFields.about,
+                            valueFields.quote,
+                            valueFields.type,
+                        ))
+
+                    // Array contacts prepare
+                    const userContactRequest = contactFields.map((field) => new Shared.requests.UserContactRequest(
+                        props.model?.contacts?.filter((item) => item.type === field.type)?.[0]?.id,
+                        values[field.fname],
+                        field.type,
+                    ))
+
+                    // Array media prepare
+                    const userMediaRequest = mediaFields.map((field) => new Shared.requests.UserMediaRequest(
+                        props.model?.media?.filter((item) => item.type === field.type)?.[0]?.id,
+                        values[field.fname],
+                        field.type,
+                    ))
+
+                    console.log(userLocaleDefault)
+                    console.log(userLocaleRequests)
+                    console.log(userContactRequest)
+                    console.log(userMediaRequest)
+
                     try {
 
                         // const response = Boolean(props.id) ? (
@@ -303,11 +315,11 @@ export function UserForm(props) {
                                 name: Helper.findError('name', error),
                                 // Array locales common
                                 submit: Helper.findError('locales', error),
-                                // Array locales error field
-                                ...Object.fromEntries(Object.keys(localeFields).map((fieldName, index) => [
-                                    fieldName,
-                                    Helper.findError(`locales[${index}].text`, error)
-                                ]))
+                                // // Array locales error field
+                                // ...Object.fromEntries(Object.keys(localeFields).map((fieldName, index) => [
+                                //     fieldName,
+                                //     Helper.findError(`locales[${index}].text`, error)
+                                // ]))
                             });
                         } else {
                             setErrors({
@@ -473,21 +485,15 @@ export function UserForm(props) {
                                 </TextField>
 
                                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <Tabs value={tabLocale} onChange={(event, newValue) => { setTabLocale(newValue) }} aria-label="basic tabs example">
-                                        <Tab
-                                            key={'locale-tab-RU'}
-                                            label={'Locale RU'}
-                                            id={'tab-RU'}
-                                            aria-controls={'tabpanel-RU'}
-                                            value={'RU'}
-                                        />
-                                        {Shared.locales.map((locale) => (
+                                    <Tabs value={tabLocale} onChange={(event, newValue) => setTabLocale(newValue)}>
+                                        {localeFields.map((fields) => (
                                             <Tab
-                                                key={`locale-tab-${locale.name}`}
-                                                label={`Locale ${locale.name}`}
-                                                id={`tab-${locale.name}`}
-                                                aria-controls={`tabpanel-${locale.name}`}
-                                                value={locale.name}
+                                                key={`locale-tab-${fields[0].type}`}
+                                                id={`tab-${fields[0].type?.name}`}
+                                                label={`Locale ${fields[0].type?.name ?? 'RU'}`}
+
+                                                aria-controls={`tabpanel-${fields[0].type?.name}`}
+                                                value={`${fields[0].type?.name}`}
                                             />
                                         ))}
                                     </Tabs>
@@ -499,133 +505,52 @@ export function UserForm(props) {
                                     </Typography>
                                 </Stack>
 
-                                <div
-                                    key={`locale-tabpanel-RU`}
-                                    role={'tabpanel'}
-                                    hidden={tabLocale !== 'RU'}
-                                    id={`tabpanel-RU`}
-                                    aria-labelledby={`tab-RU`}
-                                >
-                                    <Stack spacing={2}>
-
-                                        <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                            required
-                                            type={'text'}
-                                            name={'fname'}
-                                            value={values.fname}
-                                            helperText={touched.fname && errors.fname ? errors.fname : ''}
-                                            error={Boolean(touched.fname && errors.fname)}
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            label={'First name'}
-                                            variant="filled"
-                                            inputProps={{ autoComplete: 'off' }}
-                                        />
-
-                                        <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                            required
-                                            type={'text'}
-                                            name={'lname'}
-                                            value={values.lname}
-                                            helperText={touched.lname && errors.lname ? errors.lname : ''}
-                                            error={Boolean(touched.lname && errors.lname)}
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            label={'Last name'}
-                                            variant="filled"
-                                            inputProps={{ autoComplete: 'off' }}
-                                        />
-
-                                        <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                            type={'text'}
-                                            name={'short'}
-                                            value={values.short}
-                                            helperText={touched.short && errors.short ? errors.short : ''}
-                                            error={Boolean(touched.short && errors.short)}
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            label={'Short description'}
-                                            variant="filled"
-                                            inputProps={{ autoComplete: 'off' }}
-                                        />
-
-                                        <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                            type={'text'}
-                                            name={'about'}
-                                            value={values.about}
-                                            helperText={touched.about && errors.about ? errors.about : ''}
-                                            error={Boolean(touched.about && errors.about)}
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            label={'About'}
-                                            variant="filled"
-                                            inputProps={{ autoComplete: 'off' }}
-                                            multiline
-                                            minRows={4}
-                                            maxRows={15}
-                                        />
-
-                                        <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                            type={'text'}
-                                            name={'quote'}
-                                            value={values.quote}
-                                            helperText={touched.quote && errors.quote ? errors.quote : ''}
-                                            error={Boolean(touched.quote && errors.quote)}
-                                            onBlur={handleBlur}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            label={'Quote'}
-                                            variant="filled"
-                                            inputProps={{ autoComplete: 'off' }}
-                                            multiline
-                                            minRows={4}
-                                            maxRows={15}
-                                        />
-                                    </Stack>
-                                </div>
-
-                                {Shared.locales.map((locale) => (
-                                    <div
-                                        key={`locale-tabpanel-${locale.name}`}
-                                        role={'tabpanel'}
-                                        hidden={tabLocale !== locale.name}
-                                        id={`tabpanel-${locale.name}`}
-                                        aria-labelledby={`tab-${locale.name}`}
-                                    >
-                                        <Stack spacing={2}>
-                                            {Object.keys(localeFields).filter((e) => localeFields[e].locale === locale).map((fieldName) => (
-                                                <TextField
-                                                    key={`locale-filed-${locale.name}-${fieldName}`}
-                                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                                    required={localeFields[fieldName].required}
-                                                    type={'text'}
-                                                    name={`${fieldName}`}
-                                                    value={values[fieldName]}
-                                                    helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
-                                                    error={Boolean(touched[fieldName] && errors[fieldName])}
-                                                    onBlur={handleBlur}
-                                                    onChange={handleChange}
-                                                    fullWidth
-                                                    label={`${localeFields[fieldName].label}`}
-                                                    variant="filled"
-                                                    inputProps={{ autoComplete: 'off' }}
-                                                    multiline={localeFields[fieldName].multiline}
-                                                    minRows={4}
-                                                    maxRows={15}
-                                                />
-                                            ))}
-                                        </Stack>
-                                    </div>
-                                ))}
+                                {/* Array locales */}
+                                {localeFields.map((fields) => {
+                                    const type = fields[0].type
+                                    let color = '#ff552563'
+                                    if (type === Shared.locale.EN) {
+                                        color = '#259cff63'
+                                    }
+                                    if (type === Shared.locale.BY) {
+                                        color = '#13894163'
+                                    }
+                                    return (
+                                        <div
+                                            style={{border: `1px solid ${color}`, padding: 15, borderRadius: 15}}
+                                            key={`tabpanel-${type?.name}`}
+                                            id={`tabpanel-${type?.name}`}
+                                            hidden={tabLocale !== `${type?.name}`}
+                                        >
+                                            <Stack spacing={2}>
+                                                {fields.map((field) => {
+                                                    const fieldName = `${field['fname'] ?? field['name']}`
+                                                    return (
+                                                        <TextField
+                                                            key={`locale-filed-${fieldName}`}
+                                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                            required={field.required}
+                                                            type={'text'}
+                                                            name={fieldName}
+                                                            value={values[fieldName] ?? ''}
+                                                            helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
+                                                            error={Boolean(touched[fieldName] && errors[fieldName])}
+                                                            onBlur={handleBlur}
+                                                            onChange={handleChange}
+                                                            fullWidth
+                                                            label={`${field.label}`}
+                                                            variant="filled"
+                                                            inputProps={{ autoComplete: 'off' }}
+                                                            multiline={field.multiline}
+                                                            minRows={4}
+                                                            maxRows={15}
+                                                        />
+                                                    )
+                                                })}
+                                            </Stack>
+                                        </div>
+                                    )
+                                })}
 
                                 <Stack spacing={1}>
                                     <Typography variant='h6' color={'text.primary'}>
@@ -636,20 +561,20 @@ export function UserForm(props) {
                                     </Typography>
                                 </Stack>
 
-                                {/* Array media fields */}
-                                {Object.keys(contactFields).map((fieldName) => (
+                                {/* Array contacts */}
+                                {contactFields.map((field) => (
                                     <TextField
-                                        key={`fieldName-${fieldName}`}
+                                        key={`fieldName-${field.fname}`}
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         type={'url'}
-                                        name={fieldName}
-                                        value={values[fieldName]}
-                                        helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
-                                        error={Boolean(touched[fieldName] && errors[fieldName])}
+                                        name={field.fname}
+                                        value={values[field.fname] ?? ''}
+                                        helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                        error={Boolean(touched[field.fname] && errors[field.fname])}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={contactFields[fieldName].label}
+                                        label={field.label}
                                         variant="filled"
                                         inputProps={{ autoComplete: 'off' }}
                                     />
@@ -665,19 +590,19 @@ export function UserForm(props) {
                                 </Stack>
 
                                 {/* Array media fields */}
-                                {Object.keys(mediaFields).map((fieldName) => (
-                                    <TextField
-                                        key={`fieldName-${fieldName}`}
+                                {mediaFields.map((field) => (
+                                        <TextField
+                                        key={`fieldName-${field.fname}`}
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         type={'url'}
-                                        name={fieldName}
-                                        value={values[fieldName]}
-                                        helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
-                                        error={Boolean(touched[fieldName] && errors[fieldName])}
+                                        name={field.fname}
+                                        value={values[field.fname] ?? ''}
+                                        helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                        error={Boolean(touched[field.fname] && errors[field.fname])}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={mediaFields[fieldName].label}
+                                        label={field.label}
                                         variant="filled"
                                         inputProps={{ autoComplete: 'off' }}
                                     />
