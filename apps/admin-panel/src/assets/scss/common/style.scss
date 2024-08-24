@@ -81,3 +81,8 @@ a:hover {
     color: #fff !important;
     border: 1px solid #555 !important;
   }
+
+// @todo Bug MUI https://github.com/mui/base-ui/issues/167
+.UserPage textarea {
+    overflow-y: scroll !important;
+}

@@ -96,6 +96,10 @@ class UsersService(
         contacts: List<Int>,
         media: List<Int>,
     ) = UserEntity.new {
+        // Check unique url image
+        if (Users.selectAll().where { (Users.image eq image) }.count().toInt() != 0) {
+            throw RuntimeException("You can't duplicate images, please create a new one.")
+        }
         this.image = image
         this.fname = fname
         this.lname = lname
@@ -127,6 +131,22 @@ class UsersService(
         contacts: List<Int>,
         media: List<Int>,
     ) = apply {
+        // Check unique url image
+        if (Users.selectAll().where { (Users.image eq image) and (Users.id neq this@update.id ) }.count().toInt() != 0) {
+            throw RuntimeException("You can't duplicate images, please create a new one.")
+        }
+        // Get diff ids for delete after update
+        val contactIsDelete = RelationsUserContacts
+            .select(RelationsUserContacts.contacts)
+            .where { RelationsUserContacts.user eq this@update.id }
+            .map { it[RelationsUserContacts.contacts] }
+            .filter { !contacts.contains(it.value) }
+        val mediaIsDelete = RelationsUserMedia
+            .select(RelationsUserMedia.media)
+            .where { RelationsUserMedia.user eq this@update.id }
+            .map { it[RelationsUserMedia.media] }
+            .filter { !media.contains(it.value) }
+        // Update entity
         this.image = image
         this.fname = fname
         this.lname = lname
@@ -139,6 +159,9 @@ class UsersService(
         this.contacts = UserContactEntity.find { (UserContacts.id inList contacts) }
         this.media = UserMediaEntity.find { (UserMedia.id inList media) }
         this.updateAt = System.currentTimeMillis()
+        // Clear old data after update relation
+        UserContacts.deleteWhere { UserContacts.id inList contactIsDelete }
+        UserMedia.deleteWhere { UserMedia.id inList mediaIsDelete }
     }
 
     /**
@@ -192,9 +215,9 @@ class UsersService(
         RelationsUserMedia.deleteWhere { user eq id }
         // Delete entities
         Uploads.deleteWhere { Uploads.id inList idsImage }
-        UserLocales.deleteWhere { ColumnLocales.id inList idsLocale }
-        UserContacts.deleteWhere { ColumnLocales.id inList idsContact }
-        UserMedia.deleteWhere { ColumnLocales.id inList idsMedia }
+        UserLocales.deleteWhere { UserLocales.id inList idsLocale }
+        UserContacts.deleteWhere { UserContacts.id inList idsContact }
+        UserMedia.deleteWhere { UserMedia.id inList idsMedia }
         // Delete model
         this.delete()
     }

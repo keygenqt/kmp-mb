@@ -15,6 +15,9 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.extension.validateIds
+import com.keygenqt.mb.interfaces.IdDataValidate
+import com.keygenqt.mb.interfaces.IdValidate
 import com.keygenqt.mb.shared.db.entities.ColumnLocaleEntity
 import com.keygenqt.mb.shared.responses.ColumnLocaleResponse
 import com.keygenqt.mb.shared.responses.Locale
@@ -31,31 +34,26 @@ import org.jetbrains.exposed.sql.emptySized
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class ColumnLocaleValidate(
-    val id: Int? = null,
+    override val id: Int? = null,
 
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 1000)
     val text: String,
 
     @field:NotNull(message = "Select locale required")
-    val locale: Locale,
-)
+    val locale: Locale
+
+) : IdValidate {
+    override val type: Locale get() = this.locale
+}
 
 /**
- * Map validate data to Entity
+ * Map data with validate
  */
 fun List<ColumnLocaleValidate>.toEntities(
-    locales: SizedIterable<ColumnLocaleEntity> = emptySized()
+    values: SizedIterable<ColumnLocaleEntity> = emptySized()
 ): List<ColumnLocaleResponse> {
-    if (size != map { it.locale }.distinct().size) {
-        throw RuntimeException("There should be no duplicate locales.")
-    }
-    if (locales.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
-        throw RuntimeException("Locales found that do not belong to the entity.")
-    }
-    if (locales.any { find -> filter { it.id == null }.map { it.locale }.contains(find.locale) }) {
-        throw RuntimeException("Duplicate locales were found, you need to specify the Id to update them.")
-    }
+    this.validateIds(values.map { IdDataValidate(it.id.value, it.locale) })
     return map {
         ColumnLocaleResponse(
             id = it.id,

@@ -33,5 +33,8 @@ class DeleteRequestJS(
     fun deleteCity(id: Int) = GlobalScope.promise { client.delete.deleteCity(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun deleteUser(id: Int) = GlobalScope.promise { client.delete.deleteUser(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun deleteDirection(id: Int) = GlobalScope.promise { client.delete.deleteDirection(id) }
 }

@@ -270,7 +270,7 @@ export function CountryForm(props) {
                                         <Button
                                             variant={'outlined'}
                                             size={'large'}
-                                            disabled={Boolean(isSubmitting 
+                                            disabled={Boolean(isSubmitting
                                                 || Object.keys(errors).length !== 0)
                                             }
                                             color={'inherit'}

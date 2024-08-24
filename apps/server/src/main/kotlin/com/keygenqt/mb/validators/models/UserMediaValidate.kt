@@ -15,10 +15,12 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.extension.validateIds
+import com.keygenqt.mb.interfaces.IdDataValidate
+import com.keygenqt.mb.interfaces.IdValidate
 import com.keygenqt.mb.shared.db.entities.UserMediaEntity
 import com.keygenqt.mb.shared.responses.UserMediaResponse
 import com.keygenqt.mb.shared.responses.UserMediaTypes
-import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
@@ -32,32 +34,23 @@ import org.jetbrains.exposed.sql.emptySized
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class UserMediaValidate(
-    val id: Int? = null,
+    override val id: Int? = null,
 
-    @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
     @field:URL
     val link: String,
 
     @field:NotNull(message = "Select type required")
-    val type: UserMediaTypes,
-)
+    override val type: UserMediaTypes,
+) : IdValidate
 
 /**
- * Map validate data to Entity
+ * Map data with validate
  */
-fun List<UserMediaValidate>.toEntities(
-    media: SizedIterable<UserMediaEntity> = emptySized()
+fun List<UserMediaValidate>.toData(
+    values: SizedIterable<UserMediaEntity> = emptySized()
 ): List<UserMediaResponse> {
-    if (size != map { it.type }.distinct().size) {
-        throw RuntimeException("There should be no duplicate types.")
-    }
-    if (media.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
-        throw RuntimeException("Media found that do not belong to the entity.")
-    }
-    if (media.any { find -> filter { it.id == null }.map { it.type }.contains(find.type) }) {
-        throw RuntimeException("Duplicate types were found, you need to specify the Id to update them.")
-    }
+    this.validateIds(values.map { IdDataValidate(it.id.value, it.type) })
     return map {
         UserMediaResponse(
             id = it.id,

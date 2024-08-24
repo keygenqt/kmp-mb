@@ -15,10 +15,12 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.extension.validateIds
+import com.keygenqt.mb.interfaces.IdDataValidate
+import com.keygenqt.mb.interfaces.IdValidate
 import com.keygenqt.mb.shared.db.entities.UserLocaleEntity
 import com.keygenqt.mb.shared.responses.Locale
 import com.keygenqt.mb.shared.responses.UserLocaleResponse
-import com.keygenqt.mb.validators.custom.NotBlank
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
@@ -32,7 +34,7 @@ import org.jetbrains.exposed.sql.emptySized
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class UserLocaleValidate(
-    val id: Int? = null,
+    override val id: Int? = null,
 
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
@@ -42,37 +44,29 @@ data class UserLocaleValidate(
     @field:Size(min = 3, max = 250)
     val lname: String,
 
-    @field:NotBlank
     @field:Size(max = 1000)
     val short: String?,
 
-    @field:NotBlank
     @field:Size(max = 1000)
     val about: String?,
 
-    @field:NotBlank
     @field:Size(max = 1000)
     val quote: String?,
 
     @field:NotNull(message = "Select locale required")
-    val locale: Locale,
-)
+    val locale: Locale
+
+) : IdValidate {
+    override val type: Locale get() = this.locale
+}
 
 /**
- * Map validate data to Entity
+ * Map data with validate
  */
-fun List<UserLocaleValidate>.toEntities(
-    locales: SizedIterable<UserLocaleEntity> = emptySized()
+fun List<UserLocaleValidate>.toData(
+    values: SizedIterable<UserLocaleEntity> = emptySized()
 ): List<UserLocaleResponse> {
-    if (size != map { it.locale }.distinct().size) {
-        throw RuntimeException("There should be no duplicate locales.")
-    }
-    if (locales.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
-        throw RuntimeException("Locales found that do not belong to the entity.")
-    }
-    if (locales.any { find -> filter { it.id == null }.map { it.locale }.contains(find.locale) }) {
-        throw RuntimeException("Duplicate locales were found, you need to specify the Id to update them.")
-    }
+    this.validateIds(values.map { IdDataValidate(it.id.value, it.locale) })
     return map {
         UserLocaleResponse(
             id = it.id,

@@ -15,6 +15,9 @@
  */
 package com.keygenqt.mb.validators.models
 
+import com.keygenqt.mb.extension.validateIds
+import com.keygenqt.mb.interfaces.IdDataValidate
+import com.keygenqt.mb.interfaces.IdValidate
 import com.keygenqt.mb.shared.db.entities.UserContactEntity
 import com.keygenqt.mb.shared.responses.ContactTypes
 import com.keygenqt.mb.shared.responses.UserContactResponse
@@ -22,7 +25,6 @@ import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
-import org.hibernate.validator.constraints.URL
 import org.jetbrains.exposed.sql.SizedIterable
 import org.jetbrains.exposed.sql.emptySized
 
@@ -32,32 +34,23 @@ import org.jetbrains.exposed.sql.emptySized
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
 data class UserContactValidate(
-    val id: Int? = null,
+    override val id: Int? = null,
 
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
-    @field:URL
     val link: String,
 
     @field:NotNull(message = "Select type required")
-    val type: ContactTypes,
-)
+    override val type: ContactTypes,
+) : IdValidate
 
 /**
- * Map validate data to Entity
+ * Map data with validate
  */
-fun List<UserContactValidate>.toEntities(
-    contacts: SizedIterable<UserContactEntity> = emptySized()
+fun List<UserContactValidate>.toData(
+    values: SizedIterable<UserContactEntity> = emptySized()
 ): List<UserContactResponse> {
-    if (size != map { it.type }.distinct().size) {
-        throw RuntimeException("There should be no duplicate types.")
-    }
-    if (contacts.any { find -> !filter { it.id != null }.map { it.id }.contains(find.id.value) }) {
-        throw RuntimeException("Contacts found that do not belong to the entity.")
-    }
-    if (contacts.any { find -> filter { it.id == null }.map { it.type }.contains(find.type) }) {
-        throw RuntimeException("Duplicate types were found, you need to specify the Id to update them.")
-    }
+    this.validateIds(values.map { IdDataValidate(it.id.value, it.type) })
     return map {
         UserContactResponse(
             id = it.id,

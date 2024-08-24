@@ -16,12 +16,12 @@
 package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.validators.custom.CheckUserLocales
 import com.keygenqt.mb.validators.custom.NotBlank
 import com.keygenqt.mb.validators.custom.NotNullNotBlank
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
-import org.hibernate.validator.constraints.URL
 
 /**
  * Request city validate
@@ -56,6 +56,7 @@ data class UserValidate(
     @field:Valid
     val contacts: List<UserContactValidate> = listOf(),
 
+    @field:CheckUserLocales
     @field:Valid
     val locales: List<UserLocaleValidate> = listOf(),
 

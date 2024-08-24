@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
+    useTheme,
+    useMediaQuery,
     Box,
     Button,
     CircularProgress,
@@ -102,13 +104,19 @@ const localeUserFields = [
     },
 ]
 
+// @todo Large form, on debug slow. How release?
 export function UserForm(props) {
+    const theme = useTheme()
+    const isSM = useMediaQuery(theme.breakpoints.down('sm'))
     const {route, routes} = React.useContext(RouteContext)
+
+    const roles = CacheStorage.get(CacheKeys.userRoles)
+    const isAdmin = roles?.includes('ADMIN')
+
+    const [model, setModel] = React.useState(props.model)
     const [isFormChange, setIsFormChange] = React.useState(false)
     const [isFormRemove, setIsFormRemove] = React.useState(false)
     const [tabLocale, setTabLocale] = React.useState('undefined')
-    const roles = CacheStorage.get(CacheKeys.userRoles)
-    const isAdmin = roles?.includes('ADMIN')
 
     // Array locales
     const [localeFields] = React.useState([localeUserFields].concat(
@@ -126,9 +134,10 @@ export function UserForm(props) {
         fname: `contact-${item.name}`,
         label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
         validate: Yup.string()
+            .concat(item === Shared.contactType.EMAIL ? Yup.string().email('Must be a valid Email.') : Yup.string().url('Must be a valid URL.'))
             .min(3, 'Size must be between 3 and 250.')
             .max(250, 'Size must be between 3 and 250.')
-            .required('Must not be null and not blank.'),
+            .nullable()
     })))
 
     // Array media
@@ -138,34 +147,37 @@ export function UserForm(props) {
         fname: `media-${item.name}`,
         label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
         validate: Yup.string()
+            .url('Must be a valid URL.')
             .min(3, 'Size must be between 3 and 250.')
             .max(250, 'Size must be between 3 and 250.')
-            .required('Must not be null and not blank.'),
+            .nullable()
     })))
 
     return (
         <Formik
             initialValues={{
-                roles: props.model?.roles?.map((item) => item.name) ?? [],
-                directions: props.model?.directions?.map((item) => item.id) ?? [],
-                image: props.model?.image ?? '',
+                roles: model?.roles?.map((item) => item.name) ?? [],
+                directions: model?.directions?.map((item) => item.id) ?? [],
+                image: model?.image ?? '',
                 isRemove: false,
                 submit: null,
+
+                // Redirect from create page
+                isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
 
                 // Array locales
                 ...localeFields.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
-                    field.type === undefined ? props.model[field.name] : props.model
+                    field.type === undefined ? model?.[field.name] : model
                         ?.locales
                         ?.filter((item) => item.locale === field.type)
                         ?.[0]
-                        ?.[field.name]
+                        ?.[field.name] ?? ''
                 ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
                 // Array contacts
                 ...Object.fromEntries(contactFields.map((field) => [
                     field.fname,
-                    props.model
-                        ?.contacts
+                    model?.contacts
                         ?.filter((item) => item.type === field.type)
                         ?.[0]
                         ?.['link']
@@ -173,15 +185,11 @@ export function UserForm(props) {
                 // Array media
                 ...Object.fromEntries(mediaFields.map((field) => [
                     field.fname,
-                    props.model
-                        ?.media
+                    model?.media
                         ?.filter((item) => item.type === field.type)
                         ?.[0]
                         ?.['link']
                 ])),
-
-                // Redirect from create page
-                isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
             }}
             validationSchema={Yup.object().shape({
                 image: Yup.string()
@@ -218,7 +226,6 @@ export function UserForm(props) {
 
                 if (values.isRemove) {
                     setFieldValue('isRemove', false)
-                    console.log('isRemove')
                     try {
                         await Shared.httpClient.delete.deleteUser(props.id)
                         // Success remove
@@ -247,7 +254,7 @@ export function UserForm(props) {
                     }))
                         .filter((item) => item !== null)
                         .map((valueFields) => new Shared.requests.UserLocaleRequest(
-                            props.model?.locales?.filter((item) => item.locale === valueFields.type)?.[0]?.id,
+                            model?.locales?.filter((item) => item.locale === valueFields.type)?.[0]?.id,
                             valueFields.fname,
                             valueFields.lname,
                             valueFields.short,
@@ -257,54 +264,56 @@ export function UserForm(props) {
                         ))
 
                     // Array contacts prepare
-                    const userContactRequest = contactFields.map((field) => new Shared.requests.UserContactRequest(
-                        props.model?.contacts?.filter((item) => item.type === field.type)?.[0]?.id,
+                    const userContactRequests = contactFields.map((field) => values[field.fname] ? new Shared.requests.UserContactRequest(
+                        model?.contacts?.filter((item) => item.type === field.type)?.[0]?.id,
                         values[field.fname],
                         field.type,
-                    ))
+                    ) : null).filter((item) => item !== null)
 
                     // Array media prepare
-                    const userMediaRequest = mediaFields.map((field) => new Shared.requests.UserMediaRequest(
-                        props.model?.media?.filter((item) => item.type === field.type)?.[0]?.id,
+                    const userMediaRequests = mediaFields.map((field) => values[field.fname] ? new Shared.requests.UserMediaRequest(
+                        model?.media?.filter((item) => item.type === field.type)?.[0]?.id,
                         values[field.fname],
                         field.type,
-                    ))
-
-                    console.log(userLocaleDefault)
-                    console.log(userLocaleRequests)
-                    console.log(userContactRequest)
-                    console.log(userMediaRequest)
+                    ) : null).filter((item) => item !== null)
 
                     try {
-
-                        // const response = Boolean(props.id) ? (
-                        //     await Shared.httpClient.put.editUser(props.id, new Shared.requests.UserRequest(
-                        //         values.image,
-                        //         values.fname,
-                        //         values.lname,
-                        //         values.short,
-                        //         values.about,
-                        //         values.quote,
-                        //         localesRequest
-                        //     ))
-                        // ) : (
-                        //     await Shared.httpClient.post.addUser(new Shared.requests.UserRequest(
-                        //         values.image,
-                        //         values.fname,
-                        //         values.lname,
-                        //         values.short,
-                        //         values.about,
-                        //         values.quote,
-                        //         localesRequest
-                        //     ))
-                        // )
-                        // if (!Boolean(props.id)) {
-                        //     CacheStorage.set(CacheKeys.redirectCreateUser, true, true, true)
-                        //     route.toLocationReplace(routes.userEdit, response.id)
-                        // } else {
-                        //     setFieldValue('name', response.name)
-                        //     setStatus({success: true});
-                        // }
+                        const response = Boolean(props.id) ? (
+                            await Shared.httpClient.put.editUser(props.id, new Shared.requests.UserRequest(
+                                values.image,
+                                userLocaleDefault.fname,
+                                userLocaleDefault.lname,
+                                userLocaleDefault.short,
+                                userLocaleDefault.about,
+                                userLocaleDefault.quote,
+                                userContactRequests,
+                                userLocaleRequests,
+                                userMediaRequests,
+                                values.directions,
+                                values.roles.map((name) => Shared.role.valueOf(name)),
+                            ))
+                        ) : (
+                            await Shared.httpClient.post.addUser(new Shared.requests.UserRequest(
+                                values.image,
+                                userLocaleDefault.fname,
+                                userLocaleDefault.lname,
+                                userLocaleDefault.short,
+                                userLocaleDefault.about,
+                                userLocaleDefault.quote,
+                                userContactRequests,
+                                userLocaleRequests,
+                                userMediaRequests,
+                                values.directions,
+                                values.roles.map((name) => Shared.role.valueOf(name)),
+                            ))
+                        )
+                        if (!Boolean(props.id)) {
+                            CacheStorage.set(CacheKeys.redirectCreateUser, true, true, true)
+                            route.toLocationReplace(routes.userEdit, response.id)
+                        } else {
+                            setStatus({success: true});
+                            setModel(response)
+                        }
                     } catch (error) {
                         if (error.code === 403) {
                             setErrors({
@@ -313,13 +322,25 @@ export function UserForm(props) {
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
                                 name: Helper.findError('name', error),
-                                // Array locales common
                                 submit: Helper.findError('locales', error),
-                                // // Array locales error field
-                                // ...Object.fromEntries(Object.keys(localeFields).map((fieldName, index) => [
-                                //     fieldName,
-                                //     Helper.findError(`locales[${index}].text`, error)
-                                // ]))
+
+                                // Array locales error field
+                                ...localeFields.map((fields, index) => Object.fromEntries(fields.map((field) => [
+                                    field['fname'] ?? field['name'],
+                                    field['fname'] ? Helper.findError(`locales[${index-1}].${field.name}`, error) : Helper.findError(field.name, error),
+                                ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
+
+                                // Array contacts error field
+                                ...Object.fromEntries(contactFields.map((field, index) => [
+                                    field.fname,
+                                    Helper.findError(`contacts[${index}].link`, error)
+                                ])),
+
+                                // Array media error field
+                                ...Object.fromEntries(mediaFields.map((field, index) => [
+                                    field.fname,
+                                    Helper.findError(`media[${index}].link`, error)
+                                ]))
                             });
                         } else {
                             setErrors({
@@ -328,6 +349,10 @@ export function UserForm(props) {
                         }
                     }
                 }
+                // Scroll to top
+                const root = document.getElementById("root")
+                const element = document.getElementById("FormId")
+                root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
             }}
         >
             {({
@@ -346,7 +371,7 @@ export function UserForm(props) {
             }) => (
                 <form style={{width: '100%'}} noValidate onSubmit={handleSubmit}>
                     <FormGroup>
-                        <Box id={'FormId'}>
+                        <Box id={'FormId'} sx={{width: 1}}>
                             <Stack spacing={2} >
 
                                 <DialogRemove
@@ -405,8 +430,8 @@ export function UserForm(props) {
                                         startAdornment: (
                                           <InputAdornment position="start">
                                             <Avatar
-                                                alt={`${props.model?.fname} ${props.model?.lname}`}
-                                                src={props.model?.image}
+                                                alt={`${model?.fname} ${model?.lname}`}
+                                                src={values.image}
                                                 sx={{ width: 20, height: 20 }}
                                             />
                                           </InputAdornment>
@@ -484,18 +509,40 @@ export function UserForm(props) {
                                     ))}
                                 </TextField>
 
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                                    <Tabs value={tabLocale} onChange={(event, newValue) => setTabLocale(newValue)}>
-                                        {localeFields.map((fields) => (
-                                            <Tab
-                                                key={`locale-tab-${fields[0].type}`}
-                                                id={`tab-${fields[0].type?.name}`}
-                                                label={`Locale ${fields[0].type?.name ?? 'RU'}`}
-
-                                                aria-controls={`tabpanel-${fields[0].type?.name}`}
-                                                value={`${fields[0].type?.name}`}
-                                            />
-                                        ))}
+                                <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1 }}>
+                                    <Tabs
+                                        variant="scrollable"
+                                        allowScrollButtonsMobile
+                                        value={tabLocale}
+                                        onChange={(_, newValue) => setTabLocale(newValue)}
+                                        sx={{
+                                            '& .TabError': {
+                                                color: 'error.main'
+                                            },
+                                            '& .TabError.Mui-selected': {
+                                                color: 'error.main'
+                                            },
+                                            '& .Mui-disabled.MuiTabs-scrollButtons': {
+                                                opacity: 0.3
+                                            }
+                                        }}
+                                    >
+                                        {localeFields.map((fields) => {
+                                            const isError = fields.map((field) => {
+                                                const fieldName = `${field['fname'] ?? field['name']}`
+                                                return Boolean(touched[fieldName] && errors[fieldName])
+                                            }).find((item) => item)
+                                            return (
+                                                <Tab
+                                                    key={`locale-tab-${fields[0].type}`}
+                                                    id={`tab-${fields[0].type?.name}`}
+                                                    label={`Locale ${fields[0].type?.name ?? 'RU'}`}
+                                                    aria-controls={`tabpanel-${fields[0].type?.name}`}
+                                                    value={`${fields[0].type?.name}`}
+                                                    className={isError ? 'TabError' : ''}
+                                                />
+                                            )
+                                        })}
                                     </Tabs>
                                 </Box>
 
@@ -508,7 +555,7 @@ export function UserForm(props) {
                                 {/* Array locales */}
                                 {localeFields.map((fields) => {
                                     const type = fields[0].type
-                                    let color = '#ff552563'
+                                    let color = '#ff25d263'
                                     if (type === Shared.locale.EN) {
                                         color = '#259cff63'
                                     }
@@ -525,6 +572,11 @@ export function UserForm(props) {
                                             <Stack spacing={2}>
                                                 {fields.map((field) => {
                                                     const fieldName = `${field['fname'] ?? field['name']}`
+                                                    // @todo Bug MUI https://github.com/mui/base-ui/issues/167
+                                                    const options = field.multiline ? {
+                                                        multiline: true,
+                                                        rows: isSM ? 8 : 5,
+                                                    } : {}
                                                     return (
                                                         <TextField
                                                             key={`locale-filed-${fieldName}`}
@@ -537,13 +589,10 @@ export function UserForm(props) {
                                                             error={Boolean(touched[fieldName] && errors[fieldName])}
                                                             onBlur={handleBlur}
                                                             onChange={handleChange}
-                                                            fullWidth
                                                             label={`${field.label}`}
                                                             variant="filled"
                                                             inputProps={{ autoComplete: 'off' }}
-                                                            multiline={field.multiline}
-                                                            minRows={4}
-                                                            maxRows={15}
+                                                            {...options}
                                                         />
                                                     )
                                                 })}
@@ -591,7 +640,7 @@ export function UserForm(props) {
 
                                 {/* Array media fields */}
                                 {mediaFields.map((field) => (
-                                        <TextField
+                                    <TextField
                                         key={`fieldName-${field.fname}`}
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         type={'url'}
@@ -608,7 +657,7 @@ export function UserForm(props) {
                                     />
                                 ))}
 
-                                <Stack direction={'row'} spacing={2}>
+                                <Stack direction={isSM ? 'column' : 'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>
                                     {props.id && isAdmin && (
                                         <Button

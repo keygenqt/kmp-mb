@@ -25,6 +25,7 @@ import com.keygenqt.mb.shared.db.service.UserMediaService
 import com.keygenqt.mb.shared.db.service.UsersService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.UserValidate
+import com.keygenqt.mb.validators.models.toData
 import com.keygenqt.mb.validators.models.toEntities
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -71,13 +72,13 @@ fun Route.users() {
             val request = call.receiveValidate<UserValidate>()
             // act
             val idsContact = userContactsService.transaction {
-                request.contacts.toEntities().inserts()
+                request.contacts.toData().inserts()
             }
             val idsLocale = userLocalesService.transaction {
-                request.locales.toEntities().inserts()
+                request.locales.toData().inserts()
             }
             val idsMedia = userMediaService.transaction {
-                request.media.toEntities().inserts()
+                request.media.toData().inserts()
             }
             val response = usersService.transaction {
                 insert(
@@ -110,13 +111,13 @@ fun Route.users() {
             }
             val response = with(model) {
                 val idsContact = userContactsService.transaction {
-                    request.contacts.toEntities(contacts).inserts() + request.contacts.toEntities(contacts).updates()
+                    request.contacts.toData(contacts).inserts() + request.contacts.toData(contacts).updates()
                 }
                 val idsLocale = userLocalesService.transaction {
-                    request.locales.toEntities(locales).inserts() + request.locales.toEntities(locales).updates()
+                    request.locales.toData(locales).inserts() + request.locales.toData(locales).updates()
                 }
                 val idsMedia = userMediaService.transaction {
-                    request.media.toEntities(media).inserts() + request.media.toEntities(media).updates()
+                    request.media.toData(media).inserts() + request.media.toData(media).updates()
                 }
                 usersService.transaction {
                     update(

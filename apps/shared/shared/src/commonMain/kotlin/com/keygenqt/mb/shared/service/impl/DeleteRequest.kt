@@ -35,6 +35,13 @@ class DeleteRequest(private val client: HttpClient) {
     }
 
     @Throws(Exception::class)
+    suspend fun deleteUser(
+        id: Int,
+    ) {
+        return client.delete("api/users/$id").body()
+    }
+
+    @Throws(Exception::class)
     suspend fun deleteDirection(
         id: Int,
     ) {

@@ -19,11 +19,9 @@ import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.*
 import com.keygenqt.mb.shared.interfaces.IService
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.or
 
 @Suppress("MemberVisibilityCanBePrivate")
 class CitiesService(
@@ -66,6 +64,10 @@ class CitiesService(
         organizers: List<Int>,
         uploads: List<Int>,
     ) = CityEntity.new {
+        // Check unique url image
+        if (Cities.selectAll().where { (Cities.image eq image) }.count().toInt() != 0) {
+            throw RuntimeException("You can't duplicate images, please create a new one.")
+        }
         this.countryID = EntityID(countryID, Countries)
         this.image = image
         this.link = link
@@ -89,6 +91,10 @@ class CitiesService(
         organizers: List<Int>,
         uploads: List<Int>,
     ) = apply {
+        // Check unique url image
+        if (Cities.selectAll().where { (Cities.image eq image) and (Cities.id neq this@update.id ) }.count().toInt() != 0) {
+            throw RuntimeException("You can't duplicate images, please create a new one.")
+        }
         this.countryID = EntityID(countryID, Countries)
         this.image = image
         this.link = link

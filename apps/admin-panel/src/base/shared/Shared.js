@@ -44,8 +44,8 @@ export const Shared = {
     /// ContactTypes
     contactType: ContactTypes,
     contactTypes: [
-        ContactTypes.TELEGRAM,
         ContactTypes.EMAIL,
+        ContactTypes.TELEGRAM,
         ContactTypes.LINKEDIN,
     ],
     /// UserRole

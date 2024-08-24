@@ -16,7 +16,7 @@
 package com.keygenqt.mb.validators.custom
 
 import com.keygenqt.mb.shared.responses.Locale
-import com.keygenqt.mb.validators.models.ColumnLocaleValidate
+import com.keygenqt.mb.validators.models.UserLocaleValidate
 import jakarta.validation.Constraint
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
@@ -25,15 +25,15 @@ import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.FIELD)
 @MustBeDocumented
-@Constraint(validatedBy = [CheckColumnLocalesValidator::class])
+@Constraint(validatedBy = [CheckUserLocalesValidator::class])
 @Suppress("unused")
-annotation class CheckColumnLocales(
+annotation class CheckUserLocales(
     val message: String = "All locales of the model must be specified",
     val groups: Array<KClass<*>> = [],
     val payload: Array<KClass<out Payload>> = []
 )
 
-class CheckColumnLocalesValidator : ConstraintValidator<CheckColumnLocales, Any?> {
+class CheckUserLocalesValidator : ConstraintValidator<CheckUserLocales, Any?> {
     override fun isValid(value: Any?, context: ConstraintValidatorContext?): Boolean {
         if (value == null) {
             return false
@@ -46,7 +46,7 @@ class CheckColumnLocalesValidator : ConstraintValidator<CheckColumnLocales, Any?
                 return false
             }
             return value
-                .mapNotNull { it as? ColumnLocaleValidate }
+                .mapNotNull { it as? UserLocaleValidate }
                 .mapNotNull { if (Locale.entries.contains(it.locale)) true else null }
                 .size == Locale.entries.size
         }

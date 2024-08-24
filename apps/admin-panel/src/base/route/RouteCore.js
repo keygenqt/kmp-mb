@@ -122,7 +122,7 @@ export default class RouteCore {
     toRefreshState(route, ...arg) {
         const path = this.getPathFromObject(route)
         this.navigate(this.createLink(path, arg), {replace: true});
-        this.navigate(this.createLink(path, arg));
+        this.navigate('/');
         this.toBack();
     }
 
