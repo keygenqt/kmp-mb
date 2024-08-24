@@ -16,7 +16,6 @@
 package com.keygenqt.mb.routing
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.base.SessionUser
 import com.keygenqt.mb.extension.*
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
@@ -24,7 +23,7 @@ import com.keygenqt.mb.shared.db.service.ColumnLocalesService
 import com.keygenqt.mb.shared.db.service.CountriesService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.CountryValidate
-import com.keygenqt.mb.validators.models.toEntities
+import com.keygenqt.mb.validators.models.toData
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -67,7 +66,7 @@ fun Route.countries() {
             val request = call.receiveValidate<CountryValidate>()
             // act
             val idsLocale = columnLocalesService.transaction {
-                request.locales.toEntities().inserts()
+                request.locales.toData().inserts()
             }
             val response = countriesService.transaction {
                 insert(
@@ -91,7 +90,7 @@ fun Route.countries() {
             }
             val response = with(model) {
                 val idsLocale = columnLocalesService.transaction {
-                    request.locales.toEntities(locales).inserts() + request.locales.toEntities(locales).updates()
+                    request.locales.toData(locales).inserts() + request.locales.toData(locales).updates()
                 }
                 countriesService.transaction {
                     update(

@@ -50,7 +50,7 @@ data class ColumnLocaleValidate(
 /**
  * Map data with validate
  */
-fun List<ColumnLocaleValidate>.toEntities(
+fun List<ColumnLocaleValidate>.toData(
     values: SizedIterable<ColumnLocaleEntity> = emptySized()
 ): List<ColumnLocaleResponse> {
     this.validateIds(values.map { IdDataValidate(it.id.value, it.locale) })

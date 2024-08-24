@@ -26,7 +26,6 @@ import com.keygenqt.mb.shared.db.service.UsersService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.UserValidate
 import com.keygenqt.mb.validators.models.toData
-import com.keygenqt.mb.validators.models.toEntities
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

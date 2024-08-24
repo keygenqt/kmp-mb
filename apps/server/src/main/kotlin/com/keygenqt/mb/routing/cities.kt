@@ -23,7 +23,7 @@ import com.keygenqt.mb.shared.db.service.CitiesService
 import com.keygenqt.mb.shared.db.service.ColumnLocalesService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.CityValidate
-import com.keygenqt.mb.validators.models.toEntities
+import com.keygenqt.mb.validators.models.toData
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -65,7 +65,7 @@ fun Route.cities() {
             val request = call.receiveValidate<CityValidate>()
             // act
             val idsLocale = columnLocalesService.transaction {
-                request.locales.toEntities().inserts()
+                request.locales.toData().inserts()
             }
             val response = citiesService.transaction {
                 insert(
@@ -94,7 +94,7 @@ fun Route.cities() {
             }
             val response = with(model) {
                 val idsLocale = columnLocalesService.transaction {
-                    request.locales.toEntities(locales).inserts() + request.locales.toEntities(locales).updates()
+                    request.locales.toData(locales).inserts() + request.locales.toData(locales).updates()
                 }
                 citiesService.transaction {
                     update(
