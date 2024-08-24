@@ -51,7 +51,7 @@ import {
     DoneOutlined,
 } from '@mui/icons-material';
 
-const localeUserFields = [
+const localeUserOrganizerFields = [
     {
         name: 'fname',
         required: true,
@@ -82,6 +82,10 @@ const localeUserFields = [
             .max(250, 'Size must be between 3 and 250.')
             .nullable()
     },
+]
+
+const localeUserExpertFields = [
+    ...localeUserOrganizerFields,
     {
         name: 'about',
         required: false,
@@ -117,15 +121,53 @@ export function UserForm(props) {
     const [isFormChange, setIsFormChange] = React.useState(false)
     const [isFormRemove, setIsFormRemove] = React.useState(false)
     const [tabLocale, setTabLocale] = React.useState('undefined')
+    const [formUserRoles, setFormUserRoles] = React.useState(model?.roles.map((item) => item.name))
+
+    /// Check for form mode
+    const checkFormRoles = React.useCallback(
+        (...roles) => {
+            if (formUserRoles === undefined) {
+                return false;
+            }
+            for (let i = 0; i < roles.length; i++) {
+                if (formUserRoles.includes(roles[i].name)) {
+                    return true
+                }
+            }
+            return false
+        }, [formUserRoles]);
 
     // Array locales
-    const [localeFields] = React.useState([localeUserFields].concat(
-        Shared.locales.map((locale) => localeUserFields.map((item) => ({
-            ...item,
-            type: locale,
-            fname: `${item.name}-${locale.name}`,
-        })))
-    ))
+    const localeFieldsGen = React.useCallback(
+        () => {
+            if (checkFormRoles(Shared.role.EXPERT)) {
+                return [localeUserExpertFields].concat(
+                    Shared.locales.map((locale) => localeUserExpertFields.map((item) => ({
+                        ...item,
+                        type: locale,
+                        fname: `${item.name}-${locale.name}`,
+                    })))
+                )
+            }
+            if (checkFormRoles(Shared.role.ORGANIZER)) {
+                return [localeUserOrganizerFields].concat(
+                    Shared.locales.map((locale) => localeUserOrganizerFields.map((item) => ({
+                        ...item,
+                        type: locale,
+                        fname: `${item.name}-${locale.name}`,
+                    })))
+                )
+            }
+            if (checkFormRoles(Shared.role.ADMIN, Shared.role.MANAGER)) {
+                return [localeUserOrganizerFields]
+            }
+        }, [checkFormRoles]);
+
+    const [localeFields, setLocaleFields] = React.useState(localeFieldsGen())
+
+    React.useEffect(() => {
+        setLocaleFields(localeFieldsGen())
+    }, [localeFieldsGen])
 
     // Array contacts
     const [contactFields] = React.useState(Shared.contactTypes.map((item) => ({
@@ -166,7 +208,7 @@ export function UserForm(props) {
                 isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
 
                 // Array locales
-                ...localeFields.map((fields) => Object.fromEntries(fields.map((field) => [
+                ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
                     field.type === undefined ? model?.[field.name] : model
                         ?.locales
@@ -175,7 +217,7 @@ export function UserForm(props) {
                         ?.[field.name] ?? ''
                 ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
                 // Array contacts
-                ...Object.fromEntries(contactFields.map((field) => [
+                ...Object.fromEntries(contactFields?.map((field) => [
                     field.fname,
                     model?.contacts
                         ?.filter((item) => item.type === field.type)
@@ -183,7 +225,7 @@ export function UserForm(props) {
                         ?.['link']
                 ])),
                 // Array media
-                ...Object.fromEntries(mediaFields.map((field) => [
+                ...Object.fromEntries(mediaFields?.map((field) => [
                     field.fname,
                     model?.media
                         ?.filter((item) => item.type === field.type)
@@ -198,17 +240,17 @@ export function UserForm(props) {
                     .required('Must not be null and not blank.'),
 
                 // Array locales
-                ...localeFields.map((fields) => Object.fromEntries(fields.map((field) => [
+                ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
                     field.validate
                 ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
                 // Array contacts
-                ...Object.fromEntries(contactFields.map((field) => [
+                ...Object.fromEntries(contactFields?.map((field) => [
                     field.fname,
                     field.validate
                 ])),
                 // Array media
-                ...Object.fromEntries(mediaFields.map((field) => [
+                ...Object.fromEntries(mediaFields?.map((field) => [
                     field.fname,
                     field.validate
                 ])),
@@ -416,74 +458,15 @@ export function UserForm(props) {
                                     disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                     required
                                     type={'text'}
-                                    name={'image'}
-                                    value={values.image}
-                                    helperText={touched.image && errors.image ? errors.image : ''}
-                                    error={Boolean(touched.image && errors.image)}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    label={'Image'}
-                                    variant="filled"
-                                    InputProps={{
-                                        autoComplete: 'off',
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Avatar
-                                                alt={`${model?.fname} ${model?.lname}`}
-                                                src={values.image}
-                                                sx={{ width: 20, height: 20 }}
-                                            />
-                                          </InputAdornment>
-                                        ),
-                                    }}
-                                />
-
-                                <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                    required
-                                    type={'text'}
-                                    name={'directions'}
-                                    value={values.directions}
-                                    helperText={touched.directions && errors.directions ? errors.directions : ''}
-                                    error={Boolean(touched.directions && errors.directions)}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    label={'Directions'}
-                                    variant="filled"
-                                    select
-                                    SelectProps={{
-                                        multiple: true,
-                                        renderValue: (selected) => (
-                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                {selected.map((value) => (
-                                                    <Chip
-                                                        key={`directions-${value}`}
-                                                        label={props.directions.filter((e) => e.id === value)[0]['name'] ?? value}
-                                                    />
-                                                ))}
-                                            </Box>
-                                        )
-                                    }}
-                                >
-                                    {props.directions?.map((item) => (
-                                        <MenuItem key={`directions-menu-${item.id}`} value={item.id}>
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-
-                                <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                    required
-                                    type={'text'}
                                     name={'roles'}
                                     value={values.roles}
                                     helperText={touched.roles && errors.roles ? errors.roles : ''}
                                     error={Boolean(touched.roles && errors.roles)}
                                     onBlur={handleBlur}
-                                    onChange={handleChange}
+                                    onChange={(e) => {
+                                        setFormUserRoles(e.target.value)
+                                        handleChange(e)
+                                    }}
                                     fullWidth
                                     label={'Roles'}
                                     variant="filled"
@@ -509,153 +492,294 @@ export function UserForm(props) {
                                     ))}
                                 </TextField>
 
-                                <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1 }}>
-                                    <Tabs
-                                        variant="scrollable"
-                                        allowScrollButtonsMobile
-                                        value={tabLocale}
-                                        onChange={(_, newValue) => setTabLocale(newValue)}
-                                        sx={{
-                                            '& .TabError': {
-                                                color: 'error.main'
-                                            },
-                                            '& .TabError.Mui-selected': {
-                                                color: 'error.main'
-                                            },
-                                            '& .Mui-disabled.MuiTabs-scrollButtons': {
-                                                opacity: 0.3
-                                            }
+                                {checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER) && (
+                                    <TextField
+                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        required
+                                        type={'text'}
+                                        name={'image'}
+                                        value={values.image}
+                                        helperText={touched.image && errors.image ? errors.image : ''}
+                                        error={Boolean(touched.image && errors.image)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        label={'Image'}
+                                        variant="filled"
+                                        InputProps={{
+                                            autoComplete: 'off',
+                                            startAdornment: (
+                                            <InputAdornment position="start">
+                                                <Avatar
+                                                    alt={`${model?.fname} ${model?.lname}`}
+                                                    src={values.image}
+                                                    sx={{ width: 20, height: 20 }}
+                                                />
+                                            </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+
+                                {checkFormRoles(Shared.role.EXPERT) && (
+                                    <TextField
+                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        required
+                                        type={'text'}
+                                        name={'directions'}
+                                        value={values.directions}
+                                        helperText={touched.directions && errors.directions ? errors.directions : ''}
+                                        error={Boolean(touched.directions && errors.directions)}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        label={'Directions'}
+                                        variant="filled"
+                                        select
+                                        SelectProps={{
+                                            multiple: true,
+                                            renderValue: (selected) => (
+                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                                    {selected.map((value) => (
+                                                        <Chip
+                                                            key={`directions-${value}`}
+                                                            label={props.directions.filter((e) => e.id === value)[0]['name'] ?? value}
+                                                        />
+                                                    ))}
+                                                </Box>
+                                            )
                                         }}
                                     >
-                                        {localeFields.map((fields) => {
-                                            const isError = fields.map((field) => {
-                                                const fieldName = `${field['fname'] ?? field['name']}`
-                                                return Boolean(touched[fieldName] && errors[fieldName])
-                                            }).find((item) => item)
+                                        {props.directions?.map((item) => (
+                                            <MenuItem key={`directions-menu-${item.id}`} value={item.id}>
+                                                {item.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                )}
+
+                                {checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER) ? (
+                                    <>
+                                        {localeFields && (
+                                            <>
+                                                <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1 }}>
+                                                    <Tabs
+                                                        variant="scrollable"
+                                                        allowScrollButtonsMobile
+                                                        value={tabLocale}
+                                                        onChange={(_, newValue) => setTabLocale(newValue)}
+                                                        sx={{
+                                                            '& .TabError': {
+                                                                color: 'error.main'
+                                                            },
+                                                            '& .TabError.Mui-selected': {
+                                                                color: 'error.main'
+                                                            },
+                                                            '& .Mui-disabled.MuiTabs-scrollButtons': {
+                                                                opacity: 0.3
+                                                            }
+                                                        }}
+                                                    >
+                                                        {localeFields?.map((fields) => {
+                                                            const isError = fields.map((field) => {
+                                                                const fieldName = `${field['fname'] ?? field['name']}`
+                                                                return Boolean(touched[fieldName] && errors[fieldName])
+                                                            }).find((item) => item)
+                                                            return (
+                                                                <Tab
+                                                                    key={`locale-tab-${fields[0].type}`}
+                                                                    id={`tab-${fields[0].type?.name}`}
+                                                                    label={`Locale ${fields[0].type?.name ?? 'RU'}`}
+                                                                    aria-controls={`tabpanel-${fields[0].type?.name}`}
+                                                                    value={`${fields[0].type?.name}`}
+                                                                    className={isError ? 'TabError' : ''}
+                                                                />
+                                                            )
+                                                        })}
+                                                    </Tabs>
+                                                </Box>
+
+                                                <Stack spacing={1}>
+                                                    <Typography variant='caption' color={'text.primary'}>
+                                                        The main language is Russian, but all other fields are mandatory; it is not good if the user does not find a translation on the site.
+                                                    </Typography>
+                                                </Stack>
+                                            </>
+                                        )}
+
+                                        {/* Array locales */}
+                                        {localeFields?.map((fields) => {
+                                            const type = fields[0].type
+                                            let color = '#ff25d263'
+                                            if (type === Shared.locale.EN) {
+                                                color = '#259cff63'
+                                            }
+                                            if (type === Shared.locale.BY) {
+                                                color = '#13894163'
+                                            }
                                             return (
-                                                <Tab
-                                                    key={`locale-tab-${fields[0].type}`}
-                                                    id={`tab-${fields[0].type?.name}`}
-                                                    label={`Locale ${fields[0].type?.name ?? 'RU'}`}
-                                                    aria-controls={`tabpanel-${fields[0].type?.name}`}
-                                                    value={`${fields[0].type?.name}`}
-                                                    className={isError ? 'TabError' : ''}
-                                                />
+                                                <div
+                                                    style={{border: `1px solid ${color}`, padding: 15, borderRadius: 15}}
+                                                    key={`tabpanel-${type?.name}`}
+                                                    id={`tabpanel-${type?.name}`}
+                                                    hidden={tabLocale !== `${type?.name}`}
+                                                >
+                                                    <Stack spacing={2}>
+                                                        {fields.map((field) => {
+                                                            const fieldName = `${field['fname'] ?? field['name']}`
+                                                            // @todo Bug MUI https://github.com/mui/base-ui/issues/167
+                                                            const options = field.multiline ? {
+                                                                multiline: true,
+                                                                rows: isSM ? 8 : 5,
+                                                            } : {}
+                                                            return (
+                                                                <TextField
+                                                                    key={`locale-filed-${fieldName}`}
+                                                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                                    required={field.required}
+                                                                    type={'text'}
+                                                                    name={fieldName}
+                                                                    value={values[fieldName] ?? ''}
+                                                                    helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
+                                                                    error={Boolean(touched[fieldName] && errors[fieldName])}
+                                                                    onBlur={handleBlur}
+                                                                    onChange={handleChange}
+                                                                    label={`${field.label}`}
+                                                                    variant="filled"
+                                                                    inputProps={{ autoComplete: 'off' }}
+                                                                    {...options}
+                                                                />
+                                                            )
+                                                        })}
+                                                    </Stack>
+                                                </div>
                                             )
                                         })}
-                                    </Tabs>
-                                </Box>
+                                    </>
+                                ) : (
+                                    <>
+                                        {localeFields?.map((fields) => (fields.map((field) => {
+                                            const fieldName = `${field['fname'] ?? field['name']}`
+                                            // @todo Bug MUI https://github.com/mui/base-ui/issues/167
+                                            const options = field.multiline ? {
+                                                multiline: true,
+                                                rows: isSM ? 8 : 5,
+                                            } : {}
+                                            return (
+                                                <TextField
+                                                    key={`locale-filed-${fieldName}`}
+                                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                    required={field.required}
+                                                    type={'text'}
+                                                    name={fieldName}
+                                                    value={values[fieldName] ?? ''}
+                                                    helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
+                                                    error={Boolean(touched[fieldName] && errors[fieldName])}
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                    label={`${field.label}`}
+                                                    variant="filled"
+                                                    inputProps={{ autoComplete: 'off' }}
+                                                    {...options}
+                                                />
+                                            )
+                                        })))}
+                                    </>
+                                )}
 
-                                <Stack spacing={1}>
-                                    <Typography variant='caption' color={'text.primary'}>
-                                        The main language is Russian, but all other fields are mandatory; it is not good if the user does not find a translation on the site.
-                                    </Typography>
-                                </Stack>
+                                {checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER) && (
+                                    <>
+                                        <Stack spacing={1}>
+                                            <Typography variant='h6' color={'text.primary'}>
+                                                Contacts
+                                            </Typography>
+                                            <Typography variant='caption' color={'text.primary'}>
+                                                User contacts that will be displayed on the website.
+                                            </Typography>
+                                        </Stack>
 
-                                {/* Array locales */}
-                                {localeFields.map((fields) => {
-                                    const type = fields[0].type
-                                    let color = '#ff25d263'
-                                    if (type === Shared.locale.EN) {
-                                        color = '#259cff63'
-                                    }
-                                    if (type === Shared.locale.BY) {
-                                        color = '#13894163'
-                                    }
-                                    return (
-                                        <div
-                                            style={{border: `1px solid ${color}`, padding: 15, borderRadius: 15}}
-                                            key={`tabpanel-${type?.name}`}
-                                            id={`tabpanel-${type?.name}`}
-                                            hidden={tabLocale !== `${type?.name}`}
-                                        >
-                                            <Stack spacing={2}>
-                                                {fields.map((field) => {
-                                                    const fieldName = `${field['fname'] ?? field['name']}`
-                                                    // @todo Bug MUI https://github.com/mui/base-ui/issues/167
-                                                    const options = field.multiline ? {
-                                                        multiline: true,
-                                                        rows: isSM ? 8 : 5,
-                                                    } : {}
-                                                    return (
-                                                        <TextField
-                                                            key={`locale-filed-${fieldName}`}
-                                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                                            required={field.required}
-                                                            type={'text'}
-                                                            name={fieldName}
-                                                            value={values[fieldName] ?? ''}
-                                                            helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
-                                                            error={Boolean(touched[fieldName] && errors[fieldName])}
-                                                            onBlur={handleBlur}
-                                                            onChange={handleChange}
-                                                            label={`${field.label}`}
-                                                            variant="filled"
-                                                            inputProps={{ autoComplete: 'off' }}
-                                                            {...options}
-                                                        />
-                                                    )
-                                                })}
-                                            </Stack>
-                                        </div>
-                                    )
-                                })}
+                                        {/* Array contacts */}
+                                        {contactFields.map((field) => (
+                                            <TextField
+                                                key={`fieldName-${field.fname}`}
+                                                disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                type={'url'}
+                                                name={field.fname}
+                                                value={values[field.fname] ?? ''}
+                                                helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                                error={Boolean(touched[field.fname] && errors[field.fname])}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                fullWidth
+                                                label={field.label}
+                                                variant="filled"
+                                                inputProps={{ autoComplete: 'off' }}
+                                            />
+                                        ))}
+                                    </>
+                                )}
 
-                                <Stack spacing={1}>
-                                    <Typography variant='h6' color={'text.primary'}>
-                                        Contacts
-                                    </Typography>
-                                    <Typography variant='caption' color={'text.primary'}>
-                                        User contacts that will be displayed on the website.
-                                    </Typography>
-                                </Stack>
+                                {checkFormRoles(Shared.role.EXPERT) && (
+                                    <>
+                                        <Stack spacing={1}>
+                                            <Typography variant='h6' color={'text.primary'}>
+                                                Media
+                                            </Typography>
+                                            <Typography variant='caption' color={'text.primary'}>
+                                                Links to the user's media resources.
+                                            </Typography>
+                                        </Stack>
 
-                                {/* Array contacts */}
-                                {contactFields.map((field) => (
-                                    <TextField
-                                        key={`fieldName-${field.fname}`}
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                        type={'url'}
-                                        name={field.fname}
-                                        value={values[field.fname] ?? ''}
-                                        helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
-                                        error={Boolean(touched[field.fname] && errors[field.fname])}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        label={field.label}
-                                        variant="filled"
-                                        inputProps={{ autoComplete: 'off' }}
-                                    />
-                                ))}
+                                        {/* Array media fields */}
+                                        {mediaFields.map((field) => (
+                                            <TextField
+                                                key={`fieldName-${field.fname}`}
+                                                disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                type={'url'}
+                                                name={field.fname}
+                                                value={values[field.fname] ?? ''}
+                                                helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                                error={Boolean(touched[field.fname] && errors[field.fname])}
+                                                onBlur={handleBlur}
+                                                onChange={handleChange}
+                                                fullWidth
+                                                label={field.label}
+                                                variant="filled"
+                                                inputProps={{ autoComplete: 'off' }}
+                                            />
+                                        ))}
+                                    </>
+                                )}
 
-                                <Stack spacing={1}>
-                                    <Typography variant='h6' color={'text.primary'}>
-                                        Media
-                                    </Typography>
-                                    <Typography variant='caption' color={'text.primary'}>
-                                        Links to the user's media resources.
-                                    </Typography>
-                                </Stack>
+                                {checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN) && (
+                                    <>
+                                        <Stack spacing={1}>
+                                            <Typography variant='h6' color={'text.primary'}>
+                                                {props.id ? 'Password' : 'Create password'}
+                                            </Typography>
+                                            {props.id && (
+                                                <Typography variant='caption' color={'text.primary'}>
+                                                    Change user password.
+                                                </Typography>
+                                            )}
+                                        </Stack>
 
-                                {/* Array media fields */}
-                                {mediaFields.map((field) => (
-                                    <TextField
-                                        key={`fieldName-${field.fname}`}
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                        type={'url'}
-                                        name={field.fname}
-                                        value={values[field.fname] ?? ''}
-                                        helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
-                                        error={Boolean(touched[field.fname] && errors[field.fname])}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        fullWidth
-                                        label={field.label}
-                                        variant="filled"
-                                        inputProps={{ autoComplete: 'off' }}
-                                    />
-                                ))}
+                                        <TextField
+                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                            type={'password'}
+                                            name={'password'}
+                                            value={values.password ?? ''}
+                                            helperText={touched.password && errors.password ? errors.password : ''}
+                                            error={Boolean(touched.password && errors.password)}
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            label={'Password'}
+                                            variant="filled"
+                                            inputProps={{ autoComplete: 'off' }}
+                                        />
+                                    </>
+                                )}
 
                                 <Stack direction={isSM ? 'column' : 'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>
