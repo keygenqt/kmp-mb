@@ -92,6 +92,7 @@ fun Route.users() {
                     locales = idsLocale,
                     contacts = idsContact,
                     media = idsMedia,
+                    password = request.password,
                 ).toResponse(call.getUserRoles())
             }
             // response
@@ -131,6 +132,7 @@ fun Route.users() {
                         locales = idsLocale,
                         contacts = idsContact,
                         media = idsMedia,
+                        password = request.password,
                     ).toResponse(call.getUserRoles())
                 }
             }

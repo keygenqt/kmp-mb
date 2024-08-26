@@ -34,6 +34,7 @@ import {
     Chip,
     Avatar,
     InputAdornment,
+    Divider,
 } from '@mui/material';
 import {
     AlertInfo,
@@ -117,10 +118,19 @@ export function UserForm(props) {
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
 
+    // Update model ids relations from db
     const [model, setModel] = React.useState(props.model)
-    const [isFormChange, setIsFormChange] = React.useState(false)
+    // Refresh page after create model
+    const [isFormRedirect, setIsFormRedirect] = React.useState(CacheStorage.get(CacheKeys.redirectCreateUser))
+    // Set success from, state from not working with enableReinitialize
+    const [isFormSuccess, setIsFormSuccess] = React.useState(false)
+    // Enable button submit if change form or redirect
+    const [isFormChange, setIsFormChange] = React.useState(isFormRedirect)
+    // Dialog remove set state
     const [isFormRemove, setIsFormRemove] = React.useState(false)
+    // Tabs index active
     const [tabLocale, setTabLocale] = React.useState('undefined')
+    // Model roles with mode
     const [formUserRoles, setFormUserRoles] = React.useState(model?.roles.map((item) => item.name))
 
     /// Check for form mode
@@ -163,50 +173,78 @@ export function UserForm(props) {
             }
         }, [checkFormRoles]);
 
-    const [localeFields, setLocaleFields] = React.useState(localeFieldsGen())
-
-    React.useEffect(() => {
-        setLocaleFields(localeFieldsGen())
-    }, [localeFieldsGen])
-
     // Array contacts
-    const [contactFields] = React.useState(Shared.contactTypes.map((item) => ({
-        type: item,
-        name: item.name,
-        fname: `contact-${item.name}`,
-        label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
-        validate: Yup.string()
-            .concat(item === Shared.contactType.EMAIL ? Yup.string().email('Must be a valid Email.') : Yup.string().url('Must be a valid URL.'))
-            .min(3, 'Size must be between 3 and 250.')
-            .max(250, 'Size must be between 3 and 250.')
-            .nullable()
-    })))
+    const contactFieldsGen = React.useCallback(
+        () => {
+            if (checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER)) {
+                return Shared.contactTypes.map((item) => ({
+                    type: item,
+                    name: item.name,
+                    fname: `contact-${item.name}`,
+                    label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
+                    validate: Yup.string()
+                        .concat(item === Shared.contactType.EMAIL ? Yup.string().email('Must be a valid Email.') : Yup.string().url('Must be a valid URL.'))
+                        .min(3, 'Size must be between 3 and 250.')
+                        .max(250, 'Size must be between 3 and 250.')
+                        .nullable()
+                }))
+            }
+            return []
+        }, [checkFormRoles]);
 
     // Array media
-    const [mediaFields] = React.useState(Shared.userMediaTypes.map((item) => ({
-        type: item,
-        name: item.name,
-        fname: `media-${item.name}`,
-        label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
-        validate: Yup.string()
-            .url('Must be a valid URL.')
-            .min(3, 'Size must be between 3 and 250.')
-            .max(250, 'Size must be between 3 and 250.')
-            .nullable()
-    })))
+    const mediaFieldsGen = React.useCallback(
+        () => {
+            if (checkFormRoles(Shared.role.EXPERT)) {
+                return Shared.userMediaTypes.map((item) => ({
+                    type: item,
+                    name: item.name,
+                    fname: `media-${item.name}`,
+                    label: `${item.name.charAt(0).toUpperCase()}${item.name.slice(1).toLowerCase()}`,
+                    validate: Yup.string()
+                        .url('Must be a valid URL.')
+                        .min(3, 'Size must be between 3 and 250.')
+                        .max(250, 'Size must be between 3 and 250.')
+                        .nullable()
+                }))
+            }
+            return []
+        }, [checkFormRoles]);
+
+    // Fields
+    const [localeFields, setLocaleFields] = React.useState(localeFieldsGen())
+    const [contactFields, setContactFields] = React.useState(contactFieldsGen())
+    const [mediaFields, setMediaFields] = React.useState(mediaFieldsGen())
+
+    // Change state from after change role user
+    React.useEffect(() => {
+        setLocaleFields(localeFieldsGen())
+        setContactFields(contactFieldsGen())
+        setMediaFields(mediaFieldsGen())
+        setIsFormChange(false)
+    }, [
+        localeFieldsGen,
+        contactFieldsGen,
+        mediaFieldsGen,
+    ])
 
     return (
         <Formik
+            enableReinitialize
             initialValues={{
-                roles: model?.roles?.map((item) => item.name) ?? [],
-                directions: model?.directions?.map((item) => item.id) ?? [],
-                image: model?.image ?? '',
+                roles: formUserRoles ?? [],
                 isRemove: false,
                 submit: null,
-
-                // Redirect from create page
-                isRedirect: CacheStorage.get(CacheKeys.redirectCreateUser),
-
+                // Fields by role
+                ...(checkFormRoles(Shared.role.EXPERT) ? {
+                    directions: model?.directions?.map((item) => item.id) ?? []
+                } : {}),
+                ...(checkFormRoles(...Shared.roles) ? {
+                    image: model?.image ?? '',
+                } : {}),
+                ...(checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN) ? {
+                    password: model?.password ?? '',
+                } : {}),
                 // Array locales
                 ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
@@ -234,11 +272,22 @@ export function UserForm(props) {
                 ])),
             }}
             validationSchema={Yup.object().shape({
-                image: Yup.string()
-                    .min(3, 'Size must be between 3 and 250.')
-                    .max(250, 'Size must be between 3 and 250.')
-                    .required('Must not be null and not blank.'),
-
+                ...(checkFormRoles(...Shared.roles) ? {
+                    image: Yup.string()
+                        .min(3, 'Size must be between 3 and 250.')
+                        .max(250, 'Size must be between 3 and 250.')
+                        .required('Must not be null and not blank.'),
+                } : {}),
+                ...(checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN) ? {
+                    password: Yup.string()
+                        .min(8, 'Size must be between 8 and 12.')
+                        .max(12, 'Size must be between 8 and 12.')
+                        .concat(Boolean(props.id) ? (
+                            Yup.string().nullable()
+                        ) : (
+                            Yup.string().required('Must not be null and not blank.')
+                        ))
+                } : {}),
                 // Array locales
                 ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
@@ -255,13 +304,13 @@ export function UserForm(props) {
                     field.validate
                 ])),
             })}
-            validate={() => {
-                setIsFormChange(true)
+            validate={(values) => {
+                setIsFormChange(Boolean(values['image']))
             }}
-            onSubmit={async (values, {setErrors, setStatus, setFieldValue}) => {
-                setFieldValue('isRedirect', false)
-                setStatus({success: null});
-                setErrors({submit: null});
+            onSubmit={async (values, {setErrors, setFieldValue}) => {
+                setIsFormRedirect(false)
+                setIsFormSuccess(false)
+                setErrors({submit: null})
 
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
@@ -319,42 +368,50 @@ export function UserForm(props) {
                         field.type,
                     ) : null).filter((item) => item !== null)
 
+                    console.log(values.password && values.password.length > 0 ? values.password : null)
+
                     try {
                         const response = Boolean(props.id) ? (
                             await Shared.httpClient.put.editUser(props.id, new Shared.requests.UserRequest(
                                 values.image,
                                 userLocaleDefault.fname,
                                 userLocaleDefault.lname,
-                                userLocaleDefault.short,
-                                userLocaleDefault.about,
-                                userLocaleDefault.quote,
+                                userLocaleDefault.short && userLocaleDefault.short.length > 0 ? userLocaleDefault.short : null,
+                                userLocaleDefault.about && userLocaleDefault.about.length > 0 ? userLocaleDefault.about : null,
+                                userLocaleDefault.quote && userLocaleDefault.quote.length > 0 ? userLocaleDefault.quote : null,
                                 userContactRequests,
                                 userLocaleRequests,
                                 userMediaRequests,
-                                values.directions,
+                                values.directions ?? [],
                                 values.roles.map((name) => Shared.role.valueOf(name)),
+                                values.password && values.password.length > 0 ? values.password : null,
                             ))
                         ) : (
                             await Shared.httpClient.post.addUser(new Shared.requests.UserRequest(
                                 values.image,
                                 userLocaleDefault.fname,
                                 userLocaleDefault.lname,
-                                userLocaleDefault.short,
-                                userLocaleDefault.about,
-                                userLocaleDefault.quote,
+                                userLocaleDefault.short && userLocaleDefault.short.length > 0 ? userLocaleDefault.short : null,
+                                userLocaleDefault.about && userLocaleDefault.about.length > 0 ? userLocaleDefault.about : null,
+                                userLocaleDefault.quote && userLocaleDefault.quote.length > 0 ? userLocaleDefault.quote : null,
                                 userContactRequests,
                                 userLocaleRequests,
                                 userMediaRequests,
-                                values.directions,
+                                values.directions ?? [],
                                 values.roles.map((name) => Shared.role.valueOf(name)),
+                                values.password && values.password.length > 0 ? values.password : null,
                             ))
                         )
                         if (!Boolean(props.id)) {
                             CacheStorage.set(CacheKeys.redirectCreateUser, true, true, true)
                             route.toLocationReplace(routes.userEdit, response.id)
                         } else {
-                            setStatus({success: true});
+                            setIsFormSuccess(true);
                             setModel(response)
+                            // Clear user password after update for MANAGER/ADMIN
+                            if (checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN)) {
+                                setFieldValue('password', '')
+                            }
                         }
                     } catch (error) {
                         if (error.code === 403) {
@@ -363,7 +420,8 @@ export function UserForm(props) {
                             });
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
-                                name: Helper.findError('name', error),
+                                image: Helper.findError('image', error),
+                                password: Helper.findError('password', error),
                                 submit: Helper.findError('locales', error),
 
                                 // Array locales error field
@@ -398,12 +456,10 @@ export function UserForm(props) {
             }}
         >
             {({
-                status,
                 errors,
                 touched,
                 values,
                 isSubmitting,
-                setStatus,
                 setErrors,
                 handleBlur,
                 handleChange,
@@ -440,7 +496,7 @@ export function UserForm(props) {
                                     </AlertInfo>
                                 )}
 
-                                {values.isRedirect && (
+                                {isFormRedirect && (
                                     <AlertSuccess onClear={() => {
                                         CacheStorage.set(CacheKeys.redirectCreateUser, false, true, true)
                                     }}>
@@ -448,8 +504,8 @@ export function UserForm(props) {
                                     </AlertSuccess>
                                 )}
 
-                                {status && status.success && (
-                                    <AlertSuccess onClose={() => setStatus({success: false})}>
+                                {isFormSuccess && (
+                                    <AlertSuccess onClose={() => setIsFormSuccess(false)}>
                                         Update user successfully.
                                     </AlertSuccess>
                                 )}
@@ -492,7 +548,7 @@ export function UserForm(props) {
                                     ))}
                                 </TextField>
 
-                                {checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER) && (
+                                {values.image !== undefined && (
                                     <TextField
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         required
@@ -521,7 +577,7 @@ export function UserForm(props) {
                                     />
                                 )}
 
-                                {checkFormRoles(Shared.role.EXPERT) && (
+                                {values.directions !== undefined && (
                                     <TextField
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                         required
@@ -558,54 +614,50 @@ export function UserForm(props) {
                                     </TextField>
                                 )}
 
-                                {checkFormRoles(Shared.role.EXPERT, Shared.role.ORGANIZER) ? (
+                                {localeFields && localeFields.length > 1 ? (
                                     <>
-                                        {localeFields && (
-                                            <>
-                                                <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1 }}>
-                                                    <Tabs
-                                                        variant="scrollable"
-                                                        allowScrollButtonsMobile
-                                                        value={tabLocale}
-                                                        onChange={(_, newValue) => setTabLocale(newValue)}
-                                                        sx={{
-                                                            '& .TabError': {
-                                                                color: 'error.main'
-                                                            },
-                                                            '& .TabError.Mui-selected': {
-                                                                color: 'error.main'
-                                                            },
-                                                            '& .Mui-disabled.MuiTabs-scrollButtons': {
-                                                                opacity: 0.3
-                                                            }
-                                                        }}
-                                                    >
-                                                        {localeFields?.map((fields) => {
-                                                            const isError = fields.map((field) => {
-                                                                const fieldName = `${field['fname'] ?? field['name']}`
-                                                                return Boolean(touched[fieldName] && errors[fieldName])
-                                                            }).find((item) => item)
-                                                            return (
-                                                                <Tab
-                                                                    key={`locale-tab-${fields[0].type}`}
-                                                                    id={`tab-${fields[0].type?.name}`}
-                                                                    label={`Locale ${fields[0].type?.name ?? 'RU'}`}
-                                                                    aria-controls={`tabpanel-${fields[0].type?.name}`}
-                                                                    value={`${fields[0].type?.name}`}
-                                                                    className={isError ? 'TabError' : ''}
-                                                                />
-                                                            )
-                                                        })}
-                                                    </Tabs>
-                                                </Box>
+                                        <Box sx={{ borderBottom: 1, borderColor: 'divider', width: 1 }}>
+                                            <Tabs
+                                                variant="scrollable"
+                                                allowScrollButtonsMobile
+                                                value={tabLocale}
+                                                onChange={(_, newValue) => setTabLocale(newValue)}
+                                                sx={{
+                                                    '& .TabError': {
+                                                        color: 'error.main'
+                                                    },
+                                                    '& .TabError.Mui-selected': {
+                                                        color: 'error.main'
+                                                    },
+                                                    '& .Mui-disabled.MuiTabs-scrollButtons': {
+                                                        opacity: 0.3
+                                                    }
+                                                }}
+                                            >
+                                                {localeFields?.map((fields) => {
+                                                    const isError = fields.map((field) => {
+                                                        const fieldName = `${field['fname'] ?? field['name']}`
+                                                        return Boolean(touched[fieldName] && errors[fieldName])
+                                                    }).find((item) => item)
+                                                    return (
+                                                        <Tab
+                                                            key={`locale-tab-${fields[0].type}`}
+                                                            id={`tab-${fields[0].type?.name}`}
+                                                            label={`Locale ${fields[0].type?.name ?? 'RU'}`}
+                                                            aria-controls={`tabpanel-${fields[0].type?.name}`}
+                                                            value={`${fields[0].type?.name}`}
+                                                            className={isError ? 'TabError' : ''}
+                                                        />
+                                                    )
+                                                })}
+                                            </Tabs>
+                                        </Box>
 
-                                                <Stack spacing={1}>
-                                                    <Typography variant='caption' color={'text.primary'}>
-                                                        The main language is Russian, but all other fields are mandatory; it is not good if the user does not find a translation on the site.
-                                                    </Typography>
-                                                </Stack>
-                                            </>
-                                        )}
+                                        <Stack spacing={1}>
+                                            <Typography variant='caption' color={'text.primary'}>
+                                                The main language is Russian, but all other fields are mandatory; it is not good if the user does not find a translation on the site.
+                                            </Typography>
+                                        </Stack>
 
                                         {/* Array locales */}
                                         {localeFields?.map((fields) => {
@@ -751,21 +803,17 @@ export function UserForm(props) {
                                     </>
                                 )}
 
-                                {checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN) && (
+                                {values.password !== undefined && (
                                     <>
-                                        <Stack spacing={1}>
-                                            <Typography variant='h6' color={'text.primary'}>
-                                                {props.id ? 'Password' : 'Create password'}
-                                            </Typography>
-                                            {props.id && (
-                                                <Typography variant='caption' color={'text.primary'}>
-                                                    Change user password.
-                                                </Typography>
-                                            )}
-                                        </Stack>
+                                        {props.id && (
+                                            <Divider textAlign="left">
+                                                Change user password
+                                            </Divider>
+                                        )}
 
                                         <TextField
                                             disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                            required
                                             type={'password'}
                                             name={'password'}
                                             value={values.password ?? ''}

@@ -42,6 +42,7 @@ data class UserRequest(
     val media: Array<UserMediaRequest>,
     val directions: Array<Int>,
     val roles: Array<UserRole>,
+    val password: String?,
 )
 
 /**

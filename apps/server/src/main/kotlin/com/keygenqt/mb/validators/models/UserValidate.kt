@@ -24,7 +24,7 @@ import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 
 /**
- * Request city validate
+ * Request expert validate
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
@@ -56,7 +56,6 @@ data class UserValidate(
     @field:Valid
     val contacts: List<UserContactValidate> = listOf(),
 
-    @field:CheckUserLocales
     @field:Valid
     val locales: List<UserLocaleValidate> = listOf(),
 
@@ -72,4 +71,10 @@ data class UserValidate(
      * List roles user
      */
     val roles: List<UserRole> = listOf(UserRole.ORGANIZER),
+
+    /**
+     * User for MANAGER & ADMIN
+     */
+    @field:Size(min = 8, max = 12)
+    val password: String?,
 )
