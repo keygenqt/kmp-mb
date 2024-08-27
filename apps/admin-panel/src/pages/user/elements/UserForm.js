@@ -124,14 +124,14 @@ export function UserForm(props) {
     const [isFormRedirect, setIsFormRedirect] = React.useState(CacheStorage.get(CacheKeys.redirectCreateUser))
     // Set success from, state from not working with enableReinitialize
     const [isFormSuccess, setIsFormSuccess] = React.useState(false)
-    // Enable button submit if change form or redirect
-    const [isFormChange, setIsFormChange] = React.useState(isFormRedirect)
     // Dialog remove set state
     const [isFormRemove, setIsFormRemove] = React.useState(false)
     // Tabs index active
     const [tabLocale, setTabLocale] = React.useState('undefined')
     // Model roles with mode
     const [formUserRoles, setFormUserRoles] = React.useState(model?.roles.map((item) => item.name))
+    // Save state values before refresh by roles
+    const [formStateValues, setFormStateValues] = React.useState({})
 
     /// Check for form mode
     const checkFormRoles = React.useCallback(
@@ -221,7 +221,6 @@ export function UserForm(props) {
         setLocaleFields(localeFieldsGen())
         setContactFields(contactFieldsGen())
         setMediaFields(mediaFieldsGen())
-        setIsFormChange(false)
     }, [
         localeFieldsGen,
         contactFieldsGen,
@@ -237,27 +236,27 @@ export function UserForm(props) {
                 submit: null,
                 // Fields by role
                 ...(checkFormRoles(Shared.role.EXPERT) ? {
-                    directions: model?.directions?.map((item) => item.id) ?? []
+                    directions: formStateValues.directions ?? model?.directions?.map((item) => item.id) ?? []
                 } : {}),
                 ...(checkFormRoles(...Shared.roles) ? {
-                    image: model?.image ?? '',
+                    image: formStateValues.image ?? model?.image ?? '',
                 } : {}),
                 ...(checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN) ? {
-                    password: model?.password ?? '',
+                    password: formStateValues.password ?? model?.password ?? '',
                 } : {}),
                 // Array locales
                 ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
-                    field.type === undefined ? model?.[field.name] : model
+                    formStateValues[field['fname'] ?? field['name']] ?? (field.type === undefined ? model?.[field.name] : model
                         ?.locales
                         ?.filter((item) => item.locale === field.type)
                         ?.[0]
-                        ?.[field.name] ?? ''
+                        ?.[field.name] ?? '')
                 ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
                 // Array contacts
                 ...Object.fromEntries(contactFields?.map((field) => [
                     field.fname,
-                    model?.contacts
+                    formStateValues[field.fname] ?? model?.contacts
                         ?.filter((item) => item.type === field.type)
                         ?.[0]
                         ?.['link']
@@ -265,7 +264,7 @@ export function UserForm(props) {
                 // Array media
                 ...Object.fromEntries(mediaFields?.map((field) => [
                     field.fname,
-                    model?.media
+                    formStateValues[field.fname] ?? model?.media
                         ?.filter((item) => item.type === field.type)
                         ?.[0]
                         ?.['link']
@@ -288,6 +287,9 @@ export function UserForm(props) {
                             Yup.string().required('Must not be null and not blank.')
                         ))
                 } : {}),
+                ...(checkFormRoles(Shared.role.EXPERT) ? {
+                    directions: Yup.array().min(1, 'Must not be null and not blank.')
+                } : {}),
                 // Array locales
                 ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
                     field['fname'] ?? field['name'],
@@ -304,13 +306,16 @@ export function UserForm(props) {
                     field.validate
                 ])),
             })}
-            validate={(values) => {
-                setIsFormChange(Boolean(values['image']))
-            }}
             onSubmit={async (values, {setErrors, setFieldValue}) => {
                 setIsFormRedirect(false)
                 setIsFormSuccess(false)
                 setErrors({submit: null})
+
+                const scrollToTop = function() {
+                    const root = document.getElementById("root")
+                    const element = document.getElementById("FormId")
+                    root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
+                }
 
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
@@ -368,11 +373,10 @@ export function UserForm(props) {
                         field.type,
                     ) : null).filter((item) => item !== null)
 
-                    console.log(values.password && values.password.length > 0 ? values.password : null)
-
                     try {
                         const response = Boolean(props.id) ? (
                             await Shared.httpClient.put.editUser(props.id, new Shared.requests.UserRequest(
+                                parseInt(props.id),
                                 values.image,
                                 userLocaleDefault.fname,
                                 userLocaleDefault.lname,
@@ -388,6 +392,7 @@ export function UserForm(props) {
                             ))
                         ) : (
                             await Shared.httpClient.post.addUser(new Shared.requests.UserRequest(
+                                null,
                                 values.image,
                                 userLocaleDefault.fname,
                                 userLocaleDefault.lname,
@@ -408,6 +413,7 @@ export function UserForm(props) {
                         } else {
                             setIsFormSuccess(true);
                             setModel(response)
+                            scrollToTop()
                             // Clear user password after update for MANAGER/ADMIN
                             if (checkFormRoles(Shared.role.MANAGER, Shared.role.ADMIN)) {
                                 setFieldValue('password', '')
@@ -417,11 +423,13 @@ export function UserForm(props) {
                         if (error.code === 403) {
                             setErrors({
                                 submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
-                            });
+                            })
+                            scrollToTop()
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
                                 image: Helper.findError('image', error),
                                 password: Helper.findError('password', error),
+                                directions: Helper.findError('directions', error),
                                 submit: Helper.findError('locales', error),
 
                                 // Array locales error field
@@ -441,18 +449,15 @@ export function UserForm(props) {
                                     field.fname,
                                     Helper.findError(`media[${index}].link`, error)
                                 ]))
-                            });
+                            })
                         } else {
                             setErrors({
                                 submit: error.message
-                            });
+                            })
+                            scrollToTop()
                         }
                     }
                 }
-                // Scroll to top
-                const root = document.getElementById("root")
-                const element = document.getElementById("FormId")
-                root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
             }}
         >
             {({
@@ -520,7 +525,35 @@ export function UserForm(props) {
                                     error={Boolean(touched.roles && errors.roles)}
                                     onBlur={handleBlur}
                                     onChange={(e) => {
+                                        // ADMIN & MANAGER not needed together
+                                        if (e.target.value.includes('ADMIN') && e.target.value.includes('MANAGER')) {
+                                            if (e.target.value.findIndex((e) => e === 'ADMIN') > e.target.value.findIndex((e) => e === 'MANAGER')) {
+                                                e.target.value = e.target.value.filter((e) => e !== 'MANAGER')
+                                            } else {
+                                                e.target.value = e.target.value.filter((e) => e !== 'ADMIN')
+                                            }
+                                        }
+                                        // Save data model before refresh roles
+                                        setFormStateValues({
+                                            directions: values?.directions,
+                                            image: values?.image,
+                                            password: values?.password,
+                                            ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
+                                                field['fname'] ?? field['name'],
+                                                values[field['fname'] ?? field['name']]
+                                            ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
+                                            ...Object.fromEntries(contactFields?.map((field) => [
+                                                field.fname,
+                                                values[field.fname]
+                                            ])),
+                                            ...Object.fromEntries(mediaFields?.map((field) => [
+                                                field.fname,
+                                                values[field.fname]
+                                            ]))
+                                        })
+                                        // Update state roles
                                         setFormUserRoles(e.target.value)
+                                        // Save value form
                                         handleChange(e)
                                     }}
                                     fullWidth
@@ -835,9 +868,7 @@ export function UserForm(props) {
                                         <Button
                                             variant={'outlined'}
                                             size={'large'}
-                                            disabled={Boolean(isSubmitting
-                                                || Object.keys(errors).length !== 0)
-                                            }
+                                            disabled={Boolean(isSubmitting)}
                                             color={'inherit'}
                                             startIcon={<Delete color={'default'} sx={{height: 18}}/>}
                                             onClick={() => setIsFormRemove(true)}
@@ -850,11 +881,7 @@ export function UserForm(props) {
                                         type={'submit'}
                                         variant={'contained'}
                                         size={'large'}
-                                        disabled={
-                                            Boolean(isSubmitting
-                                                || (props.id === undefined && !isFormChange)
-                                                || Object.keys(errors).length !== 0)
-                                        }
+                                        disabled={ Boolean(isSubmitting || formUserRoles === undefined) }
                                         startIcon={isSubmitting && !errors.submit ? (
                                             <CircularProgress sx={{
                                                 mr: 0.5,

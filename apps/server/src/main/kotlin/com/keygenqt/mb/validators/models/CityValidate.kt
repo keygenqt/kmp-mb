@@ -31,7 +31,7 @@ import org.hibernate.validator.constraints.URL
 @Serializable
 data class CityValidate(
     @field:NotNull
-    @field:Min(1)
+    @field:Min(1, message = "Must not be null and not blank.")
     val countryID: Int,
 
     @field:NotNullNotBlank

@@ -25,6 +25,7 @@ export const queries = {
     countries: 'countries',
     cities: 'cities',
     directions: 'directions',
+    organizers: 'organizers',
     users: 'users',
     registrationExperts: 'registrationExperts',
     registrationOrganizers: 'registrationOrganizers',

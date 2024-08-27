@@ -101,7 +101,7 @@ export function BlockExperts(props) {
                         <Box className={'ExpertImage'}>
                             <CardMedia
                                 sx={{ height: isSM ? 560 : 380 }}
-                                image={`${AppConf.apiUrl}${item.image}`}
+                                image={item.image}
                                 title={fullName}
                             />
                             <CircularProgress size={24} />

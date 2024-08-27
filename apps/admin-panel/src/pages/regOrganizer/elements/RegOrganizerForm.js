@@ -43,11 +43,14 @@ export function RegOrganizerForm(props) {
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
 
+    // Update model ids relations from db
+    const [model, setModel] = React.useState(props.model)
+
     return (
         <Formik
             initialValues={{
-                note: props.model?.note ?? '',
-                state: props.model?.state.name ?? '',
+                note: model?.note ?? '',
+                state: model?.state.name ?? '',
                 submit: null,
             }}
             onSubmit={async (values, {setErrors, setStatus, setFieldValue}) => {
@@ -62,8 +65,7 @@ export function RegOrganizerForm(props) {
                         values.note,
                         Shared.RegOrganizerState.valueOf(values.state),
                     ))
-                    setFieldValue('note', response.note)
-                    setFieldValue('state', response.state.name)
+                    setModel(response)
                     setStatus({success: true});
                 } catch (error) {
                     if (error.code === 422 && error.validates !== null) {

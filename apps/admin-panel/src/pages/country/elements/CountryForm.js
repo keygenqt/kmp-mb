@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
+    useTheme,
+    useMediaQuery,
     Box,
     Button,
     CircularProgress,
@@ -45,52 +47,56 @@ import {
 
 
 export function CountryForm(props) {
+    const theme = useTheme()
+    const isSM = useMediaQuery(theme.breakpoints.down('sm'))
+
     const {route, routes} = React.useContext(RouteContext)
-    const [isFormChange, setIsFormChange] = React.useState(false)
     const [isFormRemove, setIsFormRemove] = React.useState(false)
-    const locales = {}
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
 
-    // Array locales base data
-    Shared.locales.forEach((locale) => {
-        locales[`name-${locale}`] = locale
-    });
+    // Update model ids relations from db
+    const [model, setModel] = React.useState(props.model)
+
+    // Array locales
+    const [localeFields] = React.useState(Shared.locales.map((item) => ({
+        locale: item,
+        fname: `name-${item.name}`,
+        label: `Name (${item.name})`,
+        validate: Yup.string()
+            .min(3, 'Size must be between 3 and 1000.')
+            .max(1000, 'Size must be between 3 and 1000.')
+            .required('Must not be null and not blank.')
+    })))
 
     return (
         <Formik
             initialValues={{
-                name: props.model?.name ?? '',
+                name: model?.name ?? '',
                 isRemove: false,
                 submit: null,
                 // Redirect from create page
                 isRedirect: CacheStorage.get(CacheKeys.redirectCreateCountry),
-                // Array locales fields
-                ...Object.fromEntries(Object.keys(locales).map((fieldName) => [
-                    fieldName,
-                    props.model
-                        ?.locales
-                        ?.filter((item) => item.locale === locales[fieldName])[0]
-                        ?.text ?? ''
-                ]))
+                // Array locales
+                ...Object.fromEntries(localeFields?.map((field) => [
+                    field.fname,
+                    model?.locales
+                        ?.filter((item) => item.locale === field.locale)
+                        ?.[0]
+                        ?.['text']
+                ])),
             }}
             validationSchema={Yup.object().shape({
                 name: Yup.string()
                         .min(3, 'Size must be between 3 and 250.')
                         .max(250, 'Size must be between 3 and 250.')
                         .required('Must not be null and not blank.'),
-                // Array locales validate
-                ...Object.fromEntries(Object.keys(locales).map((fieldName) => [
-                    fieldName,
-                    Yup.string()
-                        .min(3, 'Size must be between 3 and 1000.')
-                        .max(250, 'Size must be between 3 and 1000.')
-                        .required('Must not be null and not blank.')
-                ]))
+                // Array locales
+                ...Object.fromEntries(localeFields?.map((field) => [
+                    field.fname,
+                    field.validate
+                ])),
             })}
-            validate={() => {
-                setIsFormChange(true)
-            }}
             onSubmit={async (values, {setErrors, setStatus, setFieldValue}) => {
                 setFieldValue('isRedirect', false)
                 setStatus({success: null});
@@ -114,28 +120,29 @@ export function CountryForm(props) {
                     }
                 } else {
                     // Array locales prepare
-                    const localesRequest = Object.keys(locales).map((fieldName) => new Shared.requests.ColumnLocaleRequest(
-                        props.model?.locales?.filter((item) => item.locale === locales[fieldName])[0]?.id,
-                        values[fieldName],
-                        locales[fieldName]
-                    ));
+                    const localeRequests = localeFields.map((field) => values[field.fname] ? new Shared.requests.ColumnLocaleRequest(
+                        model?.locales?.filter((item) => item.locale === field.locale)?.[0]?.id,
+                        values[field.fname],
+                        field.locale,
+                    ) : null).filter((item) => item !== null)
+
                     try {
                         const response = Boolean(props.id) ? (
                             await Shared.httpClient.put.editCountry(props.id, new Shared.requests.CountryRequest(
                                 values.name,
-                                localesRequest
+                                localeRequests
                             ))
                         ) : (
                             await Shared.httpClient.post.addCountry(new Shared.requests.CountryRequest(
                                 values.name,
-                                localesRequest
+                                localeRequests
                             ))
                         )
                         if (!Boolean(props.id)) {
                             CacheStorage.set(CacheKeys.redirectCreateCountry, true, true, true)
                             route.toLocationReplace(routes.countryEdit, response.id)
                         } else {
-                            setFieldValue('name', response.name)
+                            setModel(response)
                             setStatus({success: true});
                         }
                     } catch (error) {
@@ -149,10 +156,10 @@ export function CountryForm(props) {
                                 // Array locales common
                                 submit: Helper.findError('locales', error),
                                 // Array locales error field
-                                ...Object.fromEntries(Object.keys(locales).map((fieldName, index) => [
-                                    fieldName,
+                                ...Object.fromEntries(localeFields.map((field, index) => [
+                                    field.fname,
                                     Helper.findError(`locales[${index}].text`, error)
-                                ]))
+                                ])),
                             });
                         } else {
                             setErrors({
@@ -231,7 +238,7 @@ export function CountryForm(props) {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     fullWidth
-                                    label={'Last name'}
+                                    label={'Name'}
                                     variant="filled"
                                     inputProps={{ autoComplete: 'off' }}
                                 />
@@ -245,34 +252,32 @@ export function CountryForm(props) {
                                     </Typography>
                                 </Stack>
 
-                                {/* Array locales fields */}
-                                {Object.keys(locales).map((fieldName) => (
+                                {/* Array contacts */}
+                                {localeFields.map((field) => (
                                     <TextField
-                                        key={`fieldName-${fieldName}`}
+                                        key={`fieldName-${field.fname}`}
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                        type={'text'}
-                                        name={fieldName}
-                                        value={values[fieldName]}
-                                        helperText={touched[fieldName] && errors[fieldName] ? errors[fieldName] : ''}
-                                        error={Boolean(touched[fieldName] && errors[fieldName])}
+                                        type={'url'}
+                                        name={field.fname}
+                                        value={values[field.fname] ?? ''}
+                                        helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                        error={Boolean(touched[field.fname] && errors[field.fname])}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         fullWidth
-                                        label={`Last name (${locales[fieldName].name})`}
+                                        label={field.label}
                                         variant="filled"
                                         inputProps={{ autoComplete: 'off' }}
                                     />
                                 ))}
 
-                                <Stack direction={'row'} spacing={2}>
+                                <Stack direction={isSM ? 'column' : 'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>
                                     {props.id && isAdmin && (
                                         <Button
                                             variant={'outlined'}
                                             size={'large'}
-                                            disabled={Boolean(isSubmitting
-                                                || Object.keys(errors).length !== 0)
-                                            }
+                                            disabled={Boolean(isSubmitting)}
                                             color={'inherit'}
                                             startIcon={<Delete color={'default'} sx={{height: 18}}/>}
                                             onClick={() => setIsFormRemove(true)}
@@ -285,11 +290,7 @@ export function CountryForm(props) {
                                         type={'submit'}
                                         variant={'contained'}
                                         size={'large'}
-                                        disabled={
-                                            Boolean(isSubmitting
-                                                || (props.id === undefined && !isFormChange)
-                                                || Object.keys(errors).length !== 0)
-                                        }
+                                        disabled={ Boolean(isSubmitting) }
                                         startIcon={isSubmitting && !errors.submit ? (
                                             <CircularProgress sx={{
                                                 mr: 0.5,

@@ -129,6 +129,7 @@ fun Application.module() {
                 dashboard()
                 directions()
                 experts()
+                organizers()
                 users()
                 countries()
                 cities()

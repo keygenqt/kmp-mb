@@ -44,7 +44,7 @@ class UsersService(
         .map { UserEntity.wrapRow(it) }
 
     /**
-     * Find entity by id.
+     * Find entity by id with roles
      */
     fun findById(
         id: Int,
@@ -97,10 +97,6 @@ class UsersService(
         media: List<Int>,
         password: String?
     ) = UserEntity.new {
-        // Password only for MANAGER/ADMIN
-        if (!(roles.contains(UserRole.MANAGER) || roles.contains(UserRole.ADMIN)) && password !== null) {
-            throw RuntimeException("Password can be specified for MANAGER and ADMIN roles.")
-        }
         // Check unique url image
         if (Users.selectAll().where { (Users.image eq image) }.count().toInt() != 0) {
             throw RuntimeException("You can't duplicate images, please create a new one.")
@@ -141,10 +137,6 @@ class UsersService(
         media: List<Int>,
         password: String?
     ) = apply {
-        // Password only for MANAGER/ADMIN
-        if (!(roles.contains(UserRole.MANAGER) || roles.contains(UserRole.ADMIN)) && password !== null) {
-            throw RuntimeException("Password can be specified for MANAGER and ADMIN roles.")
-        }
         // Check unique url image
         if (Users.selectAll().where { (Users.image eq image) and (Users.id neq this@update.id ) }.count().toInt() != 0) {
             throw RuntimeException("You can't duplicate images, please create a new one.")

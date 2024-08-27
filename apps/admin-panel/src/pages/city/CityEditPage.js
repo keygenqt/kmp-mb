@@ -23,19 +23,21 @@ import { CityForm } from './elements/CityForm';
 export function CityEditPage(props) {
     let {id} = useParams();
     const countries = useHttpQuery(Shared.queries.countries)
+    const organizers = useHttpQuery(Shared.queries.organizers)
     const model = useHttpQuery(Shared.queries.city, id)
 
     return (
         <FormLayout
             id={id}
             model={model}
-            loading={countries === undefined}
+            loading={countries === undefined || organizers === undefined}
             title={'Edit city'}
         >
             <CityForm
                 id={id}
                 model={model}
                 countries={countries?.toArray() ?? []}
+                organizers={organizers?.toArray() ?? []}
             />
         </FormLayout>
     )

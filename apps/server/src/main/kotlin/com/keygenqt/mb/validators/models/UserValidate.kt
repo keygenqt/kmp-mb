@@ -16,19 +16,22 @@
 package com.keygenqt.mb.validators.models
 
 import com.keygenqt.mb.shared.responses.UserRole
-import com.keygenqt.mb.validators.custom.CheckUserLocales
-import com.keygenqt.mb.validators.custom.NotBlank
-import com.keygenqt.mb.validators.custom.NotNullNotBlank
+import com.keygenqt.mb.validators.custom.*
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Size
 import kotlinx.serialization.Serializable
 
 /**
- * Request expert validate
+ * Request user validate
  */
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")
 @Serializable
+@UserDirectionsValidate
+@UserPasswordValidate
+@UserLocalesValidate
 data class UserValidate(
+    val id: Int?,
+
     @field:NotNullNotBlank
     @field:Size(min = 3, max = 250)
     val image: String,

@@ -31,6 +31,7 @@ import kotlin.js.JsExport
 @Serializable
 @Suppress("ArrayInDataClass")
 data class UserRequest(
+    val id: Int?,
     val image: String,
     val fname: String,
     val lname: String,

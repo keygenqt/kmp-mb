@@ -21,13 +21,17 @@ import { CityForm } from './elements/CityForm';
 
 export function CityAddPage(props) {
     const countries = useHttpQuery(Shared.queries.countries)
+    const organizers = useHttpQuery(Shared.queries.organizers)
     return (
         <FormLayout
             title={'Add city'}
             model={null}
-            loading={countries === undefined}
+            loading={countries === undefined || organizers === undefined}
         >
-            <CityForm countries={countries?.toArray() ?? []} />
+            <CityForm
+                countries={countries?.toArray() ?? []}
+                organizers={organizers?.toArray() ?? []}
+            />
         </FormLayout>
     )
 }

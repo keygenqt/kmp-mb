@@ -103,6 +103,7 @@ class CitiesService(
         this.organizers = UserEntity.find { (Users.id inList organizers) }
         this.uploads = UploadEntity.find { (Uploads.id inList uploads) }
         this.updateAt = System.currentTimeMillis()
+        // @todo delete uploads
     }
 
     /**

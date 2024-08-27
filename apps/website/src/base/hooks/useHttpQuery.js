@@ -30,7 +30,6 @@ export function useHttpQuery(method, ...arg) {
 
     React.useEffect(() => {
         setValue(cacheData)
-        wasCalled.current = cacheData !== undefined;
     }, [cacheData])
 
     React.useEffect(() => {

@@ -45,6 +45,12 @@ class GetRequestJS(
     fun expert(id: Int) = GlobalScope.promise { client.get.expert(id) }
 
     @OptIn(DelicateCoroutinesApi::class)
+    fun organizers() = GlobalScope.promise { client.get.organizers() }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun organizer(id: Int) = GlobalScope.promise { client.get.organizer(id) }
+
+    @OptIn(DelicateCoroutinesApi::class)
     fun directions() = GlobalScope.promise { client.get.directions() }
 
     @OptIn(DelicateCoroutinesApi::class)

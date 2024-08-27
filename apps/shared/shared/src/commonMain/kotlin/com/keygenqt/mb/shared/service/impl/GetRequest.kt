@@ -42,6 +42,16 @@ class GetRequest(private val client: HttpClient) {
     }
 
     @Throws(Exception::class)
+    suspend fun organizers(): List<UserResponse> {
+        return client.get("api/organizers").body()
+    }
+
+    @Throws(Exception::class)
+    suspend fun organizer(id: Int): UserResponse {
+        return client.get("api/organizers/$id").body()
+    }
+
+    @Throws(Exception::class)
     suspend fun directions(): List<UserDirectionResponse> {
         return client.get("api/directions").body()
     }

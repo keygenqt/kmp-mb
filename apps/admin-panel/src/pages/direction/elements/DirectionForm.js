@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import {
+    useTheme,
+    useMediaQuery,
     Box,
     Button,
     CircularProgress,
@@ -44,16 +46,21 @@ import {
 
 
 export function DirectionForm(props) {
+    const theme = useTheme()
+    const isSM = useMediaQuery(theme.breakpoints.down('sm'))
+
     const {route, routes} = React.useContext(RouteContext)
-    const [isFormChange, setIsFormChange] = React.useState(false)
     const [isFormRemove, setIsFormRemove] = React.useState(false)
     const roles = CacheStorage.get(CacheKeys.userRoles)
     const isAdmin = roles?.includes('ADMIN')
 
+    // Update model ids relations from db
+    const [model, setModel] = React.useState(props.model)
+
     return (
         <Formik
             initialValues={{
-                name: props.model?.name ?? '',
+                name: model?.name ?? '',
                 isRemove: false,
                 submit: null,
                 // Redirect from create page
@@ -65,9 +72,6 @@ export function DirectionForm(props) {
                         .max(250, 'Size must be between 3 and 250.')
                         .required('Must not be null and not blank.'),
             })}
-            validate={() => {
-                setIsFormChange(true)
-            }}
             onSubmit={async (values, {setErrors, setStatus, setFieldValue}) => {
                 setFieldValue('isRedirect', false)
                 setStatus({success: null});
@@ -104,7 +108,7 @@ export function DirectionForm(props) {
                             CacheStorage.set(CacheKeys.redirectCreateDirection, true, true, true)
                             route.toLocationReplace(routes.directionEdit, response.id)
                         } else {
-                            setFieldValue('name', response.name)
+                            setModel(response)
                             setStatus({success: true});
                         }
                     } catch (error) {
@@ -193,20 +197,18 @@ export function DirectionForm(props) {
                                     onBlur={handleBlur}
                                     onChange={handleChange}
                                     fullWidth
-                                    label={'Last name'}
+                                    label={'Name'}
                                     variant="filled"
                                     inputProps={{ autoComplete: 'off' }}
                                 />
 
-                                <Stack direction={'row'} spacing={2}>
+                                <Stack direction={isSM ? 'column' : 'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>
                                     {props.id && isAdmin && (
                                         <Button
                                             variant={'outlined'}
                                             size={'large'}
-                                            disabled={Boolean(isSubmitting
-                                                || Object.keys(errors).length !== 0)
-                                            }
+                                            disabled={Boolean(isSubmitting)}
                                             color={'inherit'}
                                             startIcon={<Delete color={'default'} sx={{height: 18}}/>}
                                             onClick={() => setIsFormRemove(true)}
@@ -219,11 +221,7 @@ export function DirectionForm(props) {
                                         type={'submit'}
                                         variant={'contained'}
                                         size={'large'}
-                                        disabled={
-                                            Boolean(isSubmitting
-                                                || (props.id === undefined && !isFormChange)
-                                                || Object.keys(errors).length !== 0)
-                                        }
+                                        disabled={ Boolean(isSubmitting) }
                                         startIcon={isSubmitting && !errors.submit ? (
                                             <CircularProgress sx={{
                                                 mr: 0.5,
