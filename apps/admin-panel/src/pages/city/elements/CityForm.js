@@ -100,7 +100,7 @@ export function CityForm(props) {
                     model?.locales
                         ?.filter((item) => item.locale === field.locale)
                         ?.[0]
-                        ?.['text']
+                        ?.['text'] ?? ''
                 ])),
             }}
             validationSchema={Yup.object().shape({
@@ -129,12 +129,17 @@ export function CityForm(props) {
                 setStatus({success: null});
                 setErrors({submit: null});
 
+                const scrollToTop = function() {
+                    const root = document.getElementById("root")
+                    const element = document.getElementById("FormId")
+                    root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
+                }
+
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
                 if (values.isRemove) {
                     setFieldValue('isRemove', false)
-                    console.log('isRemove')
                     try {
                         await Shared.httpClient.delete.deleteCity(props.id)
                         // Success remove
@@ -143,7 +148,8 @@ export function CityForm(props) {
                     } catch (error) {
                         setErrors({
                             submit: error.message
-                        });
+                        })
+                        scrollToTop()
                     }
                 } else {
                     // Array locales prepare
@@ -179,13 +185,15 @@ export function CityForm(props) {
                             route.toLocationReplace(routes.cityEdit, response.id)
                         } else {
                             setModel(response)
-                            setStatus({success: true});
+                            setStatus({success: true})
+                            scrollToTop()
                         }
                     } catch (error) {
                         if (error.code === 403) {
                             setErrors({
                                 submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
-                            });
+                            })
+                            scrollToTop()
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
                                 countryID: Helper.findError('countryID', error),
@@ -200,11 +208,12 @@ export function CityForm(props) {
                                     field.fname,
                                     Helper.findError(`locales[${index}].text`, error)
                                 ])),
-                            });
+                            })
                         } else {
                             setErrors({
                                 submit: error.message
-                            });
+                            })
+                            scrollToTop()
                         }
                     }
                 }
@@ -341,41 +350,6 @@ export function CityForm(props) {
                                     )}
                                 />
 
-                                {/* <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                    required
-                                    type={'text'}
-                                    name={'organizers'}
-                                    value={values.organizers}
-                                    helperText={touched.organizers && errors.organizers ? errors.organizers : ''}
-                                    error={Boolean(touched.organizers && errors.organizers)}
-                                    onBlur={handleBlur}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    label={'Organizers'}
-                                    variant="filled"
-                                    select
-                                    SelectProps={{
-                                        multiple: true,
-                                        renderValue: (selected) => (
-                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                {selected.map((value) => (
-                                                    <Chip
-                                                        key={`organizers-${value}`}
-                                                        label={props.organizers.filter((e) => e.id === value)[0]['name'] ?? value}
-                                                    />
-                                                ))}
-                                            </Box>
-                                        )
-                                    }}
-                                >
-                                    {props.organizers?.map((item) => (
-                                        <MenuItem key={`organizers-menu-${item.id}`} value={item.id}>
-                                            {item.name}
-                                        </MenuItem>
-                                    ))}
-                                </TextField> */}
-
                                 <TextField
                                     disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                     required
@@ -417,7 +391,7 @@ export function CityForm(props) {
                                     </Typography>
                                 </Stack>
 
-                                {/* Array contacts */}
+                                {/* Array locales */}
                                 {localeFields.map((field) => (
                                     <TextField
                                         key={`fieldName-${field.fname}`}

@@ -330,7 +330,8 @@ export function UserForm(props) {
                     } catch (error) {
                         setErrors({
                             submit: error.message
-                        });
+                        })
+                        scrollToTop()
                     }
                 } else {
                     // Array locale default prepare

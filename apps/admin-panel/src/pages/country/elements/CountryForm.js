@@ -83,7 +83,7 @@ export function CountryForm(props) {
                     model?.locales
                         ?.filter((item) => item.locale === field.locale)
                         ?.[0]
-                        ?.['text']
+                        ?.['text'] ?? ''
                 ])),
             }}
             validationSchema={Yup.object().shape({
@@ -102,12 +102,17 @@ export function CountryForm(props) {
                 setStatus({success: null});
                 setErrors({submit: null});
 
+                const scrollToTop = function() {
+                    const root = document.getElementById("root")
+                    const element = document.getElementById("FormId")
+                    root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
+                }
+
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
                 if (values.isRemove) {
                     setFieldValue('isRemove', false)
-                    console.log('isRemove')
                     try {
                         await Shared.httpClient.delete.deleteCountry(props.id)
                         // Success remove
@@ -116,7 +121,8 @@ export function CountryForm(props) {
                     } catch (error) {
                         setErrors({
                             submit: error.message
-                        });
+                        })
+                        scrollToTop()
                     }
                 } else {
                     // Array locales prepare
@@ -143,13 +149,15 @@ export function CountryForm(props) {
                             route.toLocationReplace(routes.countryEdit, response.id)
                         } else {
                             setModel(response)
-                            setStatus({success: true});
+                            setStatus({success: true})
+                            scrollToTop()
                         }
                     } catch (error) {
                         if (error.code === 403) {
                             setErrors({
                                 submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
-                            });
+                            })
+                            scrollToTop()
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
                                 name: Helper.findError('name', error),
@@ -160,11 +168,12 @@ export function CountryForm(props) {
                                     field.fname,
                                     Helper.findError(`locales[${index}].text`, error)
                                 ])),
-                            });
+                            })
                         } else {
                             setErrors({
                                 submit: error.message
-                            });
+                            })
+                            scrollToTop()
                         }
                     }
                 }

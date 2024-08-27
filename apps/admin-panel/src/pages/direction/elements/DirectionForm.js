@@ -77,12 +77,17 @@ export function DirectionForm(props) {
                 setStatus({success: null});
                 setErrors({submit: null});
 
+                const scrollToTop = function() {
+                    const root = document.getElementById("root")
+                    const element = document.getElementById("FormId")
+                    root.scrollTo({top: element.offsetTop - 20, behavior: 'smooth'});
+                }
+
                 // Loading for animation
                 await new Promise(r => setTimeout(r, 500));
 
                 if (values.isRemove) {
                     setFieldValue('isRemove', false)
-                    console.log('isRemove')
                     try {
                         await Shared.httpClient.delete.deleteDirection(props.id)
                         // Success remove
@@ -91,7 +96,8 @@ export function DirectionForm(props) {
                     } catch (error) {
                         setErrors({
                             submit: error.message
-                        });
+                        })
+                        scrollToTop()
                     }
                 } else {
                     try {
@@ -109,21 +115,24 @@ export function DirectionForm(props) {
                             route.toLocationReplace(routes.directionEdit, response.id)
                         } else {
                             setModel(response)
-                            setStatus({success: true});
+                            setStatus({success: true})
+                            scrollToTop()
                         }
                     } catch (error) {
                         if (error.code === 403) {
                             setErrors({
                                 submit: `For a user with "${roles?.join(', ')}" roles this action is prohibited.`
-                            });
+                            })
+                            scrollToTop()
                         } else if (error.code === 422 && error.validates !== null) {
                             setErrors({
                                 name: Helper.findError('name', error),
-                            });
+                            })
                         } else {
                             setErrors({
                                 submit: error.message
-                            });
+                            })
+                            scrollToTop()
                         }
                     }
                 }
