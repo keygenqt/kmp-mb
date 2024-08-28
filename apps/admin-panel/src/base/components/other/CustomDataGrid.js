@@ -24,11 +24,18 @@ import {
 import {
     useCacheStorage,
     CacheKeys,
+    CacheStorage,
 } from '../../../base';
 
 export function CustomDataGrid(props) {
     const {palette} = useTheme();
     const darkMode = useCacheStorage(CacheKeys.darkMode, false, false)
+    const cacheKey = `${CacheKeys.gridPage}-${props.rows?.[0]?.constructor?.name}`
+    const paginationModel = useCacheStorage(cacheKey, {
+        pageSize: 12,
+        page: 0,
+    })
+
     return (
         <Box sx={{
             width: 1,
@@ -76,6 +83,8 @@ export function CustomDataGrid(props) {
             }
         }}>
             <DataGrid
+                paginationModel={paginationModel}
+                onPaginationModelChange={(paginationModel) => CacheStorage.set(cacheKey, paginationModel)}
                 pageSize={9}
                 disableColumnFilter
                 disableColumnSorting
@@ -86,14 +95,6 @@ export function CustomDataGrid(props) {
                 rows={props.rows}
                 columns={props.columns}
                 pageSizeOptions={[12]}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            page: 0,
-                            pageSize: 12,
-                        },
-                    },
-                }}
             />
         </Box>
     );

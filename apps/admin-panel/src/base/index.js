@@ -28,6 +28,7 @@ export * from './components/other/CardCount';
 export * from './components/other/CardIcon';
 export * from './components/other/CustomDataGrid';
 export * from './components/other/DialogRemove';
+export * from './components/other/TextFieldFile';
 // data
 export * from './data/DataImages';
 export * from './data/DataLottie';

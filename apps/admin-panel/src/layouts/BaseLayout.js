@@ -82,7 +82,9 @@ export function BaseLayout(props) {
                                 marginLeft: showMenu ? '0' : `calc(-${widthMenu}px - 15px) !important`,
                             }}
                         >
-                            <Menu/>
+                            <Menu onClick={() => {
+                                setShowMenu(!isLG)
+                            }}/>
                         </Stack>
                         {/* Body */}
                         <Stack

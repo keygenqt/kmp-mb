@@ -74,4 +74,9 @@ class PostRequestJS(
     fun addDirection(
         request: DirectionRequest
     ) = GlobalScope.promise { client.post.addDirection(request) }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun uploads(
+        request: Array<FileRequest>
+    ) = GlobalScope.promise { client.post.uploads(request) }
 }

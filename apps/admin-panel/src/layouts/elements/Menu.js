@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {
     Stack,
     Divider,
@@ -34,6 +35,8 @@ import {
 } from '@mui/icons-material';
 import {
     RouteContext,
+    CacheKeys,
+    CacheStorage,
 } from '../../base';
 
 
@@ -65,6 +68,7 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.dashboard)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.dashboard)) {
                             route.refreshPage()
                         } else {
@@ -94,7 +98,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.countries) || route.isPage(routes.country)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.countries)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-CountryResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.country)) {
                             route.toBack()
@@ -113,7 +119,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.cities) || route.isPage(routes.city)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.cities)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-CityResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.city)) {
                             route.toBack()
@@ -144,7 +152,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.directions) || route.isPage(routes.direction)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.directions)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-UserDirectionResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.direction)) {
                             route.toBack()
@@ -163,7 +173,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.users) || route.isPage(routes.user)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.users)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-UserResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.user)) {
                             route.toBack()
@@ -194,7 +206,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.regExperts) || route.isPage(routes.regExpert)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.regExperts)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-RegExpertResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.regExpert)) {
                             route.toBack()
@@ -213,7 +227,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.regOrganizers) || route.isPage(routes.regOrganizer)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.regOrganizers)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-RegOrganizerResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.regOrganizer)) {
                             route.toBack()
@@ -232,7 +248,9 @@ export function Menu(props) {
                 <MenuItem
                     selected={route.isPage(routes.regPartners) || route.isPage(routes.regPartner)}
                     onClick={() => {
+                        props.onClick()
                         if (route.isPage(routes.regPartners)) {
+                            CacheStorage.clearByKey(`${CacheKeys.gridPage}-RegPartnerResponse`)
                             route.refreshPage()
                         } else if (route.isPage(routes.regPartner)) {
                             route.toBack()
@@ -253,6 +271,7 @@ export function Menu(props) {
 
                 <MenuItem
                     onClick={() => {
+                        props.onClick()
                         route.openUrlNewTab("https://mb.keygenqt.com/")
                     }}
                 >
@@ -267,4 +286,6 @@ export function Menu(props) {
     );
 }
 
-Menu.propTypes = {};
+Menu.propTypes = {
+    onClick: PropTypes.func.isRequired
+};

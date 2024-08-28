@@ -30,8 +30,6 @@ import {
     TextField,
     Typography,
     MenuItem,
-    InputAdornment,
-    Avatar
 } from "@mui/material";
 import {
     AlertInfo,
@@ -43,6 +41,7 @@ import {
     CacheStorage,
     CacheKeys,
     DialogRemove,
+    TextFieldFile,
 } from '../../../base';
 import {
     Delete,
@@ -276,31 +275,15 @@ export function CityForm(props) {
                                     </AlertSuccess>
                                 )}
 
-                                <TextField
+                                <TextFieldFile
                                     disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                    required
-                                    type={'text'}
+                                    label={'Image'}
                                     name={'image'}
                                     value={values.image}
                                     helperText={touched.image && errors.image ? errors.image : ''}
                                     error={Boolean(touched.image && errors.image)}
                                     onBlur={handleBlur}
                                     onChange={handleChange}
-                                    fullWidth
-                                    label={'Image'}
-                                    variant="filled"
-                                    InputProps={{
-                                        autoComplete: 'off',
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <Avatar
-                                                alt={`${model?.fname} ${model?.lname}`}
-                                                src={model?.image}
-                                                sx={{ width: 20, height: 20 }}
-                                            />
-                                          </InputAdornment>
-                                        ),
-                                    }}
                                 />
 
                                 <TextField
@@ -331,6 +314,7 @@ export function CityForm(props) {
                                     options={organizersData}
                                     getOptionLabel={(item) => item.name}
                                     value={values.organizers}
+                                    isOptionEqualToValue={(options, value) => options.id === value.id}
                                     onChange={(_, value) => {
                                         setFieldValue('organizers', value)
                                     }}
@@ -340,7 +324,7 @@ export function CityForm(props) {
                                             disabled={isSubmitting || (!isAdmin && props.id === undefined)}
                                             type={'text'}
                                             name={'organizers'}
-                                            value={values.organizers}
+                                            // value={values.organizers}
                                             helperText={touched.organizers && errors.organizers ? errors.organizers : ''}
                                             error={Boolean(touched.organizers && errors.organizers)}
                                             fullWidth

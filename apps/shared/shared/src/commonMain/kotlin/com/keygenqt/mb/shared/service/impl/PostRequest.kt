@@ -20,6 +20,8 @@ import com.keygenqt.mb.shared.responses.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.*
+import io.ktor.http.*
 
 class PostRequest(private val client: HttpClient) {
     /**
@@ -94,5 +96,28 @@ class PostRequest(private val client: HttpClient) {
         request: DirectionRequest
     ): UserDirectionResponse {
         return client.post("api/directions") { setBody(request) }.body()
+    }
+
+    /**
+     * Upload file
+     */
+    @Throws(Exception::class)
+    suspend fun uploads(
+        files: Array<FileRequest>
+    ): List<UploadResponse> {
+        return client.submitFormWithBinaryData(
+            url = "api/uploads",
+            formData = formData {
+                files.forEach {
+                    append(
+                        "file", it.file,
+                        Headers.build {
+                            append(HttpHeaders.ContentType, it.contentType)
+                            append(HttpHeaders.ContentDisposition, "filename=\"${it.name}\"")
+                        }
+                    )
+                }
+            }
+        ).body()
     }
 }

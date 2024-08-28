@@ -32,8 +32,6 @@ import {
     Tab,
     MenuItem,
     Chip,
-    Avatar,
-    InputAdornment,
     Divider,
 } from '@mui/material';
 import {
@@ -46,6 +44,7 @@ import {
     CacheStorage,
     CacheKeys,
     DialogRemove,
+    TextFieldFile,
 } from '../../../base';
 import {
     Delete,
@@ -583,31 +582,15 @@ export function UserForm(props) {
                                 </TextField>
 
                                 {values.image !== undefined && (
-                                    <TextField
+                                    <TextFieldFile
                                         disabled={isSubmitting || (!isAdmin && props.id === undefined)}
-                                        required
-                                        type={'text'}
+                                        label={'Image'}
                                         name={'image'}
                                         value={values.image}
                                         helperText={touched.image && errors.image ? errors.image : ''}
                                         error={Boolean(touched.image && errors.image)}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        fullWidth
-                                        label={'Image'}
-                                        variant="filled"
-                                        InputProps={{
-                                            autoComplete: 'off',
-                                            startAdornment: (
-                                            <InputAdornment position="start">
-                                                <Avatar
-                                                    alt={`${model?.fname} ${model?.lname}`}
-                                                    src={values.image}
-                                                    sx={{ width: 20, height: 20 }}
-                                                />
-                                            </InputAdornment>
-                                            ),
-                                        }}
                                     />
                                 )}
 

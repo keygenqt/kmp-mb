@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2024 Vitaliy Zarubin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,17 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.keygenqt.mb.shared.requests
 
-export const CacheKeys = {
-    darkMode: 'darkMode',
-    userRoles: 'userRoles',
-    gridPage: 'gridPage',
-    redirectCreateCountry: 'redirectCreateCountry',
-    redirectRemoveCountry: 'redirectRemoveCountry',
-    redirectCreateCity: 'redirectCreateCity',
-    redirectRemoveCity: 'redirectRemoveCity',
-    redirectCreateDirection: 'redirectCreateDirection',
-    redirectRemoveDirection: 'redirectRemoveDirection',
-    redirectCreateUser: 'redirectCreateUser',
-    redirectRemoveUser: 'redirectRemoveUser',
-};
+import kotlinx.serialization.Serializable
+import kotlin.js.ExperimentalJsExport
+import kotlin.js.JsExport
+
+/**
+ * Request upload file
+ */
+@OptIn(ExperimentalJsExport::class)
+@JsExport
+@Serializable
+@Suppress("ArrayInDataClass")
+data class FileRequest(
+    val name: String,
+    val contentType: String,
+    val file: ByteArray,
+)
