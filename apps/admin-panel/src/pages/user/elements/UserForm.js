@@ -226,6 +226,28 @@ export function UserForm(props) {
         mediaFieldsGen,
     ])
 
+    // Save data model before refresh form
+    const saveStateValues = React.useCallback(
+        (values) => {
+            setFormStateValues({
+                directions: values?.directions,
+                image: values?.image,
+                password: values?.password,
+                ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
+                    field['fname'] ?? field['name'],
+                    values[field['fname'] ?? field['name']]
+                ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
+                ...Object.fromEntries(contactFields?.map((field) => [
+                    field.fname,
+                    values[field.fname]
+                ])),
+                ...Object.fromEntries(mediaFields?.map((field) => [
+                    field.fname,
+                    values[field.fname]
+                ]))
+            })
+        }, [contactFields, localeFields, mediaFields]);
+
     return (
         <Formik
             enableReinitialize
@@ -411,7 +433,7 @@ export function UserForm(props) {
                             CacheStorage.set(CacheKeys.redirectCreateUser, true, true, true)
                             route.toLocationReplace(routes.userEdit, response.id)
                         } else {
-                            setIsFormSuccess(true);
+                            setIsFormSuccess(true)
                             setModel(response)
                             scrollToTop()
                             // Clear user password after update for MANAGER/ADMIN
@@ -489,16 +511,16 @@ export function UserForm(props) {
                                     }}
                                 />
 
+                                {!isAdmin && (
+                                    <AlertInfo>
+                                        Some functionality is missing and is available to the admin.
+                                    </AlertInfo>
+                                )}
+
                                 {errors.submit && (
                                     <AlertError onClose={() => setErrors({})}>
                                         {errors.submit}
                                     </AlertError>
-                                )}
-
-                                {props.id === undefined && !errors.submit && !isAdmin && (
-                                    <AlertInfo>
-                                        You are not allowed to create a new user.
-                                    </AlertInfo>
                                 )}
 
                                 {isFormRedirect && (
@@ -516,7 +538,7 @@ export function UserForm(props) {
                                 )}
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'roles'}
@@ -533,24 +555,8 @@ export function UserForm(props) {
                                                 e.target.value = e.target.value.filter((e) => e !== 'ADMIN')
                                             }
                                         }
-                                        // Save data model before refresh roles
-                                        setFormStateValues({
-                                            directions: values?.directions,
-                                            image: values?.image,
-                                            password: values?.password,
-                                            ...localeFields?.map((fields) => Object.fromEntries(fields.map((field) => [
-                                                field['fname'] ?? field['name'],
-                                                values[field['fname'] ?? field['name']]
-                                            ]))).reduce((prev, curr) => ({...prev, ...curr}) , {}),
-                                            ...Object.fromEntries(contactFields?.map((field) => [
-                                                field.fname,
-                                                values[field.fname]
-                                            ])),
-                                            ...Object.fromEntries(mediaFields?.map((field) => [
-                                                field.fname,
-                                                values[field.fname]
-                                            ]))
-                                        })
+                                        // Save state
+                                        saveStateValues(values)
                                         // Update state roles
                                         setFormUserRoles(e.target.value)
                                         // Save value form
@@ -574,7 +580,7 @@ export function UserForm(props) {
                                         )
                                     }}
                                 >
-                                    {props.roles?.map((item) => (
+                                    {props.roles?.map((item) => (isAdmin || (item !== Shared.role.ADMIN && item !== Shared.role.MANAGER)) && (
                                         <MenuItem key={`roles-menu-${item.name}`} value={item.name}>
                                             {item.name}
                                         </MenuItem>
@@ -583,7 +589,7 @@ export function UserForm(props) {
 
                                 {values.image !== undefined && (
                                     <TextFieldFile
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        disabled={isSubmitting || (props.id === undefined)}
                                         label={'Image'}
                                         name={'image'}
                                         value={values.image}
@@ -596,7 +602,7 @@ export function UserForm(props) {
 
                                 {values.directions !== undefined && (
                                     <TextField
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        disabled={isSubmitting || (props.id === undefined)}
                                         required
                                         type={'text'}
                                         name={'directions'}
@@ -704,7 +710,7 @@ export function UserForm(props) {
                                                             return (
                                                                 <TextField
                                                                     key={`locale-filed-${fieldName}`}
-                                                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                                    disabled={isSubmitting || (props.id === undefined)}
                                                                     required={field.required}
                                                                     type={'text'}
                                                                     name={fieldName}
@@ -737,7 +743,7 @@ export function UserForm(props) {
                                             return (
                                                 <TextField
                                                     key={`locale-filed-${fieldName}`}
-                                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                    disabled={isSubmitting || (props.id === undefined)}
                                                     required={field.required}
                                                     type={'text'}
                                                     name={fieldName}
@@ -771,7 +777,7 @@ export function UserForm(props) {
                                         {contactFields.map((field) => (
                                             <TextField
                                                 key={`fieldName-${field.fname}`}
-                                                disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                disabled={isSubmitting || (props.id === undefined)}
                                                 type={'url'}
                                                 name={field.fname}
                                                 value={values[field.fname] ?? ''}
@@ -803,7 +809,7 @@ export function UserForm(props) {
                                         {mediaFields.map((field) => (
                                             <TextField
                                                 key={`fieldName-${field.fname}`}
-                                                disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                                disabled={isSubmitting || (props.id === undefined)}
                                                 type={'url'}
                                                 name={field.fname}
                                                 value={values[field.fname] ?? ''}
@@ -820,7 +826,7 @@ export function UserForm(props) {
                                     </>
                                 )}
 
-                                {values.password !== undefined && (
+                                {values.password !== undefined && isAdmin && (
                                     <>
                                         {props.id && (
                                             <Divider textAlign="left">
@@ -829,7 +835,7 @@ export function UserForm(props) {
                                         )}
 
                                         <TextField
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                            disabled={isSubmitting || (props.id === undefined)}
                                             required
                                             type={'password'}
                                             name={'password'}

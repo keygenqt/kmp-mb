@@ -18,6 +18,7 @@ import * as React from 'react';
 import PropTypes from 'prop-types';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
+import { v4 as uuidv4 } from 'uuid';
 import {
     useTheme,
     useMediaQuery,
@@ -32,7 +33,6 @@ import {
     MenuItem,
 } from "@mui/material";
 import {
-    AlertInfo,
     AlertError,
     AlertSuccess,
     Helper,
@@ -46,7 +46,15 @@ import {
 import {
     Delete,
     DoneOutlined,
+    Add,
 } from "@mui/icons-material";
+
+function createUploadPath(fileName) {
+    if (fileName && !fileName.includes('http')) {
+        return `/api/uploads/${fileName}`
+    }
+    return fileName
+}
 
 
 export function CityForm(props) {
@@ -60,6 +68,12 @@ export function CityForm(props) {
 
     // Update model ids relations from db
     const [model, setModel] = React.useState(props.model)
+    // Save state values before refresh by roles
+    const [formStateValues, setFormStateValues] = React.useState({})
+    // Set success from, state from not working with enableReinitialize
+    const [isFormSuccess, setIsFormSuccess] = React.useState(false)
+    // Refresh page after create model
+    const [isFormRedirect, setIsFormRedirect] = React.useState(CacheStorage.get(CacheKeys.redirectCreateCity))
 
     // Array locales
     const [localeFields] = React.useState(Shared.locales.map((item) => ({
@@ -72,34 +86,84 @@ export function CityForm(props) {
             .required('Must not be null and not blank.')
     })))
 
+    // Array uploads
+    const uploadFieldsGen = React.useCallback(
+        () => {
+            return model?.uploads?.map((item) => ({
+                id: item.id,
+                fname: `upload-${item.id}`,
+                label: 'Image',
+                validate: Yup.string()
+                    .min(3, 'Size must be between 3 and 250.')
+                    .max(250, 'Size must be between 3 and 250.')
+                    .required('Must not be null and not blank.'),
+            })) ?? []
+        }, [model]);
+
+    const [uploadFields, setUploadFields] = React.useState(uploadFieldsGen())
+
+    // Change state from after change uploads
+    React.useEffect(() => {
+        setUploadFields(uploadFieldsGen())
+    }, [uploadFieldsGen])
+
     // Autocomplete data
     const [organizersData] = React.useState(props.organizers.map((item) => ({
         id: item.id,
-        name: `${item.fname} ${item.lname} (${item.id})`
+        name: `${item.lname} (${item.id})`
     })))
 
-    return (
-        <Formik
-            initialValues={{
-                countryID: model?.country?.id ?? '',
-                organizers: model?.organizers?.map((item) => ({
-                    id: item.id,
-                    name: `${item.fname} ${item.lname} (${item.id})`
-                })) ?? [],
-                image: model?.image ?? '',
-                link: model?.link ?? '',
-                name: model?.name ?? '',
-                isRemove: false,
-                submit: null,
-                // Redirect from create page
-                isRedirect: CacheStorage.get(CacheKeys.redirectCreateCity),
+    // Save data model before refresh form
+    const saveStateValues = React.useCallback(
+        (values) => {
+            setFormStateValues({
+                countryID: values?.countryID,
+                organizers: values?.organizers,
+                image: values?.image,
+                link: values?.link,
+                name: values?.name,
                 // Array locales
                 ...Object.fromEntries(localeFields?.map((field) => [
                     field.fname,
-                    model?.locales
+                    values[field.fname]
+                ])),
+                // Array uploads
+                ...Object.fromEntries(uploadFields?.map((field) => [
+                    field.fname,
+                    values[field.fname]
+                ])),
+            })
+        }, [localeFields, uploadFields]);
+
+    return (
+        <Formik
+            enableReinitialize
+            initialValues={{
+                countryID: formStateValues.countryID ?? model?.country?.id ?? '',
+                organizers: formStateValues.organizers ?? model?.organizers?.map((item) => ({
+                    id: item.id,
+                    name: `${item.lname} (${item.id})`
+                })) ?? [],
+                image: formStateValues.image ?? model?.image ?? '',
+                link: formStateValues.link ?? model?.link ?? '',
+                name: formStateValues.name ?? model?.name ?? '',
+                isRemove: false,
+                submit: null,
+                // Array locales
+                ...Object.fromEntries(localeFields?.map((field) => [
+                    field.fname,
+                    formStateValues[field.fname] ?? model?.locales
                         ?.filter((item) => item.locale === field.locale)
                         ?.[0]
                         ?.['text'] ?? ''
+                ])),
+                // Array uploads
+                ...Object.fromEntries(uploadFields?.map((field) => [
+                    field.fname,
+                    formStateValues[field.fname] ?? createUploadPath(model?.uploads
+                        ?.filter((item) => item.id === field.id)
+                        ?.[0]
+                        ?.['fileName'])
                 ])),
             }}
             validationSchema={Yup.object().shape({
@@ -122,11 +186,16 @@ export function CityForm(props) {
                     field.fname,
                     field.validate
                 ])),
+                // Array uploads
+                ...Object.fromEntries(uploadFields?.map((field) => [
+                    field.fname,
+                    field.validate
+                ])),
             })}
             onSubmit={async (values, {setErrors, setStatus, setFieldValue}) => {
-                setFieldValue('isRedirect', false)
-                setStatus({success: null});
-                setErrors({submit: null});
+                setIsFormRedirect(false)
+                setIsFormSuccess(false)
+                setErrors({submit: null})
 
                 const scrollToTop = function() {
                     const root = document.getElementById("root")
@@ -157,6 +226,13 @@ export function CityForm(props) {
                         values[field.fname],
                         field.locale,
                     ) : null).filter((item) => item !== null)
+
+                    // Array contacts prepare
+                    const userUploadsIds = uploadFields
+                        .map((field) => document.querySelectorAll(`[name="${field.fname}"]`)?.[0]?.dataset?.id ?? null)
+                        .filter((item) => item !== null)
+                        .filter((item) => !item.includes('new'))
+
                     try {
                         const response = Boolean(props.id) ? (
                             await Shared.httpClient.put.editCity(props.id, new Shared.requests.CityRequest(
@@ -166,7 +242,7 @@ export function CityForm(props) {
                                 values.name,
                                 localeRequests,
                                 values.organizers.map((item) => item.id),
-                                [] // @todo uploads
+                                userUploadsIds.map((id) => parseInt(id))
                             ))
                         ) : (
                             await Shared.httpClient.post.addCity(new Shared.requests.CityRequest(
@@ -176,15 +252,15 @@ export function CityForm(props) {
                                 values.name,
                                 localeRequests,
                                 values.organizers.map((item) => item.id),
-                                [] // @todo uploads
+                                userUploadsIds.map((id) => parseInt(id))
                             ))
                         )
                         if (!Boolean(props.id)) {
                             CacheStorage.set(CacheKeys.redirectCreateCity, true, true, true)
                             route.toLocationReplace(routes.cityEdit, response.id)
                         } else {
+                            setIsFormSuccess(true)
                             setModel(response)
-                            setStatus({success: true})
                             scrollToTop()
                         }
                     } catch (error) {
@@ -255,13 +331,7 @@ export function CityForm(props) {
                                     </AlertError>
                                 )}
 
-                                {props.id === undefined && !errors.submit && !isAdmin && (
-                                    <AlertInfo>
-                                        You are not allowed to create a new city.
-                                    </AlertInfo>
-                                )}
-
-                                {values.isRedirect && (
+                                {isFormRedirect && (
                                     <AlertSuccess onClear={() => {
                                         CacheStorage.set(CacheKeys.redirectCreateCity, false, true, true)
                                     }}>
@@ -269,14 +339,14 @@ export function CityForm(props) {
                                     </AlertSuccess>
                                 )}
 
-                                {status && status.success && (
-                                    <AlertSuccess onClose={() => setStatus({success: false})}>
+                                {isFormSuccess && (
+                                    <AlertSuccess onClose={() => setIsFormSuccess(false)}>
                                         Update city successfully.
                                     </AlertSuccess>
                                 )}
 
                                 <TextFieldFile
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     label={'Image'}
                                     name={'image'}
                                     value={values.image}
@@ -287,7 +357,7 @@ export function CityForm(props) {
                                 />
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'countryID'}
@@ -321,7 +391,7 @@ export function CityForm(props) {
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                            disabled={isSubmitting || (props.id === undefined)}
                                             type={'text'}
                                             name={'organizers'}
                                             // value={values.organizers}
@@ -335,7 +405,7 @@ export function CityForm(props) {
                                 />
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'link'}
@@ -351,7 +421,7 @@ export function CityForm(props) {
                                 />
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'name'}
@@ -379,7 +449,7 @@ export function CityForm(props) {
                                 {localeFields.map((field) => (
                                     <TextField
                                         key={`fieldName-${field.fname}`}
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        disabled={isSubmitting || (props.id === undefined)}
                                         type={'url'}
                                         name={field.fname}
                                         value={values[field.fname] ?? ''}
@@ -393,6 +463,77 @@ export function CityForm(props) {
                                         inputProps={{ autoComplete: 'off' }}
                                     />
                                 ))}
+
+                                <Stack spacing={1}>
+                                    <Typography variant='h6' color={'text.primary'}>
+                                        Uploads
+                                    </Typography>
+                                    <Typography variant='caption' color={'text.primary'}>
+                                        Upload images of community meetings to be displayed on the site in a carousel.
+                                    </Typography>
+                                </Stack>
+
+                                <Stack spacing={2} >
+                                    {/* Array locales */}
+                                    {uploadFields.map((field) => (
+                                        <Stack
+                                            key={`fieldName-${field.fname}`}
+                                            spacing={2}
+                                            direction={isSM ? 'column' : 'row'}
+                                        >
+                                            <Box sx={{width: 1}}>
+                                                <TextFieldFile
+                                                    id={`${field.id}`}
+                                                    disabled={isSubmitting || (props.id === undefined)}
+                                                    label={field.label}
+                                                    name={field.fname}
+                                                    value={values[field.fname] ?? ''}
+                                                    helperText={touched[field.fname] && errors[field.fname] ? errors[field.fname] : ''}
+                                                    error={Boolean(touched[field.fname] && errors[field.fname])}
+                                                    onBlur={handleBlur}
+                                                    onChange={handleChange}
+                                                />
+                                            </Box>
+                                            <Button
+                                                sx={{maxHeight: 57}}
+                                                variant="outlined"
+                                                color={'error'}
+                                                onClick={() => {
+                                                    var clone = Object.assign({}, model);
+                                                    clone.uploads = model.uploads.filter((item) => item.id !== field.id)
+                                                    saveStateValues(values)
+                                                    setModel(clone)
+                                                }}
+                                            >
+                                                <Delete/>
+                                            </Button>
+                                        </Stack>
+                                    ))}
+
+                                    <Box
+                                        sx={{width: isSM ? 1 : 'inherit'}}
+                                    >
+                                        <Button
+                                            sx={{height: isSM ? 'inherit' : 57, width: isSM ? 1 : 'inherit'}}
+                                            variant="outlined"
+                                            color={'success'}
+                                            onClick={() => {
+                                                var clone = Object.assign({}, model);
+                                                if (!clone.uploads) {
+                                                    clone.uploads = []
+                                                }
+                                                clone.uploads.push({
+                                                    id: `new-${uuidv4()}`,
+                                                    fileName: null
+                                                })
+                                                saveStateValues(values)
+                                                setModel(clone)
+                                            }}
+                                        >
+                                            <Add/>
+                                        </Button>
+                                    </Box>
+                                </Stack>
 
                                 <Stack direction={isSM ? 'column' : 'row'} spacing={2}>
                                     <Box sx={{ flexGrow: 1 }}/>

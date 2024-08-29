@@ -30,7 +30,6 @@ import {
     Typography,
 } from "@mui/material";
 import {
-    AlertInfo,
     AlertError,
     AlertSuccess,
     Helper,
@@ -216,12 +215,6 @@ export function CountryForm(props) {
                                     </AlertError>
                                 )}
 
-                                {props.id === undefined && !errors.submit && !isAdmin && (
-                                    <AlertInfo>
-                                        You are not allowed to create a new country.
-                                    </AlertInfo>
-                                )}
-
                                 {values.isRedirect && (
                                     <AlertSuccess onClear={() => {
                                         CacheStorage.set(CacheKeys.redirectCreateCountry, false, true, true)
@@ -237,7 +230,7 @@ export function CountryForm(props) {
                                 )}
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'name'}
@@ -265,7 +258,7 @@ export function CountryForm(props) {
                                 {localeFields.map((field) => (
                                     <TextField
                                         key={`fieldName-${field.fname}`}
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        disabled={isSubmitting || (props.id === undefined)}
                                         type={'url'}
                                         name={field.fname}
                                         value={values[field.fname] ?? ''}

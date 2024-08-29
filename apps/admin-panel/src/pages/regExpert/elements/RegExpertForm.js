@@ -31,8 +31,6 @@ import {
     AlertSuccess,
     Helper,
     Shared,
-    CacheStorage,
-    CacheKeys,
 } from '../../../base';
 import {
     DoneOutlined,
@@ -40,8 +38,6 @@ import {
 
 
 export function RegExpertForm(props) {
-    const roles = CacheStorage.get(CacheKeys.userRoles)
-    const isAdmin = roles?.includes('ADMIN')
 
     // Update model ids relations from db
     const [model, setModel] = React.useState(props.model)
@@ -111,7 +107,7 @@ export function RegExpertForm(props) {
                                 )}
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'note'}
@@ -130,7 +126,7 @@ export function RegExpertForm(props) {
                                 />
 
                                 <TextField
-                                        disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                        disabled={isSubmitting || (props.id === undefined)}
                                         required
                                         type={'text'}
                                         name={'state'}

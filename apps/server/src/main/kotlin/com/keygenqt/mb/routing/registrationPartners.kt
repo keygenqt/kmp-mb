@@ -37,7 +37,7 @@ fun Route.registrationPartners() {
         get {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = regPartnersService.transaction {
                 getAll().toResponses(call.getUserRoles())
@@ -48,7 +48,7 @@ fun Route.registrationPartners() {
         get("/{id}") {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             // act
@@ -86,7 +86,7 @@ fun Route.registrationPartners() {
         put("/{id}") {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             val request = call.receiveValidate<RegPartnerUpdateValidate>()

@@ -60,7 +60,7 @@ fun Route.cities() {
         post {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<CityValidate>()
             // act

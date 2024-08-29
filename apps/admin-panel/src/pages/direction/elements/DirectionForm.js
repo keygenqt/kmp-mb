@@ -29,7 +29,6 @@ import {
     TextField,
 } from "@mui/material";
 import {
-    AlertInfo,
     AlertError,
     AlertSuccess,
     Helper,
@@ -175,12 +174,6 @@ export function DirectionForm(props) {
                                     </AlertError>
                                 )}
 
-                                {props.id === undefined && !errors.submit && !isAdmin && (
-                                    <AlertInfo>
-                                        You are not allowed to create a new direction.
-                                    </AlertInfo>
-                                )}
-
                                 {values.isRedirect && (
                                     <AlertSuccess onClear={() => {
                                         CacheStorage.set(CacheKeys.redirectCreateDirection, false, true, true)
@@ -196,7 +189,7 @@ export function DirectionForm(props) {
                                 )}
 
                                 <TextField
-                                    disabled={isSubmitting || (!isAdmin && props.id === undefined)}
+                                    disabled={isSubmitting || (props.id === undefined)}
                                     required
                                     type={'text'}
                                     name={'name'}

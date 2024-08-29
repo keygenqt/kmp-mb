@@ -53,7 +53,7 @@ fun Route.uploads() {
         post {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val uploads = mutableListOf<UploadEntity>()
             // act

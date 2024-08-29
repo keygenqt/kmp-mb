@@ -23,11 +23,13 @@ import com.keygenqt.mb.shared.db.service.UserContactsService
 import com.keygenqt.mb.shared.db.service.UserLocalesService
 import com.keygenqt.mb.shared.db.service.UserMediaService
 import com.keygenqt.mb.shared.db.service.UsersService
+import com.keygenqt.mb.shared.extension.fromTextUserRole
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.UserValidate
 import com.keygenqt.mb.validators.models.toData
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -42,7 +44,7 @@ fun Route.users() {
         get {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = usersService.transaction {
                 getAll().toResponses(call.getUserRoles())
@@ -53,7 +55,7 @@ fun Route.users() {
         get("/{id}") {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             // act
@@ -66,9 +68,18 @@ fun Route.users() {
         post {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
-            val request = call.receiveValidate<UserValidate>()
+            val receive = call.receive<UserValidate>()
+            // Check add admin/manager role only admin
+            if (!call.getUserRoles().contains(UserRole.ADMIN) && receive.roles.contains(UserRole.ADMIN)) {
+                throw RuntimeException("Only an admin can assign admin.")
+            }
+            if (!call.getUserRoles().contains(UserRole.ADMIN) && receive.roles.contains(UserRole.MANAGER)) {
+                throw RuntimeException("Only an admin can assign manager.")
+            }
+            // validate
+            val request = call.receiveValidate(receive)
             // act
             val idsContact = userContactsService.transaction {
                 request.contacts.toData().inserts()
@@ -104,11 +115,40 @@ fun Route.users() {
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
-            val request = call.receiveValidate<UserValidate>()
-            // act
             val model = usersService.transaction {
                 findById(id) ?: throw Exceptions.NotFound()
             }
+            val receive = call.receive<UserValidate>()
+            // Check change password
+            if (!call.getUserRoles().contains(UserRole.ADMIN) && receive.password !== null) {
+                throw RuntimeException("Only admin can update password")
+            }
+            // Check change admin/manager role only admin
+            if (!call.getUserRoles().contains(UserRole.ADMIN)) {
+                with(model.roles.fromTextUserRole()) {
+                    if (receive.roles.contains(UserRole.ADMIN) && !contains(UserRole.ADMIN)) {
+                        throw RuntimeException("Only an admin can assign admin.")
+                    }
+                    if (receive.roles.contains(UserRole.MANAGER) && !contains(UserRole.MANAGER)) {
+                        throw RuntimeException("Only an admin can assign manager.")
+                    }
+                    if (contains(UserRole.ADMIN) && !receive.roles.contains(UserRole.ADMIN)) {
+                        throw RuntimeException("Only an admin can remove role admin.")
+                    }
+                    if (contains(UserRole.MANAGER) && !receive.roles.contains(UserRole.MANAGER)) {
+                        throw RuntimeException("Only an admin can remove role manager.")
+                    }
+                }
+            }
+            if (!call.getUserRoles().contains(UserRole.ADMIN)
+                && receive.roles.contains(UserRole.MANAGER)
+                && !model.roles.fromTextUserRole().contains(UserRole.MANAGER)
+            ) {
+                throw RuntimeException("Only an admin can assign manager.")
+            }
+            // validate
+            val request = call.receiveValidate(receive)
+            // act
             val response = with(model) {
                 val idsContact = userContactsService.transaction {
                     request.contacts.toData(contacts).inserts() + request.contacts.toData(contacts).updates()

@@ -61,7 +61,7 @@ fun Route.countries() {
         post {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<CountryValidate>()
             // act

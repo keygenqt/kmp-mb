@@ -62,9 +62,9 @@ fun ApplicationCall.getDoublesQueryParam(key: String = "ids") =
 /**
  * Get request with validate
  */
-suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(): T {
+suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(data: T? = null): T {
     val request = try {
-        receive<T>()
+        data ?: receive<T>()
     } catch (ex: Exception) {
         throw Exceptions.BadRequest()
     }

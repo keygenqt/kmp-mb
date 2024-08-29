@@ -37,7 +37,7 @@ fun Route.registrationExperts() {
         get {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = regExpertsService.transaction {
                 getAll().toResponses(call.getUserRoles())
@@ -48,7 +48,7 @@ fun Route.registrationExperts() {
         get("/{id}") {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             // act
@@ -90,7 +90,7 @@ fun Route.registrationExperts() {
         put("/{id}") {
             // check role
             call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN)
+            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             val request = call.receiveValidate<RegExpertUpdateValidate>()

@@ -107,10 +107,12 @@ fun initUsers() {
     UserEntity.new {
         this.roles = listOf(
             UserRole.EXPERT,
+            UserRole.ADMIN,
         ).toText()
         this.image = "/api/uploads/${"data/experts/Gladkov.jpeg".createFileUpload()?.fileName}"
         this.fname = "Алексей"
         this.lname = "Гладков"
+        this.paswd = DatabaseMysql.getDefaultPassword()
         this.about = """
                     Mobile Broadcast User по Android, Aurora и Kotlin Multiplatform.
                     Делает вклад в опенсорс в виде примеров по Kotlin Multiplatform и своей библиотеки, автор нескольких крупнейших в СНГ сообществ по разработке, участвует во всех топовых конференциях, автор популярных статей на Дзене.
@@ -343,10 +345,12 @@ fun initUsers() {
     UserEntity.new {
         this.roles = listOf(
             UserRole.EXPERT,
+            UserRole.ADMIN,
         ).toText()
         this.image = "/api/uploads/${"data/experts/Rozov.jpeg".createFileUpload()?.fileName}"
         this.fname = "Кирилл"
         this.lname = "Розов"
+        this.paswd = DatabaseMysql.getDefaultPassword()
         this.about = """
                     Mobile Broadcast User по Android.
                     Android разработчик с 11+ годами опыта в разработке мобильных приложений. Автор и создатель Android Broadcast - популярных Telegram и YouTube каналов про лучшие практики в Android разработке и последние тренды.

@@ -15,6 +15,7 @@
  */
 
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import {
     useTheme,
     useMediaQuery,
@@ -23,6 +24,12 @@ import {
     TextField,
     InputAdornment,
     Avatar,
+    IconButton,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Divider,
 } from '@mui/material';
 import {
     Shared
@@ -38,11 +45,36 @@ export function TextFieldFile(props) {
 
     const inputRef = React.useRef(null)
     const inputFileRef = React.useRef(null)
+
+    const [showImage, setShowImage] = React.useState(undefined)
+    const [isShowImage, setIsShowImage] = React.useState(false)
+    
     /* 0 - default, 1 - loading, 2 - error */
     const [state, setState] = React.useState(0)
 
     return (
         <>
+            <Dialog
+                open={isShowImage}
+                onClose={() => setIsShowImage(false)}
+            >
+                <DialogTitle>
+                    Image
+                </DialogTitle>
+                <Divider/>
+                <DialogContent>
+                    <img style={{
+                        maxWidth: 500,
+                        maxHeight: 500,
+                        borderRadius: 10
+                    }} src={showImage} alt="logo"/>
+                </DialogContent>
+                <Divider/>
+                <DialogActions>
+                    <Button onClick={() => setIsShowImage(false)}>Close</Button>
+                </DialogActions>
+            </Dialog>
+
             <input
                 type="file"
                 style={{ display: "none" }}
@@ -59,6 +91,7 @@ export function TextFieldFile(props) {
 
                             // Emit value change
                             if (response[0]?.fileName && inputRef.current) {
+                                inputRef.current.setAttribute('data-id', response[0]?.id)
                                 inputRef.current.value = `/api/uploads/${response[0]?.fileName}`
                                 inputRef.current._valueTracker.setValue(inputRef.current)
                                 inputRef.current.dispatchEvent(new Event("input", { bubbles: true }))
@@ -76,6 +109,7 @@ export function TextFieldFile(props) {
             <Stack
                 direction={isSM ? 'column-reverse' : 'row'}
                 spacing={2}
+                sx={{width: 1}}
             >
                 <Button
                     sx={{maxHeight: 57}}
@@ -97,15 +131,27 @@ export function TextFieldFile(props) {
                     type={'text'}
                     fullWidth
                     variant="filled"
+                    inputProps={{
+                        'data-id': props.id,
+                        readOnly: true,
+                    }}
                     InputProps={{
                         autoComplete: 'off',
                         startAdornment: (
                             <InputAdornment position="start">
-                                <Avatar
-                                    alt={'Url image'}
-                                    src={props.value}
-                                    sx={{ width: 20, height: 20 }}
-                                />
+                                <IconButton
+                                    sx={{p: '2px'}}
+                                    onClick={() => {
+                                        setShowImage(inputRef.current.value)
+                                        setIsShowImage(true)
+                                    }}
+                                >
+                                    <Avatar
+                                        alt={'Url image'}
+                                        src={props.value}
+                                        sx={{ width: 20, height: 20 }}
+                                    />
+                                </IconButton>
                             </InputAdornment>
                             ),
                     }}
@@ -116,4 +162,6 @@ export function TextFieldFile(props) {
     );
 }
 
-TextFieldFile.propTypes = {};
+TextFieldFile.propTypes = {
+    dataId: PropTypes.string,
+};
