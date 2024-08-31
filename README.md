@@ -2,25 +2,26 @@
 
 ### Subscribe and like! <img src="https://github.com/keygenqt/kmp-mb/blob/main/data/star.gif?raw=true" width="16px"/>
 
-> The project is under development.
+> MVP Done 🎉
 
-Project using
-[Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
-and native UI implementation.
+I set myself a task: to implement a template for future similar projects and do a good deed for [Mobile Broadcast](https://mobilebroadcast.dev). Since this is partly a "template", the project is characterized by reduced coupling of components. There are a lot of different components and features, in the project I collected many of my developments and improved those that were already there. The site turned out to be quite large: 11k lines of JavaScript and 9k lines of Kotlin. It is not perfect, there is still work to do, but this is the path of development.
 
 ![preview.png](data/preview2.png)
 
 ### Includes
 
-- Website - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- Admin-Panel - [React](https://react.dev/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
-- API - [Ktor](https://ktor.io/) + [KMP](https://kotlinlang.org/docs/multiplatform.html)
+- Website / [React](https://react.dev/).
+- Admin Panel / [React](https://react.dev/).
+- API / [Ktor](https://ktor.io/).
+- Shared module / [KMP](https://kotlinlang.org/docs/multiplatform.html).
+- Docker / [Compose](https://docs.docker.com/compose/).
 
 ### Links
 
+- DB - https://mb-db.keygenqt.com
+- API - https://mb-api.keygenqt.com
 - Website - https://mb.keygenqt.com
 - Admin-Panel - https://mb-admin.keygenqt.com
-- API - https://mb-api.keygenqt.com
 
 ### License
 
