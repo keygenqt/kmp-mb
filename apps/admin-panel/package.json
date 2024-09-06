@@ -35,7 +35,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
