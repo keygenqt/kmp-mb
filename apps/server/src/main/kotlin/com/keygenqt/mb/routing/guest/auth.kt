@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.base.SessionService
@@ -32,7 +32,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.koin.ktor.ext.inject
 
-fun Route.auth() {
+fun Route.guestAuth() {
 
     val usersService: UsersService by inject()
     val sessionService: SessionService by inject()
@@ -64,8 +64,8 @@ fun Route.auth() {
             call.sessions.set(
                 SessionUser(
                     userId = response.id,
-                    roles = response.roles?.toList(),
-                    token = sessionService.generateToken(response.id),
+                    roles = response.roles!!.toList(),
+                    token = sessionService.generateToken(response.id, response.roles!!.toList()),
                 )
             )
             // response

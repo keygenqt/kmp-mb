@@ -16,12 +16,12 @@
 package com.keygenqt.mb
 
 import com.keygenqt.mb.base.SessionService
-import com.keygenqt.mb.base.SessionUser
 import com.keygenqt.mb.extension.SESSION_AUTH_KEY
 import com.keygenqt.mb.extension.auth
 import com.keygenqt.mb.extension.configure
 import com.keygenqt.mb.extension.session
-import com.keygenqt.mb.routing.*
+import com.keygenqt.mb.routing.guest.*
+import com.keygenqt.mb.routing.user.*
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.service.*
 import com.keygenqt.mb.utils.AppLogger.initAppLogger
@@ -35,7 +35,6 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.koin.core.context.startKoin
 import org.koin.dsl.module as koinModule
@@ -122,22 +121,31 @@ fun Application.module() {
 
         install(Routing) {
             staticResources("/static", "assets")
-            home()
+            guestHome()
             route("/api") {
-                auth()
-                logout()
-                dashboard()
-                directions()
-                experts()
-                organizers()
-                users()
-                countries()
-                cities()
-                uploads()
-                registrationExperts()
-                registrationOrganizers()
-                registrationPartners()
-                statisticView()
+                guestAuth()
+                guestLogout()
+                guestDirections()
+                guestExperts()
+                guestCountries()
+                guestCities()
+                guestUploads()
+                guestRegistrationExperts()
+                guestRegistrationOrganizers()
+                guestRegistrationPartners()
+                guestStatisticView()
+                authenticate(SESSION_AUTH_KEY) {
+                    userDashboard()
+                    userDirections()
+                    userOrganizers()
+                    userUsers()
+                    userCountries()
+                    userCities()
+                    userUploads()
+                    userRegistrationExperts()
+                    userRegistrationOrganizers()
+                    userRegistrationPartners()
+                }
             }
         }
     }

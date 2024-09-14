@@ -18,20 +18,24 @@ package com.keygenqt.mb.base
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.Payload
 import com.keygenqt.mb.shared.db.base.DatabaseMysql
 import com.keygenqt.mb.shared.db.entities.UserEntity
 import com.keygenqt.mb.shared.db.entities.Users
-import com.keygenqt.mb.shared.db.entities.toResponse
+import com.keygenqt.mb.shared.extension.expiresAt
+import com.keygenqt.mb.shared.extension.toText
 import com.keygenqt.mb.shared.responses.UserRole
-import org.jetbrains.exposed.exceptions.ExposedSQLException
-import java.util.*
+import kotlinx.datetime.DateTimeUnit
+import org.jetbrains.exposed.sql.and
 
 class SessionService(
     private val db: DatabaseMysql,
     secret: String?,
 ) {
-
-    private val claim = Users.id.name
+    companion object {
+        val claimId = Users.id.name
+        val claimRoles = Users.roles.name
+    }
 
     private val issuer = "ktor.io"
 
@@ -53,42 +57,26 @@ class SessionService(
      */
     fun generateToken(
         userId: Int,
-        timestamp: Long = System.currentTimeMillis()
+        roles: List<UserRole>,
     ): String = JWT.create()
         .withSubject("Authentication")
-        .withClaim(claim, userId)
+        .withClaim(claimId, userId)
+        .withClaim(claimRoles, roles.toText())
         .withIssuer(issuer)
-        .withExpiresAt(Date(timestamp.expiresAt()))
+        .withExpiresAt(System.currentTimeMillis().expiresAt(DateTimeUnit.WEEK))
         .sign(algorithm)
 
     /**
      * Get user by id
      */
-    suspend fun findUserById(userId: Int) = db.transaction {
-        try {
-            UserEntity.findById(userId)?.toResponse()
-        } catch (ex: ExposedSQLException) {
-            null
-        }
-    }
-
-    /**
-     * Check change roles
-     */
-    suspend fun checkUserRoles(
-        userId: Int,
-        roles: List<UserRole>
-    ) = db.transaction {
-        UserEntity.findById(userId)?.roles == roles.joinToString(",")
+    suspend fun findAuthUser(userId: Int, roles: List<UserRole>) = db.transaction {
+        UserEntity
+            .find { (Users.id eq userId) and (Users.roles eq roles.toText()) }
+            .firstOrNull()
     }
 
     /**
      * Verify refresh token with get user ID
      */
-    fun verify(value: String): Int? = verifier.verify(value).getClaim(claim).asInt()
-
-    /**
-     * (24 hours) * 30 days
-     */
-    private fun Long.expiresAt() = (this + 3_600_000 * 24) * 30
+    fun verify(value: String): Payload? = verifier.verify(value)
 }

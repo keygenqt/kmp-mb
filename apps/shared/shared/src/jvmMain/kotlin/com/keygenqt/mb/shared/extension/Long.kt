@@ -15,13 +15,24 @@
  */
 package com.keygenqt.mb.shared.extension
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.*
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import java.util.*
+
+val TIME_ZONE: TimeZone = TimeZone.of("Europe/Moscow")
 
 /**
  * Convert long to UTC string
  */
 fun Long.toUTC(): String = Instant.fromEpochMilliseconds(this)
-    .toLocalDateTime(TimeZone.UTC)
+    .toLocalDateTime(TIME_ZONE)
     .toString()
+
+/**
+ * Add time for expires
+ */
+fun Long.expiresAt(time: DateTimeUnit) = Date(
+    Instant.fromEpochMilliseconds(this)
+        .plus(1, time, TIME_ZONE)
+        .toEpochMilliseconds()
+)

@@ -18,6 +18,8 @@ package com.keygenqt.mb.extension
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.base.SessionService
 import com.keygenqt.mb.base.SessionUser
+import com.keygenqt.mb.shared.extension.fromTextUserRole
+import com.keygenqt.mb.shared.responses.UserRole
 import io.ktor.server.auth.*
 import org.koin.java.KoinJavaComponent.inject
 
@@ -27,13 +29,22 @@ fun AuthenticationConfig.auth() {
 
     session<SessionUser>(SESSION_AUTH_KEY) {
         validate { session ->
-            sessionService.verify(session.token)?.let { userId ->
-                return@validate sessionService.findUserById(userId)?.let { session }
-                    ?: throw Exceptions.Unauthorized()
+            sessionService.verify(session.token)?.let { payload ->
+                val userId: Int? = payload.getClaim(SessionService.claimId)
+                    ?.asInt()
+                val userRoles: List<UserRole>? = payload.getClaim(SessionService.claimRoles)
+                    ?.asString()
+                    ?.fromTextUserRole()
+                if (userId == null || userRoles == null) {
+                    throw Exceptions.Unauthorized()
+                }
+                return@validate sessionService.findAuthUser(userId, userRoles)?.let {
+                    session
+                } ?: throw Exceptions.Unauthorized()
             }
         }
         challenge {
-            // Guest
+            throw Exceptions.Unauthorized()
         }
     }
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,7 +21,7 @@ import io.ktor.server.html.*
 import io.ktor.server.routing.*
 import kotlinx.html.*
 
-fun Route.home() {
+fun Route.guestHome() {
     get("/") {
         call.respondHtml(HttpStatusCode.OK) {
             head {

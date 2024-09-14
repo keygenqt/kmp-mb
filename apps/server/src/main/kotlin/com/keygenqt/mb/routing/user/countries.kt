@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.user
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.*
+import com.keygenqt.mb.extension.getNumberParam
+import com.keygenqt.mb.extension.getUserRoles
+import com.keygenqt.mb.extension.receiveValidate
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponse
-import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.ColumnLocalesService
 import com.keygenqt.mb.shared.db.service.CountriesService
 import com.keygenqt.mb.shared.responses.UserRole
@@ -26,41 +28,17 @@ import com.keygenqt.mb.validators.models.CountryValidate
 import com.keygenqt.mb.validators.models.toData
 import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.countries() {
+fun Route.userCountries() {
     val countriesService: CountriesService by inject()
     val columnLocalesService: ColumnLocalesService by inject()
 
     route("/countries") {
-        get {
-            // check role
-            call.checkChangeRoles()
-            // act
-            val response = countriesService.transaction {
-                getAll().toResponses(call.getUserRoles())
-            }
-            // response
-            call.respond(response)
-        }
-        get("/{id}") {
-            // check role
-            call.checkChangeRoles()
-            // get request
-            val id = call.getNumberParam()
-            // act
-            val response = countriesService.transaction {
-                findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
-            }
-            // response
-            call.respond(response)
-        }
         post {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<CountryValidate>()
@@ -79,7 +57,6 @@ fun Route.countries() {
         }
         put("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
@@ -104,7 +81,6 @@ fun Route.countries() {
         }
         delete("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

@@ -48,7 +48,7 @@ export function TextFieldFile(props) {
 
     const [showImage, setShowImage] = React.useState(undefined)
     const [isShowImage, setIsShowImage] = React.useState(false)
-    
+
     /* 0 - default, 1 - loading, 2 - error */
     const [state, setState] = React.useState(0)
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import com.keygenqt.mb.extension.receiveValidate
 import com.keygenqt.mb.shared.db.service.StatisticViewService
@@ -26,7 +26,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.statisticView() {
+fun Route.guestStatisticView() {
     val statisticViewService: StatisticViewService by inject()
 
     route("/statistic-view") {

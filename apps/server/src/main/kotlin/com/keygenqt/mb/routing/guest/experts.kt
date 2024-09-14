@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.checkChangeRoles
 import com.keygenqt.mb.extension.getNumberParam
 import com.keygenqt.mb.extension.getUserRoles
-import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.UsersService
@@ -29,30 +27,24 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.organizers() {
+fun Route.guestExperts() {
     val usersService: UsersService by inject()
 
-    route("/organizers") {
+    route("/experts") {
         get {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = usersService.transaction {
-                getAll(UserRole.ORGANIZER).toResponses(call.getUserRoles())
+                getAll(UserRole.EXPERT).toResponses(call.getUserRoles())
             }
             // response
             call.respond(response)
         }
         get("/{id}") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             // act
             val response = usersService.transaction {
-                findById(id, UserRole.ORGANIZER)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+                findById(id, UserRole.EXPERT)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

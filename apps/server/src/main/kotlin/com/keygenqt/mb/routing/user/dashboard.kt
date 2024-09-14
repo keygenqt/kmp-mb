@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.user
 
-import com.keygenqt.mb.extension.checkChangeRoles
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponses
@@ -28,16 +27,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.dashboard() {
+fun Route.userDashboard() {
 
     val rawService: RawService by inject()
     val citiesService: CitiesService by inject()
 
     route("/dashboard") {
         get("view-home") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.HOME)
@@ -46,9 +42,6 @@ fun Route.dashboard() {
             call.respond(response)
         }
         get("view-community") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.COMMUNITY)
@@ -57,9 +50,6 @@ fun Route.dashboard() {
             call.respond(response)
         }
         get("view-experts") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageView(StatisticViewPage.EXPERTS)
@@ -68,9 +58,6 @@ fun Route.dashboard() {
             call.respond(response)
         }
         get("view-regs") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getCountPageRegs()
@@ -79,9 +66,6 @@ fun Route.dashboard() {
             call.respond(response)
         }
         get("top-community") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val data = rawService.transactionRaw {
                 it.getTopCommunityIDs()
@@ -99,9 +83,6 @@ fun Route.dashboard() {
             call.respond(response)
         }
         get("view-activity") {
-            // check role
-            call.checkChangeRoles()
-            call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
             val response = rawService.transactionRaw {
                 it.getActivityByMonths()

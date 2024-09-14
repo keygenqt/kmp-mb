@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.user
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.*
+import com.keygenqt.mb.extension.getNumberParam
+import com.keygenqt.mb.extension.getUserRoles
+import com.keygenqt.mb.extension.receiveValidate
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponse
-import com.keygenqt.mb.shared.db.entities.toResponses
 import com.keygenqt.mb.shared.db.service.DirectionsService
 import com.keygenqt.mb.shared.responses.UserRole
 import com.keygenqt.mb.validators.models.DirectionValidate
@@ -28,36 +30,13 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.directions() {
+fun Route.userDirections() {
 
     val directionsService: DirectionsService by inject()
 
     route("/directions") {
-        get {
-            // check role
-            call.checkChangeRoles()
-            // act
-            val response = directionsService.transaction {
-                getAll().toResponses(call.getUserRoles())
-            }
-            // response
-            call.respond(response)
-        }
-        get("/{id}") {
-            // check role
-            call.checkChangeRoles()
-            // get request
-            val id = call.getNumberParam()
-            // act
-            val response = directionsService.transaction {
-                findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
-            }
-            // response
-            call.respond(response)
-        }
         post {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val request = call.receiveValidate<DirectionValidate>()
@@ -72,7 +51,6 @@ fun Route.directions() {
         }
         put("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
@@ -88,7 +66,6 @@ fun Route.directions() {
         }
         delete("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()

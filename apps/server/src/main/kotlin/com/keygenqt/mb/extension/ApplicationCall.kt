@@ -79,19 +79,6 @@ suspend inline fun <reified T : Any> ApplicationCall.receiveValidate(data: T? = 
 }
 
 /**
- * Check change roles after login
- */
-suspend fun ApplicationCall.checkChangeRoles() {
-    val userId = sessions.get<SessionUser>()?.userId
-    if (userId != null) {
-        val sessionService: SessionService by inject(SessionService::class.java)
-        if (!sessionService.checkUserRoles(userId, sessions.get<SessionUser>()?.roles!!)) {
-            throw Exceptions.Unauthorized()
-        }
-    }
-}
-
-/**
  * Get user roles
  */
 fun ApplicationCall.getUserRoles(): List<UserRole> = sessions.get<SessionUser>()?.roles ?: listOf(UserRole.GUEST)

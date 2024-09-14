@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import com.keygenqt.mb.base.SessionUser
 import com.keygenqt.mb.shared.responses.StateResponse
@@ -23,7 +23,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 
-fun Route.logout() {
+fun Route.guestLogout() {
     post("/logout") {
         // act
         call.sessions.clear<SessionUser>()

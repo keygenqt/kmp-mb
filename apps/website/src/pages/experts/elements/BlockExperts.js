@@ -45,7 +45,6 @@ import {
     Chip,
     CircularProgress,
 } from '@mui/material';
-import {AppConf} from "../../../conf/AppConf";
 
 export function BlockExperts(props) {
 

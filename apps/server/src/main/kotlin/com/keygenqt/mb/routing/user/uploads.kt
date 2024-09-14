@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.user
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.checkChangeRoles
 import com.keygenqt.mb.extension.getStringParam
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.extension.userRoleNotHasForbidden
@@ -35,24 +34,13 @@ import org.koin.ktor.ext.inject
 import java.io.File
 import java.util.*
 
-fun Route.uploads() {
+fun Route.userUploads() {
 
     val uploadsService: UploadsService by inject()
 
     route("/uploads") {
-        get("/{name}") {
-            // get request
-            val name = call.getStringParam()
-            val path = "uploads/$name"
-            // act
-            val file = File(path)
-            if (!file.exists()) throw Exceptions.NotFound()
-            // response
-            call.respondFile(file)
-        }
         post {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val uploads = mutableListOf<UploadEntity>()
@@ -88,7 +76,6 @@ fun Route.uploads() {
         }
         delete("/{name}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val name = call.getStringParam()

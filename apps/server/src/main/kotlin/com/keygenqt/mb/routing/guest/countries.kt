@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.guest
 
 import com.keygenqt.mb.base.Exceptions
 import com.keygenqt.mb.extension.getNumberParam
 import com.keygenqt.mb.extension.getUserRoles
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
-import com.keygenqt.mb.shared.db.service.UsersService
-import com.keygenqt.mb.shared.responses.UserRole
+import com.keygenqt.mb.shared.db.service.CountriesService
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.experts() {
-    val usersService: UsersService by inject()
+fun Route.guestCountries() {
+    val countriesService: CountriesService by inject()
 
-    route("/experts") {
+    route("/countries") {
         get {
             // act
-            val response = usersService.transaction {
-                getAll(UserRole.EXPERT).toResponses(call.getUserRoles())
+            val response = countriesService.transaction {
+                getAll().toResponses(call.getUserRoles())
             }
             // response
             call.respond(response)
@@ -43,8 +42,8 @@ fun Route.experts() {
             // get request
             val id = call.getNumberParam()
             // act
-            val response = usersService.transaction {
-                findById(id, UserRole.EXPERT)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
+            val response = countriesService.transaction {
+                findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)

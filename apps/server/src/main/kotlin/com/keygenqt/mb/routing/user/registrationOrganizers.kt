@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.keygenqt.mb.routing
+package com.keygenqt.mb.routing.user
 
 import com.keygenqt.mb.base.Exceptions
-import com.keygenqt.mb.extension.*
+import com.keygenqt.mb.extension.getNumberParam
+import com.keygenqt.mb.extension.getUserRoles
+import com.keygenqt.mb.extension.receiveValidate
+import com.keygenqt.mb.extension.userRoleNotHasForbidden
 import com.keygenqt.mb.shared.db.entities.toResponse
 import com.keygenqt.mb.shared.db.entities.toResponses
-import com.keygenqt.mb.shared.db.service.RegExpertsService
-import com.keygenqt.mb.shared.responses.StateResponse
+import com.keygenqt.mb.shared.db.service.RegOrganizersService
 import com.keygenqt.mb.shared.responses.UserRole
-import com.keygenqt.mb.validators.models.RegExpertUpdateValidate
-import com.keygenqt.mb.validators.models.RegExpertValidate
+import com.keygenqt.mb.validators.models.RegOrganizerUpdateValidate
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
 
-fun Route.registrationExperts() {
-    val regExpertsService: RegExpertsService by inject()
+fun Route.userRegistrationOrganizers() {
+    val regOrganizersService: RegOrganizersService by inject()
 
-    route("/registration-experts") {
+    route("/registration-organizers") {
         get {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // act
-            val response = regExpertsService.transaction {
+            val response = regOrganizersService.transaction {
                 getAll().toResponses(call.getUserRoles())
             }
             // response
@@ -47,55 +47,24 @@ fun Route.registrationExperts() {
         }
         get("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
             // act
-            val response = regExpertsService.transaction {
+            val response = regOrganizersService.transaction {
                 findById(id)?.toResponse(call.getUserRoles()) ?: throw Exceptions.NotFound()
             }
             // response
             call.respond(response)
         }
-        post {
-            // check role
-            call.checkChangeRoles()
-            // get request
-            val request = call.receiveValidate<RegExpertValidate>()
-            // act
-            regExpertsService.transaction {
-                insert(
-                    directionID = request.directionID,
-                    expertID = request.expertID,
-                    why = request.why,
-                    fname = request.fname,
-                    lname = request.lname,
-                    email = request.email,
-                    telegram = request.telegram,
-                    cv = request.cv,
-                    location = request.location,
-                    experience = request.experience,
-                    contribution = request.contribution,
-                ).toResponse(call.getUserRoles())
-            }
-            // response
-            call.respond(
-                StateResponse(
-                    code = HttpStatusCode.OK.value,
-                    message = HttpStatusCode.OK.description
-                )
-            )
-        }
         put("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN, UserRole.MANAGER)
             // get request
             val id = call.getNumberParam()
-            val request = call.receiveValidate<RegExpertUpdateValidate>()
+            val request = call.receiveValidate<RegOrganizerUpdateValidate>()
             // act
-            val response = regExpertsService.transaction {
+            val response = regOrganizersService.transaction {
                 findById(id)?.update(
                     note = request.note,
                     state = request.state,
@@ -106,12 +75,11 @@ fun Route.registrationExperts() {
         }
         delete("/{id}") {
             // check role
-            call.checkChangeRoles()
             call.userRoleNotHasForbidden(UserRole.ADMIN)
             // get request
             val id = call.getNumberParam()
             // act
-            regExpertsService.transaction {
+            regOrganizersService.transaction {
                 findById(id)?.deleteEntity() ?: throw Exceptions.NotFound()
             }
             // response
